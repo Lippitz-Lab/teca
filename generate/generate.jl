@@ -92,7 +92,7 @@ md"""
 add_notebook_header = true
 
 # ╔═╡ 0b81d3ff-fa78-48c3-878c-24f9d6a34f20
-show_section_number = false
+show_section_number = true
 
 # ╔═╡ 01a2336a-5c04-4d5a-bb0b-a9c704517dbf
 pages = [
@@ -210,8 +210,7 @@ end
 
 # ╔═╡ 3e93e57c-3660-416f-9874-d43abf99e60e
 INSTRUCTORS = [
-	(name = "Person 1", href = ""),
-	(name = "Person 2", href = "")
+	(name = "Markus Lippitz", href = "mailto:markus.lippitz@uni-bayreuth.de")
 ] |> instructors
 
 # ╔═╡ feaed8af-05d0-4b80-9f69-8f827f9343a8
@@ -737,7 +736,7 @@ notebook_htmls_generated = let
 	output_filenames
 	
 	PlutoSliderServer.export_directory(pluto_notebooks_output_dir; Export_cache_dir=pluto_cache_dir,
-	 Export_slider_server_url='https://jupyter.ep3.uni-bayreuth.de/teca'
+	 Export_slider_server_url="https://jupyter.ep3.uni-bayreuth.de"
 	)
 end; GENERATED_NOTEBOOKS = 0
 
