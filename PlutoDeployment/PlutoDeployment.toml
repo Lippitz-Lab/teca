@@ -1,10 +1,12 @@
 [Export]
-#baked_notebookfile = true
+baked_notebookfile = true
 
 # needs to be in both section to avoid running!
 exclude=[
     "teca/generate/generate.jl"
        ]
+
+slider_server_url="https://jupyter.ep3.uni-bayreuth.de"
 
 [SliderServer]
 port = 2345
