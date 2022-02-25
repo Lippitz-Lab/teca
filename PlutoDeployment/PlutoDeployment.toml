@@ -1,0 +1,21 @@
+[Export]
+#baked_notebookfile = true
+
+# needs to be in both section to avoid running!
+exclude=[
+    "teca/generate/generate.jl"
+       ]
+
+[SliderServer]
+port = 2345
+host = "127.0.0.1"
+
+exclude=[
+    "teca/generate/generate.jl"
+       ]
+
+# You can also set Pluto's configuration here:
+[Pluto]
+[Pluto.compiler]
+#threads = 1
+
