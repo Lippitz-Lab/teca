@@ -736,7 +736,9 @@ end
 notebook_htmls_generated = let
 	output_filenames
 	
-	PlutoSliderServer.export_directory(pluto_notebooks_output_dir; Export_cache_dir=pluto_cache_dir)
+	PlutoSliderServer.export_directory(pluto_notebooks_output_dir; Export_cache_dir=pluto_cache_dir,
+	 Export_slider_server_url='https://jupyter.ep3.uni-bayreuth.de/teca'
+	)
 end; GENERATED_NOTEBOOKS = 0
 
 # ╔═╡ ccdea15d-1182-4d96-a7ab-26aa59a6002e
