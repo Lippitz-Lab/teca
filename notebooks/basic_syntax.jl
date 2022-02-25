@@ -4,8 +4,24 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
+        el
+    end
+end
+
 # ╔═╡ 6e618eb2-037a-4688-bc7b-53fda57993a1
 using PlutoUI
+
+# ╔═╡ bf06f5de-1e18-4f42-9d7f-3549e50e15aa
+@bind myxc Slider(1:10; show_value=true)
+
+# ╔═╡ 55f7f108-3ed0-4098-b66c-c476ec45bd36
+myxc
 
 # ╔═╡ 0d3aec92-edeb-11ea-3adb-cd0dc17cbdab
 md"# Get started with Julia - live
@@ -441,6 +457,8 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 """
 
 # ╔═╡ Cell order:
+# ╠═55f7f108-3ed0-4098-b66c-c476ec45bd36
+# ╠═bf06f5de-1e18-4f42-9d7f-3549e50e15aa
 # ╟─0d3aec92-edeb-11ea-3adb-cd0dc17cbdab
 # ╟─3b038ee0-edeb-11ea-0977-97cc30d1c6ff
 # ╠═3e8e0ea0-edeb-11ea-22e0-c58f7c2168ce
