@@ -797,12 +797,12 @@ Deno_jll = "~1.16.3"
 Franklin = "~0.10.69"
 HypertextLiteral = "~0.9.3"
 JSON3 = "~1.9.2"
-Pluto = "~0.18.0"
+Pluto = "~0.18.1"
 PlutoHooks = "~0.0.4"
 PlutoLinks = "~0.1.4"
 PlutoSliderServer = "~0.3.5"
 PlutoTest = "~0.2.1"
-PlutoUI = "~0.7.34"
+PlutoUI = "~0.7.35"
 StructTypes = "~1.8.1"
 """
 
@@ -835,9 +835,9 @@ uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 
 [[deps.BetterFileWatching]]
 deps = ["Deno_jll", "JSON"]
-git-tree-sha1 = "02f377dfe1e20b7dd8720f88e9519a136ea19bf4"
+git-tree-sha1 = "0d7ee0a1acad90d544fa87cc3d6f463e99abb77a"
 uuid = "c9fd44ac-77b5-486c-9482-9798bd063cc6"
-version = "0.1.4"
+version = "0.1.5"
 
 [[deps.Chain]]
 git-tree-sha1 = "339237319ef4712e6e5df7758d0bccddf5c237d9"
@@ -846,9 +846,9 @@ version = "0.4.10"
 
 [[deps.CodeTracking]]
 deps = ["InteractiveUtils", "UUIDs"]
-git-tree-sha1 = "9aa8a5ebb6b5bf469a7e0e2b5202cf6f8c291104"
+git-tree-sha1 = "759a12cefe1cd1bb49e477bc3702287521797483"
 uuid = "da1fd8a2-8d9e-5ec2-8556-3022fb5608a2"
-version = "1.0.6"
+version = "1.0.7"
 
 [[deps.ColorTypes]]
 deps = ["FixedPointNumbers", "Random"]
@@ -947,15 +947,16 @@ uuid = "3a985190-f512-4703-8d38-2a7944ed5916"
 version = "0.8.25"
 
 [[deps.FromFile]]
-git-tree-sha1 = "81e918d0ed5978fcdacd06b7c64c0c5074c4d55a"
+deps = ["Requires"]
+git-tree-sha1 = "625b50a8f5ae8520be86f191420bc8b970b24907"
 uuid = "ff7dd447-1dcb-4ce3-b8ac-22a812192de7"
-version = "0.1.2"
+version = "0.1.3"
 
 [[deps.FuzzyCompletions]]
 deps = ["REPL"]
-git-tree-sha1 = "2cc2791b324e8ed387a91d7226d17be754e9de61"
+git-tree-sha1 = "efd6c064e15e92fcce436977c825d2117bf8ce76"
 uuid = "fb4132e2-a121-4a70-b8a1-d5b831dcdcc2"
-version = "0.4.3"
+version = "0.5.0"
 
 [[deps.Gettext_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Libiconv_jll", "Pkg", "XML2_jll"]
@@ -1005,10 +1006,9 @@ uuid = "b5f81e59-6552-4d32-b1f0-c071b021bf89"
 version = "0.2.2"
 
 [[deps.IniFile]]
-deps = ["Test"]
-git-tree-sha1 = "098e4d2c533924c921f9f9847274f2ad89e018b8"
+git-tree-sha1 = "f550e6e32074c939295eb5ea6de31849ac2c9625"
 uuid = "83e8ac13-25f8-5344-8a64-a9f2b223428f"
-version = "0.5.0"
+version = "0.5.1"
 
 [[deps.InteractiveUtils]]
 deps = ["Markdown"]
@@ -1039,9 +1039,9 @@ version = "1.9.2"
 
 [[deps.JuliaInterpreter]]
 deps = ["CodeTracking", "InteractiveUtils", "Random", "UUIDs"]
-git-tree-sha1 = "b55aae9a2bf436fc797d9c253a900913e0e90178"
+git-tree-sha1 = "0a815f0060ab182f6c484b281107bfcd5bbb58dc"
 uuid = "aa1ae85d-cabe-5617-a682-6adf51b2e16a"
-version = "0.9.3"
+version = "0.9.7"
 
 [[deps.LeftChildRightSiblingTrees]]
 deps = ["AbstractTrees"]
@@ -1080,9 +1080,9 @@ uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [[deps.Literate]]
 deps = ["Base64", "IOCapture", "JSON", "REPL"]
-git-tree-sha1 = "32b914d8654e945e1076bab58b02dad479ceffcd"
+git-tree-sha1 = "b856be4fe3dfa4146e5c890f1d9865f4e2e4779d"
 uuid = "98b081ad-f1c9-55d3-8b20-4c87d4299306"
-version = "2.12.1"
+version = "2.13.0"
 
 [[deps.LiveServer]]
 deps = ["Crayons", "FileWatching", "HTTP", "Pkg", "Sockets", "Test"]
@@ -1165,9 +1165,9 @@ uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 
 [[deps.Pluto]]
 deps = ["Base64", "Configurations", "Dates", "Distributed", "FileWatching", "FuzzyCompletions", "HTTP", "InteractiveUtils", "Logging", "Markdown", "MsgPack", "Pkg", "REPL", "RelocatableFolders", "Sockets", "Tables", "UUIDs"]
-git-tree-sha1 = "db1306745717d127037c5697436b04cfb9d7b3dd"
+git-tree-sha1 = "c97f4548e903d132342a6f5998554f507d0b2578"
 uuid = "c3e4b0f8-55cb-11ea-2926-15256bba5781"
-version = "0.18.0"
+version = "0.18.1"
 
 [[deps.PlutoHooks]]
 deps = ["InteractiveUtils", "Markdown", "UUIDs"]
@@ -1195,15 +1195,15 @@ version = "0.2.1"
 
 [[deps.PlutoUI]]
 deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "UUIDs"]
-git-tree-sha1 = "8979e9802b4ac3d58c503a20f2824ad67f9074dd"
+git-tree-sha1 = "85bf3e4bd279e405f91489ce518dedb1e32119cb"
 uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
-version = "0.7.34"
+version = "0.7.35"
 
 [[deps.Preferences]]
 deps = ["TOML"]
-git-tree-sha1 = "2cf929d64681236a2e074ffafb8d568733d2e6af"
+git-tree-sha1 = "de893592a221142f3db370f48290e3a2ef39998f"
 uuid = "21216c6a-2e73-6563-6e65-726566657250"
-version = "1.2.3"
+version = "1.2.4"
 
 [[deps.Printf]]
 deps = ["Unicode"]
@@ -1242,9 +1242,9 @@ version = "1.3.0"
 
 [[deps.Revise]]
 deps = ["CodeTracking", "Distributed", "FileWatching", "JuliaInterpreter", "LibGit2", "LoweredCodeUtils", "OrderedCollections", "Pkg", "REPL", "Requires", "UUIDs", "Unicode"]
-git-tree-sha1 = "2f9d4d6679b5f0394c52731db3794166f49d5131"
+git-tree-sha1 = "606ddc4d3d098447a09c9337864c73d017476424"
 uuid = "295af30f-e4ad-537b-8983-00126c2a3abe"
-version = "3.3.1"
+version = "3.3.2"
 
 [[deps.SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
