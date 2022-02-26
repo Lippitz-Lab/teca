@@ -6,7 +6,19 @@ using InteractiveUtils
 
 # ╔═╡ 5cdbcc8c-96f3-11ec-3e70-45ed796a8b3d
 md"""
-Lock In 
+# Lock-In Verstärker
+
+[Ziel:]{.smallcaps} Ich kann *erklären*, wie ein Lock-in Verstärker
+funktioniert und ihn zur Messung kleiner Signal *benutzen*.
+
+-   Lock-in Verstärker
+
+-   box car averager
+
+-   Seitenbänder bei Amplituden- / Frequenz-Modulation
+
+[Literatur:]{.smallcaps} Horowitz/Hill Kap. 15.12--15
+ 
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001

@@ -6,7 +6,18 @@ using InteractiveUtils
 
 # ╔═╡ 705a5b52-96f3-11ec-11e9-45e1cd363a35
 md"""
-Heterodyn
+# Homodyn- und Heterodyn-Detektion
+
+## Ziele
+
+Ich kann erklären, wann und wie ein Interferometer hilft, rauscharm
+zu messen
+-  homodyne und heterodyne Detektion in der Optik • Schrotrauschen-limitierte Detektion
+- Schrotrauschen in Interferometern
+
+Literatur: Horowitz/Hill Kap. 13.14–20
+
+
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001

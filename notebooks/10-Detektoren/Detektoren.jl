@@ -6,7 +6,23 @@ using InteractiveUtils
 
 # ╔═╡ 4580e946-96f3-11ec-38d9-bbfb594fb979
 md"""
-Detektoren
+# Detektoren
+
+[Ziel:]{.smallcaps} Ich kann einen passenden Photodetektor *auswählen*.
+
+-   Verstärkung und Quanteneffizienz
+
+-   noise-equivalent bandwidth
+
+-   noise-equivalent power
+
+[Weitere Aufgaben:]{.smallcaps}
+
+-   passenden Verstärker auswählen
+
+[Literatur:]{.smallcaps} Horowitz/Hill Kap. 7.18--21, Handbook of Optics
+I Kap. 18, Saleh/Teich Kap. 18.6
+
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001

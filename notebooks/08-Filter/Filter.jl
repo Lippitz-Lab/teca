@@ -6,7 +6,24 @@ using InteractiveUtils
 
 # ╔═╡ ff7880da-96f2-11ec-2d80-adc081faa710
 md"""
-Filter
+# Filter
+
+
+## Lineare, zeit-invariante Systeme
+
+[Ziel:]{.smallcaps} Ich kann eine Transferfunktion *vermessen*.
+
+-   Frequenzantwort, Impulsantwort
+
+-   analoge und digitale Filter
+
+[Weitere Aufgaben:]{.smallcaps}
+
+-   Finden sie durch Filtern das Signal im Datensatz.
+
+[Literatur:]{.smallcaps} Butz Kap. 5, Horowitz / Hill, Kap. 1.19
+
+  
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001

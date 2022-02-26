@@ -6,7 +6,26 @@ using InteractiveUtils
 
 # ╔═╡ 262685e2-96f3-11ec-15c6-5f0a5e79b66b
 md"""
-Rauschem
+# Rauschen
+## Physikalische Rauschquellen
+
+[Ziel:]{.smallcaps} Ich kann den Ursprung von Rauschquellen in optischen
+Messungen *identifizieren*.
+
+-   Rauschen-Spektren: 1/f, weiß
+
+-   Physikalischer Ursprung von Rauschen: Schrot, thermisch
+
+-   Leistungsabhängigkeit
+
+-   Maße für Signalamplituden: pp, RMS, Leistung
+
+[Weitere Aufgaben:]{.smallcaps}
+
+-   Temperaturabhängigkeit von Widerstandsrauschen.
+
+[Literatur:]{.smallcaps} Horowitz / Hill, Kap. 7.18--21, Müller:
+Rauschen,
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
