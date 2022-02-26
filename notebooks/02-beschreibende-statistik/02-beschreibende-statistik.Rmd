@@ -1,0 +1,103 @@
+# Beschreibende Statistik
+
+
+## Beschreibende Statistik / Stichprobe (3)
+
+[Ziel:]{.smallcaps} Ich kann Methoden der beschreibenden Statistik
+*anwenden* und in GNU octave *implementieren*, um Aussagen über
+Datensätze zu treffen.
+
+-   Mittelwert und Standardabweichung
+
+-   Momente
+
+-   Korrelation und Kovarianz
+
+[Literatur:]{.smallcaps} Stahel Kap. 2 & 3, Bevington Kap. 1
+
+*Aufgabe 1*
+
+Sie haben jetzt Zugriff auf den STAHEL „Statistische Datenanalyse“.
+Lesen Sie zur Einführung im STAHEL die Kapitel 1 und 2 „Beschreibung eindimensionaler Stichproben“ (das klingt nach mehr, als es wirklich ist). Wichtig sind vor allem die mit schwarzen Balken am Rand markierten Abschnitte. 
+
+Zur Kontrolle: Haben Sie die folgenden Begriffe verstanden?
+Was stellt man bei einem Histogramm genau dar? Wie verändern sich die y-Werte, wenn man die sog. Klassenbreite verdoppelt?
+Was ist mit einer Stichprobe gemeint?
+Was ist eine geordnete Stichprobe und der Rang einer Zahl xi  darin?
+Wie berechnet man die kumulative Verteilungsfunktion? Wenn man sie von einer Notenverteilung (Noten 1 bis 6) einer Klausur bilden würde, was sagt ihr y-Wert z.B. zum x-Wert „Note=2“ aus? Ist es der Anteil y aller Klausuren, die schlechter oder besser als Note 2 sind? 
+Was sind die beiden wichtigsten Kennzahlen einer statistischen Verteilung?
+Ist der physikalische Schwerpunkt mathematisch dem Median oder dem Mittelwert verwandt?
+Wie ist die Varianz, wie die Standardabweichung einer Stichprobe mathematisch definiert?
+Was meint man mit der Aussage, diese beiden Streumaße seien nicht „robust“?
+Bei welchem Wert liegt typischerweise die sogenannte Standard-Lage?
+Mit welcher allgemeinen mathematischen Operation („Trick“) erzeugt man „nicht-schiefe“ Stichproben?
+
+*Aufagbe 2: Programmieraufgabe*
+
+
+Erzeugen Sie einen Vektor mit Einträgen von 30 via 0.1 bis 100.
+(for-loop oder einfacher mit passendem Befehl?)
+
+Berechnen Sie den Mittelwert, den Median und die Standardabweichung der Einträge. Nutzen Sie die Formeln. Gibt es auch entsprechende Befehle?
+
+Tragen Sie das Ergebnis bis Di. 27.4. zur Kontrolle im Elearing ein.
+
+*Aufgabe 3*
+
+a) Lesen Sie das Kapitel 3 im STAHEL „Beschreibende Statistik  
+    mehrdimensionaler Daten“
+
+b) Betrachten Sie die rechts angegebenen Daten X,Y. (File Online)
+
+Plotten Sie die Datenpunkte gegeneinander und 
+legen Sie „per-Hand“ eine lineare Gerade durch die Daten mittels
+->Insert->Line.
+2. Bestimmen Sie die Regressionsgerade nach der Methode der Kleinsten Quadrate und plotten Sie sie mittels „hold on“ in die selbe Figure.
+
+### Beschreibende Statistik mehrdimens. Daten
+
+Korrelation (genauer: Produktmomenten-Korrelation): Maß für Stärke eines Zusammenhangs multivariater Stichproben. 
+
+Am Beispiel für bivariate Stichprobe aus (𝑥_𝑖, 𝑦_𝑖)-s. Dazu: Standardisieren der Lage und Normieren der Streuung durch Standaradabweichung:  〖(𝑥_𝑖 ) ̃=(𝑥_𝑖−𝑥 ̅)/〖𝑠𝑑〗_𝑋  〗_ , entsprechend 𝑦_𝑖.
+
+Als Gesamtmaß ergibt sich die Korrelation 𝑟_𝑋𝑌  aus allen Beiträgen: 
+
+𝑟_𝑋𝑌=1/(𝑛−1) ∑_𝑖▒〖(𝑥_𝑖 ) ̃(𝑦_𝑖 ) ̃=𝑠_𝑋𝑌/(〖𝑠𝑑〗_𝑋 〖𝑠𝑑〗_𝑌 )〗
+
+mit der Kovarianz: 𝑠_𝑋𝑌= 1/(𝑛−1) ∑_𝑖▒〖=(𝑥_𝑖−𝑥 ̅)(𝑦_𝑖−𝑦 ̅)〗
+
+### Wichtige Punkte bzgl. der Korrelation
+
+Produktmomentenkorrelation ist Maß für linearen Zusammenhang!!
+     Ggf. sind andere Korrelationen besser geeignet Zusammenhänge darzustellen   
+     (z.B. Spearmansche Rankkorrelation: alg. monotone Zusammenhänge, diese ist    
+     auch robuster) 
+
+Korrelation und ihre Interpretation: hoher Korrelationswerte bedeutet nicht zwangsläufig ursächlicher Zusammenhang! 
+Artefakte z.B. durch Inhomogenitäts-Korrelation: Zusammenhang von Merkmalen in inhomogenen Stichproben (Jahrgänge, Geschlechter,…) 
+Schein-Korrelation: Durch Standardisierung durch dritte  (unkorrelierte) Größe Z entsteht formale Korrelation von X/Z und Y/Z ,
+„Unsinn“-Korrelation: Vergleich zweier beliebiger linearer Daten-Trends liefert immer (wenn auch unsinnige) Korrelation (z.B. zeitliches Anwachsen von Storch-Zahl und Geburtenzahl zwischen 1900-1970).
+
+### Regression
+
+Fragestellung: 
+Wie hängt hervorgehobene Zielgröße Y von Ausgangsgröße X ab (z.B. via Kausalzusammenhang)?
+Wie kann für beliebigen Wert von X der entsprechende Wert aus Y vorhergesagt, bzw. prognostiziert werden?
+
+
+Grundidee: Funktioneller Zusammenhang zwischen X und Y:
+
+𝑦_𝑖  ≈ℎ(𝑥_𝑖)
+
+Einfachster & wichtigster Fall: lineare Funktion ℎ(𝑥_  )=𝑎+𝑏𝑥, 
+
+mit  𝑎: Achsenabschnitt, 𝑏: Steigung.  
+
+
+Die Abweichungen 𝑟_𝑖  (Residuen) einer Gerade mit 𝑎,𝑏 von den Messdaten ist:
+
+𝑟_𝑖  ≈𝑦_𝑖−(𝑎+𝑏𝑥_𝑖)
+
+###Methode der Kleinsten Quadrate (least squares)
+
+### Transformation von Daten

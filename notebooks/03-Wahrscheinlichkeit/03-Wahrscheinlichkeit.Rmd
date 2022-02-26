@@ -1,0 +1,76 @@
+# Wahrscheinlichkeit
+
+## Wahrscheinlichkeit (4)
+
+ Begriffe,
+Pseudozufallszahlen
+
+
+Lesen Sie im STAHEL das Kapitel 4 „Wahrscheinlichkeit“.
+
+
+Zur Kontrolle: Haben Sie die folgenden Begriffe verstanden?
+
+Was ist ein Elementarereignis  ? Betrachten Sie Würfeln als typ. „Experiment“
+Was ist ein Ereignis, was der Ereignisraum? 
+Kombinationen / Operatoren von Teilmengen: 𝐴∪𝐵,  𝐴∩𝐵, 〖  𝐴〗^∁ ?
+Eigenschaften eines W‘keits-Modells:   𝑃⟨𝐴⟩≥0
+									  𝑃⟨Ω⟩=1
+									  𝑃⟨𝐴∪𝐵⟩=𝑃⟨𝐴⟩+𝑃⟨𝐵⟩, 𝑚𝑖𝑡 𝐴∩𝐵=∅
+Disjunkte Ereignisse?
+Was ist der Unterschied zwischen Elementarereignis, Zufallsvariable X und Zufallszahl?
+
+Wie lautet die Formel für die W‘keit eines Ereignisses 𝐶 mit 𝑃⟨𝐶⟩ unter der Bedingung, dass Ereignis 𝐴 eingetreten ist? Machen Sie sich das entsprechende „Venn-Diagramm“ klar.
+
+Was ist der Satz von Bayes?
+
+### Pseudozufallszahlengenerator
+
+### Uniform verteilte Zufallszahlen in MATLAB
+
+*Aufagbe 4*
+Zeichnen Sie einen Smiley in einer 2D-Matrix. 
+Definieren Sie das Gesicht als Kreis mit dem Wert 0.7, Rest=1, zwei Augen=1 und einen Mund =0.4 (ähnlich der Abb. unten).
+
+Wählen Sie als Colormap ‚hot‘ unter Edit->Colormap; 
+Tools->Standard-Colormaps->hot.
+
+Fügen Sie eine Farbskala hinzu (Insert->Colorbar)
+
+*Aufagbe 5*
+Erzeugen Sie gleichverteilte Zufallszahlen in zwei Dimensionen zwischen 0..1.
+
+Zählen Sie, wie häufig die Zahlen innerhalb eines Viertel-Kreises mit Radius r=1 liegen und bestimmen Sie die relative Häufigkeit für eine von Ihnen gewählte Gesamtanzahl. 
+
+Multiplizieren Sie Ihr Ergebnis mit 4. Welche Zahl erhalten Sie näherungsweise?
+
+Fügen Sie die Zahl an beliebiger Stelle in Ihr Smiley-Bild hinzu, exportieren Sie es als 
+.png und schicken es mir zu.
+
+
+
+
+## Wahrscheinlichkeitsverteilungen (5)
+
+[Ziel:]{.smallcaps} Ich kann eine Sequenz von ‚Zufallszahlen' in GNU
+octave *erzeugen*, die einer gegebenen Verteilung genügen.
+
+-   diskrete Verteilungen: Binomial, Poisson
+
+-   stetige Verteilungen: Normal, Log-Normal
+
+-   zentraler Grenzwertsatz
+
+[Weitere Aufgaben:]{.smallcaps}
+
+-   Erzeugen sie Paare von ‚Zufallszahlen', deren 2D Verteilung ein
+    Elefant beschreibt. Betrachten sie das Mittel über N dieser Paare.
+    Vergleichen sie es mit ihrer Erwartung.
+
+[Literatur:]{.smallcaps} Stahel Kap. 5 & 6, Bevington Kap. 2, Meyer Kap.
+22--25
+
+
+GH: Bedingte W’keiten, Stat. Verteilungen: Bernoulli, Binomial.  
+
+

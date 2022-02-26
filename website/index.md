@@ -1,6 +1,6 @@
-# Course Website of _The New Course_
+# Skript zur Vorlesung 'Messmethoden'
 
-This website is under construction.
+Hallo Guten Tag
 
 > **Acknowledgement** \\
-> The design of this website is based on _**Computational Thinking**, a live online Julia/Pluto textbook._ [(computationalthinking.mit.edu)](https://computationalthinking.mit.edu)
+> The design of this website is based on _**Computational Thinking**, a live online Julia/Pluto textbook._ [(computationalthinking.mit.edu)](https://computationalthinking.mit.edu) using the template at

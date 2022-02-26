@@ -1,30 +1,112 @@
 [
     {
-        "title": "Preliminaries",
+        "title": "Vorbereitungen",
         "contents": [
             {
                 "name": "Julia Basics",
-                "notebook_path": "notebooks/basic_syntax.jl",
+                "notebook_path": "notebooks/01-julia/basic_syntax.jl",
                 "video_id": "",
                 "preview_image_url": ""
-            },
-	   {
-                "name": "GitHub & Open Source Software",
-                "notebook_path": "notebooks/week12/how_to_collaborate_on_software.jl",
-                "video_id": "7N9Vvc8amGM",
-                "preview_image_url": "https://user-images.githubusercontent.com/6933510/136199704-ba6d0586-34bf-490c-8fd0-6959ab42cd23.png"
             }
         ]
     },
     {
-        "title": "Numerical Root Finding",
+        "title": "Statistik",
         "contents": [
             {
-                "name": "The Newton Method",
-                "notebook_path": "notebooks/week3/newton_method.jl",
+                "name": "Beschreibende Statistik",
+                "notebook_path": "notebooks/02-beschreibende-statistik/beschreibende-statistik.jl",
+                "video_id": "",
+                "preview_image_url": ""
+            },            
+            {
+                "name": "Wahrscheinlichkeit",
+                "notebook_path": "notebooks/03-Wahrscheinlichkeit/wahrscheinlichkeit.jl",
+                "video_id": "",
+                "preview_image_url": ""
+            },
+            {
+                "name": "Messunsicherheit",
+                "notebook_path": "notebooks/04-Messunsicherheit/messunsicherheit.jl",
+                "video_id": "",
+                "preview_image_url": ""
+            },
+            {
+                "name": "Schätzung",
+                "notebook_path": "notebooks/05-Schaetzung/schaetzung.jl",
+                "video_id": "",
+                "preview_image_url": ""
+            }
+        ]
+    },
+    {
+        "title": "Fourier-Transformation",
+        "contents": [
+            {
+                "name": "Fourier-Transformation",
+                "notebook_path": "notebooks/06-Fourier-Transformation/Fourier-Transformation.jl",
+                "video_id": "",
+                "preview_image_url": ""
+            },            
+            {
+                "name": "Frequenzraum",
+                "notebook_path": "notebooks/07-Frequenzraum/Frequenzraum.jl",
+                "video_id": "",
+                "preview_image_url": ""
+            },
+            {
+                "name": "Filter",
+                "notebook_path": "notebooks/08-Filter/Filter.jl",
+                "video_id": "",
+                "preview_image_url": ""
+            }
+        ]
+    },
+    {
+        "title": "Messtechnik",
+        "contents": [
+            {
+                "name": "Rauschen",
+                "notebook_path": "notebooks/09-Rauschen/Rauschen.jl",
+                "video_id": "",
+                "preview_image_url": ""
+            },            
+            {
+                "name": "Detektoren",
+                "notebook_path": "notebooks/10-Detektoren/Detektoren.jl",
+                "video_id": "",
+                "preview_image_url": ""
+            },
+            {
+                "name": "Lock-In-Verstärler",
+                "notebook_path": "notebooks/11-Lock-In/Lock-In.jl",
+                "video_id": "",
+                "preview_image_url": ""
+            },
+            {
+                "name": "Heterodyn-Detektrion",
+                "notebook_path": "notebooks/12-heterodyn/heterodyn.jl",
+                "video_id": "",
+                "preview_image_url": ""
+            }
+        ]
+    },
+    {
+        "title": "Reste",
+        "contents": [
+            {
+                "name": "collaborate",
+                "notebook_path": "notebooks/99-RESTE/how_to_collaborate_on_software.jl",
+                "video_id": "",
+                "preview_image_url": ""
+            },            
+            {
+                "name": "Newton Method",
+                "notebook_path": "notebooks/99-RESTE/newton_method.jl",
                 "video_id": "",
                 "preview_image_url": ""
             }
         ]
     }
+
 ]

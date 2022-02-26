@@ -1,0 +1,21 @@
+# Frequenzraum
+
+## Fourier-Transformation numerisch
+
+[Ziel:]{.smallcaps} Ich kann GNU octave benutzen, um Signale im
+Frequenzraum zu *analysieren*.
+
+-   Fast Fourier Transform FFT
+
+-   Frequenzachse
+
+-   Abtastrate, Länge und 'zero padding'
+
+-   FT typischer Funktionen
+
+[Weitere Aufgaben:]{.smallcaps}
+
+-   Signale transformieren und im Fourier-Raum filtern
+
+[Literatur:]{.smallcaps} Butz Kap. 4, Horowitz / Hill, Kap. 1.08, 7.20,
+15.18
