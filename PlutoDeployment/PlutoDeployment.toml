@@ -9,8 +9,8 @@ exclude=[
 slider_server_url="https://jupyter.ep3.uni-bayreuth.de"
 
 [SliderServer]
-port = 2345
-host = "127.0.0.1"
+port = 2346
+host = "127.0.0.2"
 
 exclude=[
     "teca/generate/generate.jl"

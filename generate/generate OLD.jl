@@ -49,6 +49,23 @@ md"""
 # Customization
 """
 
+# ╔═╡ 95fd01d9-2555-4e5b-a044-eab02e2967bf
+md"""
+## Course
+"""
+
+# ╔═╡ 2bee2fc7-3322-457f-a835-028c80eaf059
+TITLE = "Messmethoden"
+
+# ╔═╡ a0057e4c-0bcf-4970-8a2b-0412ad5af510
+SUBTITLE = "TECA"
+
+# ╔═╡ 4be56e57-fea0-4fbe-9659-44bed594b1b2
+INSTITUTION = "Universität Bayreuth"
+
+# ╔═╡ ab7186a4-2287-41da-a939-70f142bfeacd
+TERM = "Sommer 2022"
+
 # ╔═╡ 83130e69-9b67-44b5-ad32-500162abc0d2
 md"""
 ## Website
@@ -71,8 +88,23 @@ md"""
 #### Add notebook header?
 """
 
+# ╔═╡ c5e00f30-e734-4b59-97b9-8e5f59fd131e
+add_notebook_header = true
+
+# ╔═╡ 0b81d3ff-fa78-48c3-878c-24f9d6a34f20
+show_section_number = false
+
+# ╔═╡ 01a2336a-5c04-4d5a-bb0b-a9c704517dbf
+pages = [
+	(page = "/software/", title = "Software"),
+	(page = "/links/", title = "Links")
+]
+
 # ╔═╡ c0768146-5ea0-4736-94f8-2c1a2affa922
 SLASH_PREPATH = !isempty(PREPATH) ? "/" * PREPATH : ""
+
+# ╔═╡ 02e00e09-76a5-4f38-8557-4d9caf280b4c
+homepage = (page = "/index.html", href = "$SLASH_PREPATH/", title = "Wilkommen")
 
 # ╔═╡ d83ee9b9-d255-4217-a776-3b0f4f168c8f
 @bind regenerate Button("Regenerate!")
@@ -154,13 +186,6 @@ file_server_address(paths::AbstractString...) = join([
 	error("asdf")
 end
 
-# ╔═╡ a965eb6b-8c70-4986-a7b1-99c820c45716
-@skip_as_script @use_task([franklin_page_dir, file_server_port]) do
-
-	run(`$(Deno_jll.deno()) run --allow-net --allow-read https://deno.land/std@0.115.0/http/file_server.ts $(franklin_page_dir) --cors --port $(file_server_port)`)
-
-end
-
 # ╔═╡ a24bf899-87b0-4a2e-a6d4-30ac2aad4820
 md"""
 # Static assets
@@ -171,6 +196,43 @@ md"""
 # Sidebar
 """
 
+# ╔═╡ fd5f6637-3223-4f0b-94a6-ace86f5a5926
+function instructors(INSTRUCTORS)
+	tmp = map(INSTRUCTORS) do (; name, href)
+		"""
+		<a href="$href">$name</a>
+		"""
+	end
+	join(tmp, ", ", "&amp " ) |> HTML
+end
+
+# ╔═╡ 3e93e57c-3660-416f-9874-d43abf99e60e
+INSTRUCTORS = [
+	(name = "Markus Lippitz", href = "mailto:markus.lippitz@uni-bayreuth.de")
+] |> instructors
+
+# ╔═╡ feaed8af-05d0-4b80-9f69-8f827f9343a8
+bold(text) = @htl("<b>$(text)</b>")
+
+# ╔═╡ 4a7a342d-4bf2-455d-9cf9-52a827e180d4
+emph(text) = @htl("<em>$(text)</em>")
+
+# ╔═╡ 98fb1e6a-c57c-4d66-972f-3471c6c15dd7
+function sidebar_page(; page, title, href="$(SLASH_PREPATH)$(page)", isbold = false)
+	title = isbold ? bold(title) : title
+	@htl("""
+	<a class="sidebar-nav-item {{ispage $(page)}}active{{end}}" href="$(href)">$(title)</a>
+	""")
+end
+
+# ╔═╡ 6775885d-0340-462e-bdeb-1e9076d94925
+function sidebar_pages(pages)
+	vec = map(pages) do page
+		sidebar_page(; page...)
+	end
+	HTML(join(vec, "\n"))
+end
+
 # ╔═╡ 4489fbec-39b9-454f-ad17-3a1101d335ce
 md"""
 # Title headers inside notebooks
@@ -180,6 +242,53 @@ md"""
 function flatten_path(input::String)
 	join(input |> splitpath, "_")
 end
+
+# ╔═╡ 444502c9-33b5-4bb2-9a8d-a8d8e1adb632
+function sidebar_code(book_model)
+    @htl("""
+    <div class="sidebar">
+    <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+    <br>
+    <div style="font-weight: bold; margin-bottom: 0.5em">
+		$(TERM)<span style="opacity: 0.6;">| $(INSTITUTION)</span></div>
+    <h1><a href="$(SLASH_PREPATH)/">$(TITLE)</a></h1>
+    <h2>$(SUBTITLE)</h2>
+    <div style="line-height:18px; font-size: 15px; opacity: 0.85">by $(INSTRUCTORS)</div>
+    </div>
+    <br>
+    <style>
+    </style>
+    <nav class="sidebar-nav" style="opacity: 0.9">
+	$(sidebar_page(; homepage..., isbold = true))
+	$(sidebar_pages(pages))
+    <br>
+    $(map(enumerate(book_model)) do (chapter_number, chap)
+		@htl("""
+		<div class="course-section">Modul $(chapter_number): $(chap.title)</div>
+		
+		$(map(enumerate(chap.contents)) do (section_number, section)
+
+			notebook_name = 
+				basename(without_pluto_file_extension(section.notebook_path))
+			notebook_id = flatten_path(without_pluto_file_extension(section.notebook_path))
+			
+		    @htl("""
+		    <a class="sidebar-nav-item {{ispage /$notebook_name/}}active{{end}}" href="$(SLASH_PREPATH)/$notebook_id/"><b>$(chapter_number).$(section_number)</b> - <em>$(section.name)</em></a>
+		    """)
+		end)
+		""")
+	end)
+
+    <br>
+    </nav>
+    </div>
+    </div>
+	""")
+end
+
+# ╔═╡ 544518ea-d36d-4e80-855e-93895a8cc35d
+sidebar = sidebar_code(book_model)
 
 # ╔═╡ 32540d48-becf-482a-990c-4cd4d13d93f3
 function output_notebook_relpath(input::String)
@@ -297,14 +406,6 @@ md"""
 (using PlutoSliderServer)
 """
 
-# ╔═╡ 866746a1-8102-431c-94e5-f93f6c98e825
-notebook_htmls_generated = let
-	
-	PlutoSliderServer.export_directory(pluto_notebooks_output_dir; Export_cache_dir=pluto_cache_dir,
-	 Export_slider_server_url="https://jupyter.ep3.uni-bayreuth.de"
-	)
-end; GENERATED_NOTEBOOKS = 0
-
 # ╔═╡ d15f2d13-0885-4da2-950d-fbbdd83f3907
 md"""
 # Generate non-Pluto pages from markdown, add sidebar
@@ -312,10 +413,59 @@ md"""
 _powered by Franklin.jl_
 """
 
+# ╔═╡ 9cb9559a-cbe4-4a4a-b974-cb9a3573f67d
+import Franklin
+
 # ╔═╡ 0e1a2d5b-16da-49e9-98b3-6f1202fd0fa1
 begin
 	current_dir = pwd()
 	website_dir = joinpath(PROJECT_ROOT, "website")
+end
+
+# ╔═╡ afff6777-1fec-41ee-bbba-b99dab0fd008
+function franklin_config()
+	franklin_config_file_base = joinpath(WEBSITE_DIR, "franklin-config.md")
+	franklin_config_file = joinpath(website_dir, "config.md")
+	
+	cp(franklin_config_file_base, franklin_config_file, force=true)
+
+	isfile(franklin_config_file)
+
+	open(franklin_config_file, "a") do f
+
+		write(f, 
+			"""
+			
+			@def title = "$TITLE"
+			@def prepath = "$PREPATH"
+			@def description = "$TITLE - $SUBTITLE"
+			@def authors = ""
+			"""
+		)
+		flush(f)
+	end
+end
+
+# ╔═╡ fbfcd2b0-3fb0-4999-ba59-4706437a501e
+begin
+	franklin_page_dir = joinpath(website_dir, "__site")
+	if isdir(franklin_page_dir)
+		rm(franklin_page_dir, recursive = true)
+		@info "removed" franklin_page_dir
+	end
+	mkpath(franklin_page_dir)
+	franklin_config()
+	cd(website_dir)
+	Franklin.optimize(; minify = false)
+	#cp(joinpath(website_dir, "__site"), franklin_page_dir, force = true)
+	cd(current_dir)
+end
+
+# ╔═╡ a965eb6b-8c70-4986-a7b1-99c820c45716
+@skip_as_script @use_task([franklin_page_dir, file_server_port]) do
+
+	run(`$(Deno_jll.deno()) run --allow-net --allow-read https://deno.land/std@0.115.0/http/file_server.ts $(franklin_page_dir) --cors --port $(file_server_port)`)
+
 end
 
 # ╔═╡ 5c69b7bd-6b18-496f-bcd5-3251a5eb0dd8
@@ -334,6 +484,9 @@ md"""
 
 # ╔═╡ 190e776a-600e-41a4-b4de-08884036d610
 output_dir
+
+# ╔═╡ e49944c7-e975-4018-b068-90b872b6d175
+franklin_page_dir
 
 # ╔═╡ 7ec64792-82d4-454d-83ce-d507d66e80e7
 md"""
@@ -480,6 +633,33 @@ notebook_index_styles = @htl("""
 </style>
 """);
 
+# ╔═╡ 35d20fb6-be54-4d6c-b6aa-5bc2529dafea
+function add_sidebar(page_dir)
+	page_name = basename(page_dir)
+	rel_page_dir = page_name == "__site" ? "." : joinpath("..", page_name)
+	index_page = joinpath(rel_page_dir, "main.html")
+	new_page_dir = page_dir # joinpath(output_dir, page_name)
+	isdir(new_page_dir) || mkpath(new_page_dir)
+
+	
+	@chain index_page begin
+		iframe
+		html_page(@htl("""
+		$(notebook_index_styles)
+
+		$(_)"""), SLASH_PREPATH)
+		string
+		"<!doctype html>\n" * _
+		write(joinpath(new_page_dir, "index.html")	, _)
+	end
+end
+
+# ╔═╡ d276b28e-a379-4804-ad25-f7d396b4ffb6
+for page_dir in franklin_pages
+	mv(joinpath(page_dir, "index.html"), joinpath(page_dir, "main.html"), force=true)
+	add_sidebar(page_dir)
+end; FRANKLIN_DONE = 1
+
 # ╔═╡ 1780b6d1-5e53-48e0-8675-f78645e7c576
 function notebook_html_page(section)
 	new_jl_name = flatten_path(section.notebook_path)
@@ -549,6 +729,15 @@ output_filenames = flatmap(enumerate(book_model)) do (chapter_number, chap)
 	end
 end
 
+# ╔═╡ 866746a1-8102-431c-94e5-f93f6c98e825
+notebook_htmls_generated = let
+	output_filenames
+	
+	PlutoSliderServer.export_directory(pluto_notebooks_output_dir; Export_cache_dir=pluto_cache_dir,
+	 Export_slider_server_url="https://jupyter.ep3.uni-bayreuth.de"
+	)
+end; GENERATED_NOTEBOOKS = 0
+
 # ╔═╡ ccdea15d-1182-4d96-a7ab-26aa59a6002e
 notebook_index_filenames = flatmap(enumerate(book_model)) do (chapter_number, chap)
 	
@@ -587,6 +776,7 @@ PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 Chain = "8be319e6-bccf-4806-a6f7-6fae938471bc"
 Deno_jll = "04572ae6-984a-583e-9378-9577a1c2574d"
+Franklin = "713c75ef-9fc9-4b05-94a9-213340da978e"
 HypertextLiteral = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
 JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
 Pluto = "c3e4b0f8-55cb-11ea-2926-15256bba5781"
@@ -602,6 +792,7 @@ UUIDs = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
 [compat]
 Chain = "~0.4.10"
 Deno_jll = "~1.16.3"
+Franklin = "~0.10.69"
 HypertextLiteral = "~0.9.3"
 JSON3 = "~1.9.2"
 Pluto = "~0.18.0"
@@ -673,6 +864,11 @@ git-tree-sha1 = "79e812c535bb9780ba00f3acba526bde5652eb13"
 uuid = "5218b696-f38b-4ac9-8b61-a12ec717816d"
 version = "0.16.6"
 
+[[deps.Crayons]]
+git-tree-sha1 = "249fe38abf76d48563e2f4556bebd215aa317e15"
+uuid = "a8cc5b0e-0ffa-5ad4-8c14-923d3ee1735f"
+version = "4.1.1"
+
 [[deps.DataAPI]]
 git-tree-sha1 = "cc70b17275652eb47bc9e5f81635981f13cea5c8"
 uuid = "9a962f9c-6df0-11e9-0e5d-c546b8b5ee8a"
@@ -687,6 +883,10 @@ version = "1.0.0"
 deps = ["Printf"]
 uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
 
+[[deps.DelimitedFiles]]
+deps = ["Mmap"]
+uuid = "8bb1440f-4735-579b-a4ab-409b98df4dab"
+
 [[deps.Deno_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "244309ef7003f30c7a5fe571f6b860c6b032b691"
@@ -697,6 +897,12 @@ version = "1.16.3+0"
 deps = ["Random", "Serialization", "Sockets"]
 uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
 
+[[deps.DocStringExtensions]]
+deps = ["LibGit2"]
+git-tree-sha1 = "b19534d1895d702889b219c382a6e18010797f0b"
+uuid = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
+version = "0.8.6"
+
 [[deps.Downloads]]
 deps = ["ArgTools", "LibCURL", "NetworkOptions"]
 uuid = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
@@ -706,6 +912,11 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "ae13fcbc7ab8f16b0856729b050ef0c446aa3492"
 uuid = "2e619515-83b5-522b-bb60-26c02a35a201"
 version = "2.4.4+0"
+
+[[deps.ExprTools]]
+git-tree-sha1 = "56559bbef6ca5ea0c0818fa5c90320398a6fbf8d"
+uuid = "e2ba6199-217a-4e67-a87a-7c52f15ade04"
+version = "0.1.8"
 
 [[deps.ExproniconLite]]
 git-tree-sha1 = "8b08cc88844e4d01db5a2405a08e9178e19e479e"
@@ -720,6 +931,18 @@ deps = ["Statistics"]
 git-tree-sha1 = "335bfdceacc84c5cdf16aadc768aa5ddfc5383cc"
 uuid = "53c48c17-4a7d-5ca2-90c5-79b7896eea93"
 version = "0.8.4"
+
+[[deps.Franklin]]
+deps = ["Dates", "DelimitedFiles", "DocStringExtensions", "ExprTools", "FranklinTemplates", "HTTP", "Literate", "LiveServer", "Logging", "Markdown", "NodeJS", "OrderedCollections", "Pkg", "REPL", "Random", "TOML"]
+git-tree-sha1 = "74ab12901ff55d4aec5864bc46b8bf16db0ea2ed"
+uuid = "713c75ef-9fc9-4b05-94a9-213340da978e"
+version = "0.10.69"
+
+[[deps.FranklinTemplates]]
+deps = ["LiveServer"]
+git-tree-sha1 = "6a0a98f70cdb16cc63e013e3ed6743f3af14309c"
+uuid = "3a985190-f512-4703-8d38-2a7944ed5916"
+version = "0.8.25"
 
 [[deps.FromFile]]
 git-tree-sha1 = "81e918d0ed5978fcdacd06b7c64c0c5074c4d55a"
@@ -853,6 +1076,18 @@ version = "1.16.1+1"
 deps = ["Libdl", "libblastrampoline_jll"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
+[[deps.Literate]]
+deps = ["Base64", "IOCapture", "JSON", "REPL"]
+git-tree-sha1 = "32b914d8654e945e1076bab58b02dad479ceffcd"
+uuid = "98b081ad-f1c9-55d3-8b20-4c87d4299306"
+version = "2.12.1"
+
+[[deps.LiveServer]]
+deps = ["Crayons", "FileWatching", "HTTP", "Pkg", "Sockets", "Test"]
+git-tree-sha1 = "505e296f3a4babe953d808fd944e7cffd160c407"
+uuid = "16fef848-5104-11e9-1b77-fb7a48bbb589"
+version = "0.7.1"
+
 [[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
@@ -890,6 +1125,12 @@ version = "1.1.0"
 
 [[deps.NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
+
+[[deps.NodeJS]]
+deps = ["Pkg"]
+git-tree-sha1 = "905224bbdd4b555c69bb964514cfa387616f0d3a"
+uuid = "2bd173c7-0d6d-553b-b6af-13a54713934c"
+version = "1.3.0"
 
 [[deps.OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
@@ -1102,13 +1343,23 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═60d603c3-c1e7-4d49-820f-288d20de70f5
 # ╠═6a3614fb-81bd-474d-85cf-06725846a6c0
 # ╟─004b0769-ee4a-4749-86eb-97a3c2322452
+# ╟─95fd01d9-2555-4e5b-a044-eab02e2967bf
+# ╠═2bee2fc7-3322-457f-a835-028c80eaf059
+# ╠═a0057e4c-0bcf-4970-8a2b-0412ad5af510
+# ╠═3e93e57c-3660-416f-9874-d43abf99e60e
+# ╠═4be56e57-fea0-4fbe-9659-44bed594b1b2
+# ╠═ab7186a4-2287-41da-a939-70f142bfeacd
 # ╟─83130e69-9b67-44b5-ad32-500162abc0d2
 # ╟─5b7892c6-ca5c-4c3a-b5d8-0a6323ee2fa9
 # ╠═88e1e91d-0d48-42e0-b4ab-4866624fd745
 # ╟─2582ae89-616f-4a08-be81-0875362c1f7e
+# ╠═c5e00f30-e734-4b59-97b9-8e5f59fd131e
+# ╠═0b81d3ff-fa78-48c3-878c-24f9d6a34f20
+# ╠═02e00e09-76a5-4f38-8557-4d9caf280b4c
+# ╠═01a2336a-5c04-4d5a-bb0b-a9c704517dbf
 # ╠═c0768146-5ea0-4736-94f8-2c1a2affa922
 # ╠═8781d8d4-0dff-4b24-9500-6ba4ec586f9b
-# ╠═d83ee9b9-d255-4217-a776-3b0f4f168c8f
+# ╟─d83ee9b9-d255-4217-a776-3b0f4f168c8f
 # ╟─41b00a73-f42d-4e9e-86bb-49ff9105d949
 # ╠═e8169711-6e94-45e0-9c41-b4d4692af328
 # ╠═6eb94b8c-b972-4c80-9644-1bd6568dc943
@@ -1134,6 +1385,13 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─a24bf899-87b0-4a2e-a6d4-30ac2aad4820
 # ╠═d7098dc2-fe08-4545-921c-6ad3d2648c91
 # ╟─2bba13d3-0c1d-4d17-bd70-526ce70407fb
+# ╠═fd5f6637-3223-4f0b-94a6-ace86f5a5926
+# ╠═feaed8af-05d0-4b80-9f69-8f827f9343a8
+# ╠═4a7a342d-4bf2-455d-9cf9-52a827e180d4
+# ╠═98fb1e6a-c57c-4d66-972f-3471c6c15dd7
+# ╠═6775885d-0340-462e-bdeb-1e9076d94925
+# ╠═444502c9-33b5-4bb2-9a8d-a8d8e1adb632
+# ╠═544518ea-d36d-4e80-855e-93895a8cc35d
 # ╟─4489fbec-39b9-454f-ad17-3a1101d335ce
 # ╠═8eac52e6-6a5e-4519-9b4c-80aadbf27573
 # ╠═32540d48-becf-482a-990c-4cd4d13d93f3
@@ -1151,11 +1409,17 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─96aa002c-cebc-41f7-97cf-ecd02081b6ce
 # ╠═866746a1-8102-431c-94e5-f93f6c98e825
 # ╟─d15f2d13-0885-4da2-950d-fbbdd83f3907
+# ╠═9cb9559a-cbe4-4a4a-b974-cb9a3573f67d
 # ╠═0e1a2d5b-16da-49e9-98b3-6f1202fd0fa1
+# ╠═afff6777-1fec-41ee-bbba-b99dab0fd008
+# ╠═fbfcd2b0-3fb0-4999-ba59-4706437a501e
 # ╠═5c69b7bd-6b18-496f-bcd5-3251a5eb0dd8
 # ╠═e2fc5eab-e333-4ff8-951b-89fdfe40eef8
+# ╠═d276b28e-a379-4804-ad25-f7d396b4ffb6
+# ╠═35d20fb6-be54-4d6c-b6aa-5bc2529dafea
 # ╟─77617779-76f0-4dec-aeea-cda321c71c9e
 # ╠═190e776a-600e-41a4-b4de-08884036d610
+# ╠═e49944c7-e975-4018-b068-90b872b6d175
 # ╠═db665156-3a33-4c33-a979-74ef2c9f5792
 # ╟─7ec64792-82d4-454d-83ce-d507d66e80e7
 # ╠═729efdbc-9556-4d34-bcef-1dfff2fba6bb

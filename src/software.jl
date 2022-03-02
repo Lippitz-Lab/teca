@@ -1,3 +1,11 @@
+### A Pluto.jl notebook ###
+# v0.18.1
+
+using Markdown
+using InteractiveUtils
+
+# ╔═╡ 1307b6cc-9a0c-11ec-2038-1573ce19f589
+md"""
 # First-time setup: Install Julia & Pluto
 
 > **Acknowledgement** \\
@@ -117,3 +125,25 @@ Click _Choose_.
 ## Step 4: Sharing a notebook
 
 After working on your notebook (your code is autosaved when you run it), you will find your notebook file in the folder we created in step 3. This the file that you can share with others, or submit as your homework assignment to Canvas.
+
+"""
+
+# ╔═╡ 00000000-0000-0000-0000-000000000001
+PLUTO_PROJECT_TOML_CONTENTS = """
+[deps]
+"""
+
+# ╔═╡ 00000000-0000-0000-0000-000000000002
+PLUTO_MANIFEST_TOML_CONTENTS = """
+# This file is machine-generated - editing it directly is not advised
+
+julia_version = "1.7.2"
+manifest_format = "2.0"
+
+[deps]
+"""
+
+# ╔═╡ Cell order:
+# ╠═1307b6cc-9a0c-11ec-2038-1573ce19f589
+# ╟─00000000-0000-0000-0000-000000000001
+# ╟─00000000-0000-0000-0000-000000000002

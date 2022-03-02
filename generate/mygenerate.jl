@@ -1,7 +1,199 @@
+### A Pluto.jl notebook ###
+# v0.18.1
+
+using Markdown
+using InteractiveUtils
+
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
+        el
+    end
+end
+
+# ╔═╡ b1cfebc4-9a0e-11ec-1a55-e519f246f211
+using PlutoUI
+
+# ╔═╡ 8b2ac827-d21e-44ef-9d52-f5bb4c722f15
+using PlutoSliderServer
+
+# ╔═╡ 0967d313-a66c-426a-a490-a6b042a5e569
+using Pluto, Random, UUIDs
+
+# ╔═╡ 2aea0831-439a-4990-8386-be3c7989a516
+using JSON3
+
+# ╔═╡ efbf794d-2f1b-46dd-8a38-61bcdfeeecb5
+using HypertextLiteral
+
+
+# ╔═╡ 3b3e4eae-4325-43ea-887c-efe97059da09
+using Pluto: without_pluto_file_extension
+
+
+# ╔═╡ 66770476-bd70-4651-8f5d-e50aef554f16
+begin
+	#import Pkg
+	#Pkg.activate("../PlutoDeployment")
+end
+
+# ╔═╡ 2851e16b-4df4-47a0-b613-429e8defa8b1
+@bind regenerate Button("Regenerate!")
+
+# ╔═╡ a73a0b60-7d8c-49d5-99c9-285fe76a87a9
+const PROJECT_ROOT = let
+	regenerate
+	joinpath(@__DIR__, "..") |> normpath
+end
+
+# ╔═╡ 45e9cb59-5c98-4a0b-8bea-36c42b55f548
+output_dir = let
+	PROJECT_ROOT
+	joinpath(PROJECT_ROOT, "build")
+end
+
+# ╔═╡ b6e42808-cf90-4100-821c-c745033d49e3
+source_dir = let
+	joinpath(PROJECT_ROOT, "src")
+end
+
+# ╔═╡ 105ded88-e956-4765-b7c8-20234f9e5260
+cache_dir = let
+	joinpath(PROJECT_ROOT, "pluto_state_cache")
+end
+
+# ╔═╡ 3900e40c-c736-4bf4-b41e-f2a5c8714bb3
+begin
+	regenerate
+	cp(source_dir,output_dir; force=true)
+	export_directory(output_dir; Export_cache_dir=cache_dir)
+end
+
+# ╔═╡ 824d6ebb-0304-426c-895c-c028e9ed169e
+begin
+
+		# read original notebook
+		notebook = Pluto.load_notebook_nobackup(joinpath(output_dir, "index.jl"))
+	new_path = joinpath(output_dir, "index_neu.jl")
+		notebook.path = new_path
+
+		# generate UUIDs deterministically to avoid changing the notebook hash 
+		my_rng = Random.MersenneTwister(123)
+
+		# generate code for the header
+		header_code = "HTML(testetddddds)"
+		first_cell = Pluto.Cell(
+			code = header_code,
+			code_folded = false,
+			cell_id=uuid4(my_rng)
+		)
+
+		# insert into the notebook
+		notebook.cells_dict[first_cell.cell_id] = first_cell
+		pushfirst!(notebook.cell_order, first_cell.cell_id)
+
+		# needs more work, as "save_notebook" iterates over
+		collect(topological_order(notebook))
+
+		# save to file
+		Pluto.save_notebook(notebook)
+
+end
+
+# ╔═╡ b4e170bb-6e3a-4b31-bdfb-06bcfb013571
+import StructTypes
+
+# ╔═╡ d3c3af9e-826c-449c-87eb-971cc8ce9170
+begin
+	Base.@kwdef struct Section
+	    name::String
+	    notebook_path::String
+	end
+		StructTypes.StructType(::Type{Section}) = StructTypes.Struct()
+	
+end
+
+# ╔═╡ 81dc2ebd-411c-4077-9a38-8548f9025b99
+begin
+Base.@kwdef struct Chapter
+	title::String
+	contents::Vector{Section}=Section[]
+end
+	StructTypes.StructType(::Type{Chapter}) = StructTypes.Struct()
+end
+
+# ╔═╡ 55465619-ebc3-4b37-8157-d86486588b63
+book_model = JSON3.read(read("./book_model.json", String), Vector{Chapter})
+
+
+# ╔═╡ b569d05f-4012-4b2e-be2b-73a6362249fd
+flatmap(args...) = vcat(map(args...)...)
+
+
+# ╔═╡ 2d361358-596b-432d-9691-868041132b57
+function navbar(book_model)
+    @htl("""
+    <nav >
+    $(map(enumerate(book_model)) do (chapter_number, chap)
+		@htl("""
+		<div class="course-section">Modul $(chapter_number): $(chap.title)</div>
+		
+		$(map(enumerate(chap.contents)) do (section_number, section)
+
+			notebook_name = 
+				basename(without_pluto_file_extension(section.notebook_path))
+			notebook_id = (without_pluto_file_extension(section.notebook_path))
+			
+		    @htl("""
+		    <a class="sidebar-nav-item {{ispage /$notebook_name/}}active{{end}}" href="$notebook_id/"><b>$(chapter_number).$(section_number)</b> - <em>$(section.name)</em></a>
+		    """)
+		end)
+		""")
+	end)
+
+    </nav>
+	""")
+end
+
+# ╔═╡ 71607b55-5c76-4a67-9039-b32a85121d4c
+navbar(book_model)
+
+# ╔═╡ 00000000-0000-0000-0000-000000000001
+PLUTO_PROJECT_TOML_CONTENTS = """
+[deps]
+HypertextLiteral = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
+JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
+Pluto = "c3e4b0f8-55cb-11ea-2926-15256bba5781"
+PlutoSliderServer = "2fc8631c-6f24-4c5b-bca7-cbb509c42db4"
+PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+StructTypes = "856f2bd8-1eba-4b0a-8007-ebc267875bd4"
+UUIDs = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
+
+[compat]
+HypertextLiteral = "~0.9.3"
+JSON3 = "~1.9.2"
+Pluto = "~0.18.1"
+PlutoSliderServer = "~0.3.5"
+PlutoUI = "~0.7.35"
+StructTypes = "~1.8.1"
+"""
+
+# ╔═╡ 00000000-0000-0000-0000-000000000002
+PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
 julia_version = "1.7.2"
 manifest_format = "2.0"
+
+[[deps.AbstractPlutoDingetjes]]
+deps = ["Pkg"]
+git-tree-sha1 = "8eaf9f1b4921132a4cff3f36a1d9ba923b14a481"
+uuid = "6e696c72-6542-2067-7265-42206c756150"
+version = "1.1.4"
 
 [[deps.AbstractTrees]]
 git-tree-sha1 = "03e0550477d86222521d254b741d470ba17ea0b5"
@@ -22,6 +214,12 @@ deps = ["Deno_jll", "JSON"]
 git-tree-sha1 = "0d7ee0a1acad90d544fa87cc3d6f463e99abb77a"
 uuid = "c9fd44ac-77b5-486c-9482-9798bd063cc6"
 version = "0.1.5"
+
+[[deps.ColorTypes]]
+deps = ["FixedPointNumbers", "Random"]
+git-tree-sha1 = "024fe24d83e4a5bf5fc80501a314ce0d1aa35597"
+uuid = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
+version = "0.11.0"
 
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
@@ -75,6 +273,12 @@ version = "0.6.13"
 [[deps.FileWatching]]
 uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
 
+[[deps.FixedPointNumbers]]
+deps = ["Statistics"]
+git-tree-sha1 = "335bfdceacc84c5cdf16aadc768aa5ddfc5383cc"
+uuid = "53c48c17-4a7d-5ca2-90c5-79b7896eea93"
+version = "0.8.4"
+
 [[deps.FromFile]]
 deps = ["Requires"]
 git-tree-sha1 = "625b50a8f5ae8520be86f191420bc8b970b24907"
@@ -116,6 +320,23 @@ deps = ["Base64", "Dates", "IniFile", "Logging", "MbedTLS", "NetworkOptions", "S
 git-tree-sha1 = "0fa77022fe4b511826b39c894c90daf5fce3334a"
 uuid = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 version = "0.9.17"
+
+[[deps.Hyperscript]]
+deps = ["Test"]
+git-tree-sha1 = "8d511d5b81240fc8e6802386302675bdf47737b9"
+uuid = "47d2ed2b-36de-50cf-bf87-49c2cf4b8b91"
+version = "0.0.4"
+
+[[deps.HypertextLiteral]]
+git-tree-sha1 = "2b078b5a615c6c0396c77810d92ee8c6f470d238"
+uuid = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
+version = "0.9.3"
+
+[[deps.IOCapture]]
+deps = ["Logging", "Random"]
+git-tree-sha1 = "f7be53659ab06ddc986428d3a9dcc95f6fa6705a"
+uuid = "b5f81e59-6552-4d32-b1f0-c071b021bf89"
+version = "0.2.2"
 
 [[deps.IniFile]]
 git-tree-sha1 = "f550e6e32074c939295eb5ea6de31849ac2c9625"
@@ -257,6 +478,12 @@ git-tree-sha1 = "dd581e8ec86d860e3668f48d439a0522ef274e3f"
 uuid = "2fc8631c-6f24-4c5b-bca7-cbb509c42db4"
 version = "0.3.5"
 
+[[deps.PlutoUI]]
+deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "UUIDs"]
+git-tree-sha1 = "85bf3e4bd279e405f91489ce518dedb1e32119cb"
+uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+version = "0.7.35"
+
 [[deps.Preferences]]
 deps = ["TOML"]
 git-tree-sha1 = "de893592a221142f3db370f48290e3a2ef39998f"
@@ -280,6 +507,11 @@ uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 [[deps.Random]]
 deps = ["SHA", "Serialization"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+
+[[deps.Reexport]]
+git-tree-sha1 = "45e428421666073eab6f2da5c9d310d99bb12f9b"
+uuid = "189a3867-3050-52da-a836-e630ba90ab69"
+version = "1.2.2"
 
 [[deps.RelocatableFolders]]
 deps = ["SHA", "Scratch"]
@@ -307,6 +539,14 @@ uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 
 [[deps.Sockets]]
 uuid = "6462fe0b-24de-5631-8697-dd941f90decc"
+
+[[deps.SparseArrays]]
+deps = ["LinearAlgebra", "Random"]
+uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
+
+[[deps.Statistics]]
+deps = ["LinearAlgebra", "SparseArrays"]
+uuid = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
 [[deps.StructTypes]]
 deps = ["Dates", "UUIDs"]
@@ -377,3 +617,29 @@ uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
 [[deps.p7zip_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
+"""
+
+# ╔═╡ Cell order:
+# ╠═66770476-bd70-4651-8f5d-e50aef554f16
+# ╠═b1cfebc4-9a0e-11ec-1a55-e519f246f211
+# ╠═8b2ac827-d21e-44ef-9d52-f5bb4c722f15
+# ╠═2851e16b-4df4-47a0-b613-429e8defa8b1
+# ╠═a73a0b60-7d8c-49d5-99c9-285fe76a87a9
+# ╠═45e9cb59-5c98-4a0b-8bea-36c42b55f548
+# ╠═b6e42808-cf90-4100-821c-c745033d49e3
+# ╠═105ded88-e956-4765-b7c8-20234f9e5260
+# ╠═3900e40c-c736-4bf4-b41e-f2a5c8714bb3
+# ╠═824d6ebb-0304-426c-895c-c028e9ed169e
+# ╠═0967d313-a66c-426a-a490-a6b042a5e569
+# ╠═d3c3af9e-826c-449c-87eb-971cc8ce9170
+# ╠═81dc2ebd-411c-4077-9a38-8548f9025b99
+# ╠═55465619-ebc3-4b37-8157-d86486588b63
+# ╠═b4e170bb-6e3a-4b31-bdfb-06bcfb013571
+# ╠═2aea0831-439a-4990-8386-be3c7989a516
+# ╠═b569d05f-4012-4b2e-be2b-73a6362249fd
+# ╠═71607b55-5c76-4a67-9039-b32a85121d4c
+# ╠═2d361358-596b-432d-9691-868041132b57
+# ╠═efbf794d-2f1b-46dd-8a38-61bcdfeeecb5
+# ╠═3b3e4eae-4325-43ea-887c-efe97059da09
+# ╟─00000000-0000-0000-0000-000000000001
+# ╟─00000000-0000-0000-0000-000000000002

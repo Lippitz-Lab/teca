@@ -4,7 +4,7 @@
         "contents": [
             {
                 "name": "Julia Basics",
-                "notebook_path": "notebooks/01-julia/basic_syntax.jl",
+                "notebook_path": "src/01-basic_syntax.jl",
                 "video_id": "",
                 "preview_image_url": ""
             }
@@ -15,25 +15,25 @@
         "contents": [
             {
                 "name": "Beschreibende Statistik",
-                "notebook_path": "notebooks/02-beschreibende-statistik/beschreibende-statistik.jl",
+                "notebook_path": "src/02-beschreibende-statistik.jl",
                 "video_id": "",
                 "preview_image_url": ""
             },            
             {
                 "name": "Wahrscheinlichkeit",
-                "notebook_path": "notebooks/03-Wahrscheinlichkeit/wahrscheinlichkeit.jl",
+                "notebook_path": "src/03-wahrscheinlichkeit.jl",
                 "video_id": "",
                 "preview_image_url": ""
             },
             {
                 "name": "Messunsicherheit",
-                "notebook_path": "notebooks/04-Messunsicherheit/messunsicherheit.jl",
+                "notebook_path": "src/04-messunsicherheit.jl",
                 "video_id": "",
                 "preview_image_url": ""
             },
             {
                 "name": "Schätzung",
-                "notebook_path": "notebooks/05-Schaetzung/schaetzung.jl",
+                "notebook_path": "src/05-schaetzung.jl",
                 "video_id": "",
                 "preview_image_url": ""
             }
@@ -44,19 +44,19 @@
         "contents": [
             {
                 "name": "Fourier-Transformation",
-                "notebook_path": "notebooks/06-Fourier-Transformation/Fourier-Transformation.jl",
+                "notebook_path": "src/06-Fourier-Transformation.jl",
                 "video_id": "",
                 "preview_image_url": ""
             },            
             {
                 "name": "Frequenzraum",
-                "notebook_path": "notebooks/07-Frequenzraum/Frequenzraum.jl",
+                "notebook_path": "src/07-Frequenzraum.jl",
                 "video_id": "",
                 "preview_image_url": ""
             },
             {
                 "name": "Filter",
-                "notebook_path": "notebooks/08-Filter/Filter.jl",
+                "notebook_path": "src/08-Filter.jl",
                 "video_id": "",
                 "preview_image_url": ""
             }
@@ -67,25 +67,25 @@
         "contents": [
             {
                 "name": "Rauschen",
-                "notebook_path": "notebooks/09-Rauschen/Rauschen.jl",
+                "notebook_path": "src/09-Rauschen.jl",
                 "video_id": "",
                 "preview_image_url": ""
             },            
             {
                 "name": "Detektoren",
-                "notebook_path": "notebooks/10-Detektoren/Detektoren.jl",
+                "notebook_path": "src/10-Detektoren.jl",
                 "video_id": "",
                 "preview_image_url": ""
             },
             {
                 "name": "Lock-In-Verstärler",
-                "notebook_path": "notebooks/11-Lock-In/Lock-In.jl",
+                "notebook_path": "src/11-Lock-In.jl",
                 "video_id": "",
                 "preview_image_url": ""
             },
             {
                 "name": "Heterodyn-Detektrion",
-                "notebook_path": "notebooks/12-heterodyn/heterodyn.jl",
+                "notebook_path": "src/12-heterodyn.jl",
                 "video_id": "",
                 "preview_image_url": ""
             }
@@ -93,16 +93,10 @@
     },
     {
         "title": "Reste",
-        "contents": [
-            {
-                "name": "collaborate",
-                "notebook_path": "notebooks/99-RESTE/how_to_collaborate_on_software.jl",
-                "video_id": "",
-                "preview_image_url": ""
-            },            
+        "contents": [          
             {
                 "name": "Newton Method",
-                "notebook_path": "notebooks/99-RESTE/newton_method.jl",
+                "notebook_path": "src/99-newton_method.jl",
                 "video_id": "",
                 "preview_image_url": ""
             }
