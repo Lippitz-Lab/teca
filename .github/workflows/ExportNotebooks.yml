@@ -23,11 +23,11 @@ jobs:
               with:
                   version: 1.7
             - name: Run Pluto notebooks and generate website
-              run: cp generate.jl generate2.jl; julia --project=../PlutoDeployment -e 'import Pkg; Pkg.add("Pluto"); import Pluto; Pluto.activate_notebook_environment("generate2.jl"); Pkg.instantiate(); include("generate.jl")'
+              run: cd generate; julia  -e 'include("mygenerate.jl")'
               working-directory: generate
             - name: Build and Deploy
               uses: JamesIves/github-pages-deploy-action@releases/v3
               with:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   BRANCH: gh-pages
-                  FOLDER: ./website/__site
+                  FOLDER: ./build
