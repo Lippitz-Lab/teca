@@ -23,7 +23,7 @@ jobs:
               with:
                   version: 1.7
             - name: Run Pluto notebooks and generate website
-              run: cd generate; julia  -e 'include("mygenerate.jl")'
+              run: julia  -e 'include("mygenerate.jl")'
               working-directory: generate
             - name: Build and Deploy
               uses: JamesIves/github-pages-deploy-action@releases/v3
