@@ -18,6 +18,7 @@ end
 begin
 	import Pkg
 	Pkg.activate("../PlutoDeployment")
+	Pkg.instantiate()
 end
 
 # ╔═╡ b1cfebc4-9a0e-11ec-1a55-e519f246f211
