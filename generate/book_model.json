@@ -3,10 +3,20 @@
         "title": "Vorbereitungen",
         "contents": [
             {
+                "name": "Intro",
+                "notebook_path": "index.jl"
+            }, 
+             {
+                "name": "Software",
+                "notebook_path": "software.jl"
+            },
+            {
+                "name": "Hints",
+                "notebook_path": "links.jl"
+            },
+             {
                 "name": "Julia Basics",
-                "notebook_path": "src/01-basic_syntax.jl",
-                "video_id": "",
-                "preview_image_url": ""
+                "notebook_path": "01-basic_syntax.jl"
             }
         ]
     },
@@ -15,27 +25,19 @@
         "contents": [
             {
                 "name": "Beschreibende Statistik",
-                "notebook_path": "src/02-beschreibende-statistik.jl",
-                "video_id": "",
-                "preview_image_url": ""
+                "notebook_path": "02-beschreibende-statistik.jl"
             },            
             {
                 "name": "Wahrscheinlichkeit",
-                "notebook_path": "src/03-wahrscheinlichkeit.jl",
-                "video_id": "",
-                "preview_image_url": ""
+                "notebook_path": "03-wahrscheinlichkeit.jl"
             },
             {
                 "name": "Messunsicherheit",
-                "notebook_path": "src/04-messunsicherheit.jl",
-                "video_id": "",
-                "preview_image_url": ""
+                "notebook_path": "04-messunsicherheit.jl"
             },
             {
                 "name": "Schätzung",
-                "notebook_path": "src/05-schaetzung.jl",
-                "video_id": "",
-                "preview_image_url": ""
+                "notebook_path": "05-schaetzung.jl"
             }
         ]
     },
@@ -44,21 +46,15 @@
         "contents": [
             {
                 "name": "Fourier-Transformation",
-                "notebook_path": "src/06-Fourier-Transformation.jl",
-                "video_id": "",
-                "preview_image_url": ""
+                "notebook_path": "06-Fourier-Transformation.jl"
             },            
             {
                 "name": "Frequenzraum",
-                "notebook_path": "src/07-Frequenzraum.jl",
-                "video_id": "",
-                "preview_image_url": ""
+                "notebook_path": "07-Frequenzraum.jl"
             },
             {
                 "name": "Filter",
-                "notebook_path": "src/08-Filter.jl",
-                "video_id": "",
-                "preview_image_url": ""
+                "notebook_path": "08-Filter.jl"
             }
         ]
     },
@@ -67,27 +63,19 @@
         "contents": [
             {
                 "name": "Rauschen",
-                "notebook_path": "src/09-Rauschen.jl",
-                "video_id": "",
-                "preview_image_url": ""
+                "notebook_path": "09-Rauschen.jl"
             },            
             {
                 "name": "Detektoren",
-                "notebook_path": "src/10-Detektoren.jl",
-                "video_id": "",
-                "preview_image_url": ""
+                "notebook_path": "10-Detektoren.jl"
             },
             {
                 "name": "Lock-In-Verstärler",
-                "notebook_path": "src/11-Lock-In.jl",
-                "video_id": "",
-                "preview_image_url": ""
+                "notebook_path": "11-Lock-In.jl"
             },
             {
                 "name": "Heterodyn-Detektrion",
-                "notebook_path": "src/12-heterodyn.jl",
-                "video_id": "",
-                "preview_image_url": ""
+                "notebook_path": "12-heterodyn.jl"
             }
         ]
     },
@@ -96,9 +84,7 @@
         "contents": [          
             {
                 "name": "Newton Method",
-                "notebook_path": "src/99-newton_method.jl",
-                "video_id": "",
-                "preview_image_url": ""
+                "notebook_path": "99-newton_method.jl"
             }
         ]
     }

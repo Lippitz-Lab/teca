@@ -14,6 +14,10 @@ macro bind(def, element)
     end
 end
 
+# ╔═╡ f5450eab-0f9f-4b7f-9b80-992d3c553ba9
+# DO NOT MODIFY, will be updated by update_navbar.jl
+HTML("    <nav >\n    Vorbereitungen:\n\n<a class=\"sidebar-nav-item {{ispage /index/}}active{{end}}\" href=\"index/\"><em>Intro</em></a> / \n<a class=\"sidebar-nav-item {{ispage /software/}}active{{end}}\" href=\"software/\"><em>Software</em></a> / \n<a class=\"sidebar-nav-item {{ispage /links/}}active{{end}}\" href=\"links/\"><em>Hints</em></a> / \n<a class=\"sidebar-nav-item {{ispage /01-basic_syntax/}}active{{end}}\" href=\"01-basic_syntax/\"><em>Julia Basics</em></a> / \n\n<br>\nStatistik:\n\n<a class=\"sidebar-nav-item {{ispage /02-beschreibende-statistik/}}active{{end}}\" href=\"02-beschreibende-statistik/\"><em>Beschreibende Statistik</em></a> / \n<a class=\"sidebar-nav-item {{ispage /03-wahrscheinlichkeit/}}active{{end}}\" href=\"03-wahrscheinlichkeit/\"><em>Wahrscheinlichkeit</em></a> / \n<a class=\"sidebar-nav-item {{ispage /04-messunsicherheit/}}active{{end}}\" href=\"04-messunsicherheit/\"><em>Messunsicherheit</em></a> / \n<a class=\"sidebar-nav-item {{ispage /05-schaetzung/}}active{{end}}\" href=\"05-schaetzung/\"><em>Schätzung</em></a> / \n\n<br>\nFourier-Transformation:\n\n<a class=\"sidebar-nav-item {{ispage /06-Fourier-Transformation/}}active{{end}}\" href=\"06-Fourier-Transformation/\"><em>Fourier-Transformation</em></a> / \n<a class=\"sidebar-nav-item {{ispage /07-Frequenzraum/}}active{{end}}\" href=\"07-Frequenzraum/\"><em>Frequenzraum</em></a> / \n<a class=\"sidebar-nav-item {{ispage /08-Filter/}}active{{end}}\" href=\"08-Filter/\"><em>Filter</em></a> / \n\n<br>\nMesstechnik:\n\n<a class=\"sidebar-nav-item {{ispage /09-Rauschen/}}active{{end}}\" href=\"09-Rauschen/\"><em>Rauschen</em></a> / \n<a class=\"sidebar-nav-item {{ispage /10-Detektoren/}}active{{end}}\" href=\"10-Detektoren/\"><em>Detektoren</em></a> / \n<a class=\"sidebar-nav-item {{ispage /11-Lock-In/}}active{{end}}\" href=\"11-Lock-In/\"><em>Lock-In-Verstärler</em></a> / \n<a class=\"sidebar-nav-item {{ispage /12-heterodyn/}}active{{end}}\" href=\"12-heterodyn/\"><em>Heterodyn-Detektrion</em></a> / \n\n<br>\nReste:\n\n<a class=\"sidebar-nav-item {{ispage /99-newton_method/}}active{{end}}\" href=\"99-newton_method/\"><em>Newton Method</em></a> / \n\n<br>\n\n\n    </nav>\n\t")
+
 # ╔═╡ f4fda666-7b9c-11eb-0304-716c5e710462
 begin
     using Symbolics, ForwardDiff, Plots, PlutoUI, LaTeXStrings
@@ -70,6 +74,13 @@ md"""
 x₀ = $(@bind x02 Slider(-10:10, show_value=true, default=6))
 """
 
+# ╔═╡ ecb40aea-7b9c-11eb-1476-e54faf32d91c
+let
+	f(x) = x^2 - 2
+
+	standard_Newton(f, n2, -1:0.01:10, x02, -10, 70)
+end
+
 # ╔═╡ 2445da24-7b9d-11eb-02bd-eb99a3d95a2e
 md"""
 n = $(@bind n Slider(0:10, show_value=true, default=0))
@@ -79,6 +90,13 @@ n = $(@bind n Slider(0:10, show_value=true, default=0))
 md"""
 x₀ = $(@bind x0 Slider(-10:10, show_value=true, default=6))
 """
+
+# ╔═╡ ec6c6328-7b9c-11eb-1c69-dba12ae522ad
+let
+	f(x) = 0.2x^3 - 4x + 1
+	
+	standard_Newton(f, n, -10:0.01:10, x0, -10, 70)
+end
 
 # ╔═╡ c0b4defe-7c2f-11eb-1913-bdb01d28a4a8
 md"""
@@ -95,22 +113,25 @@ Let's see what happens if we perturb a function $f$ around a point $z$ by a smal
 # ╔═╡ 71efd6b0-7c30-11eb-0da7-0d4a5ab8f8ff
 @variables z, η
 
-# ╔═╡ a869e6c6-7c31-11eb-13c8-155d08be02eb
-md"""
-m = $(@bind m Slider(1:6, show_value=true))
-"""
-
 # ╔═╡ 6dc89964-7c30-11eb-0a41-8d97b210ed34
 f(x) = x^m - 2;
 
 # ╔═╡ d35e0cc8-7c30-11eb-28d3-17c9e221ea62
 f′(x) = ForwardDiff.derivative(f, x);
 
+# ╔═╡ a869e6c6-7c31-11eb-13c8-155d08be02eb
+md"""
+m = $(@bind m Slider(1:6, show_value=true))
+"""
+
 # ╔═╡ 63dbf052-7c32-11eb-1062-5b3581d38f70
 f(z)
 
 # ╔═╡ 9371f930-7c30-11eb-1f77-c7f31b97ea26
 f(z + η)
+
+# ╔═╡ 98158a38-7c30-11eb-0796-2335e97ec6d0
+expand( f(z + η) )
 
 # ╔═╡ 9d778e36-7c30-11eb-1f4b-894af86a8f5d
 md"""
@@ -122,6 +143,9 @@ f′(z)
 
 # ╔═╡ ea741018-7c30-11eb-3912-a50475e6ec49
 f(z) + η*f′(z)
+
+# ╔═╡ e18f2470-7c31-11eb-2b74-d59d00d20ba4
+expand( f(z + η) ) - ( f(z) + η*f′(z) )
 
 # ╔═╡ 389e990e-7c40-11eb-37c4-5ba0f59173b3
 md"""
@@ -226,6 +250,21 @@ p = $(@bind p Slider(0:0.01:1, show_value=true))
 
 # ╔═╡ 23536420-7c2d-11eb-20b0-9523f7a5f9d7
 @variables a, b, δ, ϵ
+
+# ╔═╡ 3828b94c-7c2d-11eb-2e01-79038b0f5226
+image = expand.(T(p)( [ (a + δ), (b + ϵ) ] ))
+
+# ╔═╡ 09b97be8-7c2e-11eb-05fd-65bbd097afb8
+jacobian(T(p), [a, b]) .|> Text
+
+# ╔═╡ 18ce2fac-7c2e-11eb-03d2-b3a674621662
+jacobian(T(p), [a, b]) * [δ, ϵ]
+
+# ╔═╡ ed605b90-7c3e-11eb-34e9-776a05a177dd
+image - T(p)([a, b])
+
+# ╔═╡ 35b5c5c6-7c3f-11eb-2723-4b406a809114
+simplify.(expand.(image - T(p)([a, b]) - jacobian(T(p), [a, b]) * [δ, ϵ]))
 
 # ╔═╡ 4dd2322c-7ba0-11eb-2b3b-af7c6c1d60a0
 md"""
@@ -347,28 +386,8 @@ function standard_Newton(f, n, x_range, x0, ymin=-10, ymax=10)
 
 end
 
-# ╔═╡ ecb40aea-7b9c-11eb-1476-e54faf32d91c
-let
-	f(x) = x^2 - 2
-
-	standard_Newton(f, n2, -1:0.01:10, x02, -10, 70)
-end
-
-# ╔═╡ ec6c6328-7b9c-11eb-1c69-dba12ae522ad
-let
-	f(x) = 0.2x^3 - 4x + 1
-	
-	standard_Newton(f, n, -10:0.01:10, x0, -10, 70)
-end
-
 # ╔═╡ 515c23b6-7c2d-11eb-28c9-1b1d92eb4ba0
 T(α) = ((x, y),) -> [x + α*y^2, y + α*x^2]
-
-# ╔═╡ 09b97be8-7c2e-11eb-05fd-65bbd097afb8
-jacobian(T(p), [a, b]) .|> Text
-
-# ╔═╡ 18ce2fac-7c2e-11eb-03d2-b3a674621662
-jacobian(T(p), [a, b]) * [δ, ϵ]
 
 # ╔═╡ 395fd8e2-7c31-11eb-1933-dd719fa0cd22
 md"""
@@ -408,21 +427,6 @@ TableOfContents()
 
 # ╔═╡ 786f8e78-7c2d-11eb-1bb8-c5cb2e349f45
 expand(ex) = simplify(ex, polynorm=true)
-
-# ╔═╡ 98158a38-7c30-11eb-0796-2335e97ec6d0
-expand( f(z + η) )
-
-# ╔═╡ e18f2470-7c31-11eb-2b74-d59d00d20ba4
-expand( f(z + η) ) - ( f(z) + η*f′(z) )
-
-# ╔═╡ 3828b94c-7c2d-11eb-2e01-79038b0f5226
-image = expand.(T(p)( [ (a + δ), (b + ϵ) ] ))
-
-# ╔═╡ ed605b90-7c3e-11eb-34e9-776a05a177dd
-image - T(p)([a, b])
-
-# ╔═╡ 35b5c5c6-7c3f-11eb-2723-4b406a809114
-simplify.(expand.(image - T(p)([a, b]) - jacobian(T(p), [a, b]) * [δ, ϵ]))
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1693,6 +1697,7 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
+# ╟─f5450eab-0f9f-4b7f-9b80-992d3c553ba9
 # ╠═f4fda666-7b9c-11eb-0304-716c5e710462
 # ╟─d82f1eae-7b9c-11eb-24d8-e1dcb2eef71a
 # ╟─e410c1d0-7ba1-11eb-394f-71dac89756b7
