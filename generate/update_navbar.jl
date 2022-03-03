@@ -18,6 +18,7 @@ end
 begin
 	import Pkg
 	Pkg.activate("../PlutoDeployment")
+	Pkg.instantiate()
 end
 
 # ╔═╡ b1cfebc4-9a0e-11ec-1a55-e519f246f211
@@ -89,7 +90,7 @@ function navbar(book_model)
 			notebook_id = (without_pluto_file_extension(section.notebook_path))
 			
 		    @htl("""
-		    <a class="sidebar-nav-item {{ispage /$notebook_name/}}active{{end}}" href="$notebook_id/"><em>$(section.name)</em></a> / 
+		    <a class="sidebar-nav-item {{ispage /$notebook_name}}active{{end}}" href="$notebook_id"><em>$(section.name)</em></a> / 
 		    """)
 		end )
 		<br>
