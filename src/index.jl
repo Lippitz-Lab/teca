@@ -18,6 +18,13 @@ Hallo Guten Tag
 > The design of this website is based on _**Computational Thinking**, a live online Julia/Pluto textbook._ [(computationalthinking.mit.edu)](https://computationalthinking.mit.edu) using the template at
 """
 
+# ╔═╡ 710d0ae5-fac8-4a47-8901-64fa23de051f
+html"""<style>
+#launch_binder {
+    display: none;
+}
+"""
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
@@ -36,5 +43,6 @@ manifest_format = "2.0"
 # ╔═╡ Cell order:
 # ╟─f5450eab-0f9f-4b7f-9b80-992d3c553ba9
 # ╠═e3ac1f30-9a0b-11ec-2a1c-af6544fc49cc
+# ╠═710d0ae5-fac8-4a47-8901-64fa23de051f
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

@@ -8,3 +8,4 @@ build/
 website/config.md
 
 generate/*.toml
+generate/My_pluto_state_cache

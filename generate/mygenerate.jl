@@ -62,7 +62,7 @@ end
 begin
 	regenerate
 	cp(source_dir,output_dir; force=true)
-	export_directory(output_dir; Export_cache_dir=cache_dir)
+	export_directory(output_dir)
 end
 
 # ╔═╡ Cell order:

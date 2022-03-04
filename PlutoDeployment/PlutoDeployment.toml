@@ -7,6 +7,7 @@ exclude=[
        ]
 
 slider_server_url="https://jupyter.ep3.uni-bayreuth.de"
+cache_dir="My_pluto_state_cache"
 
 [SliderServer]
 port = 2346
