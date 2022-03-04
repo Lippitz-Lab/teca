@@ -4,6 +4,16 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
+        el
+    end
+end
+
 # ╔═╡ 049ea5c2-b2e9-4524-965e-0db726134f1d
 using DataFrames, CSV
 
@@ -12,10 +22,13 @@ using Plots
 
 # ╔═╡ 22592e54-a24b-446d-bde0-93ec4c802b9b
 using StatsBase
-# Man muss im folgenden das "StatsBase." nicht mit schreiben. Ich tue es hier, um deutlich zu machen, wo die Funktion her kommt
+# Man muss im Folgenden das "StatsBase." nicht mit schreiben. Ich tue es hier, um deutlich zu machen, wo die Funktion her kommt
+
+# ╔═╡ bedcae55-ad81-485a-872e-6cafb82bde86
+using StatsPlots
 
 # ╔═╡ 2ee624de-2124-4f5e-82e6-46fd1c7dc62b
-using PlutoUI
+using PlutoUI,  LinearAlgebra
 
 # ╔═╡ f5450eab-0f9f-4b7f-9b80-992d3c553ba9
 # DO NOT MODIFY, will be updated by update_navbar.jl
@@ -67,7 +80,7 @@ Dann laden wir die Datei in die Variable 'datensatz'. Die Spalten sind durch ein
 """
 
 # ╔═╡ 1868cca5-3cfb-4376-8468-d13831366cc9
-datensatz = CSV.read(joinpath( "..", "res", "02-beschreibende-statistik", "01.08.2021 1.0.05.1 Temperatur Tagesgang_1.dat"), DataFrame; delim='\t', header=5)
+datensatz = CSV.read(download("https://raw.githubusercontent.com/MarkusLippitz/teca/62afb27f3db187a2a784ac4a88d7170eb9f0abe3/res/02-beschreibende-statistik/01.08.2021%201.0.05.1%20Temperatur%20Tagesgang_1.dat"), DataFrame; delim='\t', header=5)
 
 # ╔═╡ 436b8f12-d833-42ec-b85c-31eb96ad862a
 md"""
@@ -89,7 +102,7 @@ md"""
 Wir benutzen hier die Plots-Bibliothek und das interaktive plotly-backend
 """
 
-# ╔═╡ f840ae5a-2646-48ee-9ca7-1e72758ae947
+# ╔═╡ db816800-beb8-417b-a1dd-eab6b6939eb8
 plotly();
 
 # ╔═╡ d2ec129a-e27e-46fe-a066-6883cab53aab
@@ -108,7 +121,7 @@ Relevanter ist die Darstellung der Stichprrobe als Histogramm. Man zählt, wie o
 """
 
 # ╔═╡ 10c78be3-c1a3-4808-b136-189ddba7e53f
-histogram(stichprobe, xlabel="T_ist (deg C)", ylabel="Anzahl", legend=false)
+Plots.histogram(stichprobe, xlabel="T_ist (deg C)", ylabel="Anzahl", legend=false)
 
 # ╔═╡ 23509c7d-9e69-4f25-9839-ea9785cb7b75
 md"""
@@ -117,20 +130,40 @@ Da scheint eine gewisse Präferenz für Tempearturen im Abstand von ca. 0.02 Gra
 
 # ╔═╡ dc930a35-3705-40bd-9832-b13b084da3f1
 md"""
-Wichrig ist bei Histogrammen, dass das Integral über die x-Achse die Gesamtzahl der Messwerte ergibt. Das wird insbesondere dann relevant, wenn man unterschiedlich breite Balken kombinieren möchte, weil beispielsweise am Rand nur wenige Ereignisse sind. Effektiv löst man also doe Grenze zwischen den Balken auf. Der neue Balken hat den Mittelwert der alten als Höhe, nicht seine Summe!
+Wichtig ist bei Histogrammen, dass das Integral über die x-Achse die Gesamtzahl der Messwerte bzw. eine Wahrscheinlichkeit von 1 ergibt. Das wird insbesondere dann relevant, wenn man unterschiedlich breite Balken kombinieren möchte, weil beispielsweise am Rand nur wenige Ereignisse sind. Effektiv löst man dabei die Grenze zwischen den Balken auf. Der neue Balken hat den Mittelwert der alten als Höhe, nicht seine Summe!
+
+Das ist allerdings für die Histogramm-Funktion aus 'Plots' zu kompliziert. Wir benutzten 'StatsBase'.
 """
 
-# ╔═╡ 14fe27f9-3039-487d-b4d7-539b4c5c2b5b
+# ╔═╡ 51626ee2-e509-4cae-9f0e-1cf448b5b5e0
+@bind left_bin_width  Slider( 0.005: 0.005 : 0.1; default= 0.02, show_value = true)
+
+# ╔═╡ dbc3c042-3bb8-492c-810a-a3caf45ff794
+@bind histo_mode Radio(["pdf", "density", "probability", "none"], default="none")
+
+# ╔═╡ 532ab0aa-bc85-49b7-a577-124109ab53a1
 let
-	bins_l = range(20.88, 21; step=0.02)
+	# Histogram with variable bin size on left half
+	bins_l = range(20.88, 21; step=left_bin_width)
 	bins_r = range(21, 21.1; step=0.005)
-	histogram(stichprobe, xlabel="T_ist (deg C)", ylabel="Anzahl", legend=false, bins = [bins_l;  bins_r])
-end
+	h1 = StatsBase.fit(Histogram, stichprobe, [bins_l; bins_r])
+	h1 = LinearAlgebra.normalize(h1,mode=Symbol(histo_mode))
 
-# ╔═╡ 52963a98-5479-4f2f-9892-68f59a9e5f0f
-md"""
-Also **so nicht !**
-"""
+	# for comparison: histogram with fixed, small bin size
+	h2 = StatsBase.fit(Histogram, stichprobe, range(20.88, 21.1; step=0.005))
+	h2 = LinearAlgebra.normalize(h2,mode=Symbol(histo_mode))
+
+	# adjust label according to normalization
+	yaxis =  Dict([ (:none, "Anzahl"), 
+					(:pdf, "WK-Dichte (1/deg C)"), 
+					(:probability, "Wahrscheinlichkeit"), 
+					(:density, "Anzahl (1/deg C)")] )
+
+	# overlay both histograms
+	plot(h2, legend=false )
+	plot!(h1, fillopacity=0.7, xlabel="T_ist (deg C)", 
+			ylabel=yaxis[Symbol(histo_mode)])
+end
 
 # ╔═╡ 610cd280-d3b8-47c9-ad6e-4fb1577a6c4c
 md"""
@@ -296,6 +329,112 @@ oder 'von Hand'. Die Division liefert einen Fließkomma-Zahl, die erst in ein In
 # ╔═╡ 50779ec0-0cc2-420d-9337-89240cd31548
 sort(stichprobe)[Int32(length(stichprobe)/2)]
 
+# ╔═╡ e249afb3-2028-4b9e-828b-e757f2f27ee4
+md"""
+Analog zum Median kann man die sortierte Stichprobe an anderen Stellen als der Mitte auslesen. Das untere bzw. obere  **Quartil**  liest den Wert bei $1/4$ bzw. $3/4$. **Perzentile** lesen bei $p$ Prozent aus. Allgemein nennt man diese Maße [Quantile](https://de.wikipedia.org/wiki/Empirisches_Quantil).
+"""
+
+# ╔═╡ 11d40f7a-2c4c-4d64-843e-50824e19d10b
+md"""
+Das 2%-Percentil unseres Datensatzes ist
+"""
+
+# ╔═╡ 11394695-2a1c-4192-be2f-32a5250d0edc
+StatsBase.percentile(stichprobe, 2)
+
+# ╔═╡ 29959a13-a44b-49c9-86a1-c54c64403ebd
+md"""
+Die Quartillen sind 
+"""
+
+# ╔═╡ df8a3bc3-3980-4522-8a19-ee7264ea442e
+StatsBase.nquantile(stichprobe, 4)
+
+# ╔═╡ 0f017280-7a66-49f3-81a7-70dcba51a6a7
+md"""
+wobei die beiden 'äußeren' Werte das Minimum und das Maximum des Datensatzes angeben
+"""
+
+# ╔═╡ cd7b6262-004e-47bc-bacc-c23088a154b9
+minimum(stichprobe), maximum(stichprobe)
+
+# ╔═╡ a45c2888-98fe-42fc-b9ca-f307efb6831f
+md"""
+Die **Varianz** ist ein Maß für die Streuung der Datenpunkte
+```math
+\text{var} = \frac{1}{n-1} \sum_{i=1}^n \, (x_i - \bar{x})^2 = 
+\frac{1}{n-1} \left[ \sum_{i=1}^n x_i^2 -\frac{1}{n} \left( \sum_{i=1}^n x_i \right) ^2 \right]
+```
+Die **Standardabweichung** ist die Wurzel der Varianz
+```math
+ \sigma = \sqrt{\text{var}} = \sqrt{\frac{1}{n-1} \sum_{i=1}^n \, (x_i - \bar{x})^2}
+```
+Man beachte den Term $n-1$ in dieser Definition. Es gibt eine sehr ähnliche Defintion mit $n$ an Stelle von $n-1$, nur dass dann auch $\bar{x}$ durch $\mu$ ersetzt ist. Doch dazu mehr in dem Kapitel über Schätzer.
+"""
+
+# ╔═╡ f6fc5b01-6ea3-411f-bf12-878a4638bc01
+md"""
+In Julia 'von Hand' ist die Standardabweichung unsere Stichprobe
+"""
+
+# ╔═╡ 22e24d5a-5f53-4c38-ab48-fe3de8589057
+sqrt(sum( (stichprobe .- mean(stichprobe)).^2) / (length(stichprobe)-1))
+
+# ╔═╡ 8a0f6def-dfb6-4aca-a440-dfda31dd232c
+md"""
+Es geht auch mit der 'eingebauten' Funktion 'std'. Durch 'corrected' kann man zwsichen der Variante $n-1$ (true) und $n$ (flase) umschalten.
+"""
+
+# ╔═╡ d50a9c8b-08d8-4fcf-a2da-0c1cb0ff4021
+std([1,2,3], corrected=false), sqrt(2/3) , std([1,2,3], corrected=true)
+
+# ╔═╡ fa6d85be-0f22-438b-99b0-ec714ef2b514
+md"""
+oder aus 'StatsBase' Mittelwert und Standardabweichung in einem Aufwasch
+"""
+
+# ╔═╡ 9a681882-c8bd-4c99-979e-ca632e37e173
+StatsBase.mean_and_std( [1,2,3], corrected=true)
+
+# ╔═╡ b6921ce5-7144-484b-96e0-5276eb244b36
+md"""
+Man kann die Definition der Varianz ausbauen zu  allgemeinen **statistischen Momenten**. Das dritte Moment ist die **Schiefe** (engl. skewness) 
+```math
+\frac{1}{n} \sum \left( \frac{x_i - \bar{x}}{\sigma} \right)^3
+```
+und das vierte die  **Wölbung** (engl. kurtosis)
+```math
+\frac{1}{n} \sum \left( \frac{x_i - \bar{x}}{\sigma} \right)^4
+```
+
+"""
+
+# ╔═╡ d879445f-3379-4b82-8fbe-05354de4b7a7
+md"""
+In Julia
+"""
+
+# ╔═╡ e2018d1a-52ed-427b-9f1b-d6c50a1f18a5
+StatsBase.skewness(stichprobe), StatsBase.kurtosis(stichprobe)
+
+# ╔═╡ ed6f00d8-9ade-47ca-86f6-7018f40426a2
+md"""
+# Boxplot
+
+Wenn man verschiedene Stichproben auf einen Blick vergleichen will, dann ist der 'boxplot' hilfreich. Er zeichnet eine Kiste vom  oberen zum unteren Quartil mit einem Strich beim Median. Die 'Fehlerbalken' haben typischerweise die Länge von 1.5 mal der Kistenhöhe, werden aber zum nächstgelegenen Wert nach 'innen' gerundet. Alle weiter aussen liegenden Werte werden eingezeichnet.
+"""
+
+# ╔═╡ 816438b7-4fc0-4581-a7a0-b375ec4e88be
+ StatsPlots.boxplot(datensatz.Tist, ylabel = "Temperatur (deg. C)", legend=false, xaxis=false)
+
+# ╔═╡ 59832eb9-b4fa-4a5b-97a0-d96f532e82cc
+md"""
+So kann man gut mehrere Verteilungen vergleichen.
+"""
+
+# ╔═╡ 4de3b412-3ad3-448b-8f38-ea6ca09ce337
+StatsPlots.boxplot([ datensatz.Tist, datensatz.Kuelhlluft,  datensatz.Zuluft], ylabel = "Temperatur (deg. C)",  xticks = (1:3, ["T ist", "Kühlluft", "Zuluft"]), legend=false)
+
 # ╔═╡ 2b7f8f96-8e25-4155-89f0-c060e1d4a12e
 md"""
 *Aufgabe 1*
@@ -424,9 +563,11 @@ PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
+StatsPlots = "f3b207a7-027a-5e70-b257-86293d7955fd"
 
 [compat]
 CSV = "~0.10.2"
@@ -434,6 +575,7 @@ DataFrames = "~1.3.2"
 Plots = "~1.26.0"
 PlutoUI = "~0.7.35"
 StatsBase = "~0.33.16"
+StatsPlots = "~0.14.33"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -442,6 +584,12 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.7.2"
 manifest_format = "2.0"
+
+[[deps.AbstractFFTs]]
+deps = ["ChainRulesCore", "LinearAlgebra"]
+git-tree-sha1 = "6f1d9bc1c08f9f4a8fa92e3ea3cb50153a1b40d4"
+uuid = "621f4979-c628-5d54-868e-fcf4e3e8185c"
+version = "1.1.0"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
@@ -458,8 +606,26 @@ version = "3.3.3"
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
 
+[[deps.Arpack]]
+deps = ["Arpack_jll", "Libdl", "LinearAlgebra", "Logging"]
+git-tree-sha1 = "91ca22c4b8437da89b030f08d71db55a379ce958"
+uuid = "7d9fca2a-8960-54d3-9f78-7d1dccf2cb97"
+version = "0.5.3"
+
+[[deps.Arpack_jll]]
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "OpenBLAS_jll", "Pkg"]
+git-tree-sha1 = "5ba6c757e8feccf03a1554dfaf3e26b3cfc7fd5e"
+uuid = "68821587-b530-5797-8361-c406ea357684"
+version = "3.5.1+1"
+
 [[deps.Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
+
+[[deps.AxisAlgorithms]]
+deps = ["LinearAlgebra", "Random", "SparseArrays", "WoodburyMatrices"]
+git-tree-sha1 = "66771c8d21c8ff5e3a93379480a2307ac36863f7"
+uuid = "13072b0f-2c55-5437-9ae7-d433b7a33950"
+version = "1.0.1"
 
 [[deps.Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
@@ -493,6 +659,12 @@ deps = ["ChainRulesCore", "LinearAlgebra", "Test"]
 git-tree-sha1 = "bf98fa45a0a4cee295de98d4c1462be26345b9a1"
 uuid = "9e997f8a-9a97-42d5-a9f1-ce6bfc15e2c0"
 version = "0.1.2"
+
+[[deps.Clustering]]
+deps = ["Distances", "LinearAlgebra", "NearestNeighbors", "Printf", "SparseArrays", "Statistics", "StatsBase"]
+git-tree-sha1 = "75479b7df4167267d75294d14b58244695beb2ac"
+uuid = "aaaa29a8-35af-508c-8bc3-b662a17a0fe5"
+version = "0.14.2"
 
 [[deps.CodecZlib]]
 deps = ["TranscodingStreams", "Zlib_jll"]
@@ -561,6 +733,12 @@ git-tree-sha1 = "bfc1187b79289637fa0ef6d4436ebdfe6905cbd6"
 uuid = "e2d170a0-9d28-54be-80f0-106bbe20a464"
 version = "1.0.0"
 
+[[deps.DataValues]]
+deps = ["DataValueInterfaces", "Dates"]
+git-tree-sha1 = "d88a19299eba280a6d062e135a43f00323ae70bf"
+uuid = "e7dc6d0d-1eca-5fa6-8ad6-5aecde8b7ea5"
+version = "0.4.13"
+
 [[deps.Dates]]
 deps = ["Printf"]
 uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
@@ -569,9 +747,27 @@ uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
 deps = ["Mmap"]
 uuid = "8bb1440f-4735-579b-a4ab-409b98df4dab"
 
+[[deps.DensityInterface]]
+deps = ["InverseFunctions", "Test"]
+git-tree-sha1 = "80c3e8639e3353e5d2912fb3a1916b8455e2494b"
+uuid = "b429d917-457f-4dbc-8f4c-0cc954292b1d"
+version = "0.4.0"
+
+[[deps.Distances]]
+deps = ["LinearAlgebra", "SparseArrays", "Statistics", "StatsAPI"]
+git-tree-sha1 = "3258d0659f812acde79e8a74b11f17ac06d0ca04"
+uuid = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
+version = "0.10.7"
+
 [[deps.Distributed]]
 deps = ["Random", "Serialization", "Sockets"]
 uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
+
+[[deps.Distributions]]
+deps = ["ChainRulesCore", "DensityInterface", "FillArrays", "LinearAlgebra", "PDMats", "Printf", "QuadGK", "Random", "SparseArrays", "SpecialFunctions", "Statistics", "StatsBase", "StatsFuns", "Test"]
+git-tree-sha1 = "9d3c0c762d4666db9187f363a76b47f7346e673b"
+uuid = "31c24e10-a181-5473-b8eb-7969acd0382f"
+version = "0.25.49"
 
 [[deps.DocStringExtensions]]
 deps = ["LibGit2"]
@@ -607,11 +803,29 @@ git-tree-sha1 = "d8a578692e3077ac998b50c0217dfd67f21d1e5f"
 uuid = "b22a6f82-2f65-5046-a5b2-351ab43fb4e5"
 version = "4.4.0+0"
 
+[[deps.FFTW]]
+deps = ["AbstractFFTs", "FFTW_jll", "LinearAlgebra", "MKL_jll", "Preferences", "Reexport"]
+git-tree-sha1 = "505876577b5481e50d089c1c68899dfb6faebc62"
+uuid = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
+version = "1.4.6"
+
+[[deps.FFTW_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "c6033cc3892d0ef5bb9cd29b7f2f0331ea5184ea"
+uuid = "f5851436-0d7a-5f13-b9de-f02708fd171a"
+version = "3.3.10+0"
+
 [[deps.FilePathsBase]]
 deps = ["Compat", "Dates", "Mmap", "Printf", "Test", "UUIDs"]
 git-tree-sha1 = "04d13bfa8ef11720c24e4d840c0033d145537df7"
 uuid = "48062228-2e41-5def-b9a4-89aafe57970f"
 version = "0.9.17"
+
+[[deps.FillArrays]]
+deps = ["LinearAlgebra", "Random", "SparseArrays", "Statistics"]
+git-tree-sha1 = "4c7d3757f3ecbcb9055870351078552b7d1dbd2d"
+uuid = "1a297f60-69ca-5386-bcde-b61e274b549b"
+version = "0.13.0"
 
 [[deps.FixedPointNumbers]]
 deps = ["Statistics"]
@@ -734,9 +948,21 @@ git-tree-sha1 = "61feba885fac3a407465726d0c330b3055df897f"
 uuid = "842dd82b-1e85-43dc-bf29-5d0ee9dffc48"
 version = "1.1.2"
 
+[[deps.IntelOpenMP_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "d979e54b71da82f3a65b62553da4fc3d18c9004c"
+uuid = "1d5cc7b8-4909-519e-a0f8-d0f5ad9712d0"
+version = "2018.0.3+2"
+
 [[deps.InteractiveUtils]]
 deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
+
+[[deps.Interpolations]]
+deps = ["AxisAlgorithms", "ChainRulesCore", "LinearAlgebra", "OffsetArrays", "Random", "Ratios", "Requires", "SharedArrays", "SparseArrays", "StaticArrays", "WoodburyMatrices"]
+git-tree-sha1 = "b15fc0a95c564ca2e0a7ae12c1f095ca848ceb31"
+uuid = "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59"
+version = "0.13.5"
 
 [[deps.InverseFunctions]]
 deps = ["Test"]
@@ -782,6 +1008,12 @@ git-tree-sha1 = "b53380851c6e6664204efb2e62cd24fa5c47e4ba"
 uuid = "aacddb02-875f-59d6-b918-886e6ef4fbf8"
 version = "2.1.2+0"
 
+[[deps.KernelDensity]]
+deps = ["Distributions", "DocStringExtensions", "FFTW", "Interpolations", "StatsBase"]
+git-tree-sha1 = "591e8dc09ad18386189610acafb970032c519707"
+uuid = "5ab0869b-81aa-558d-bb23-cbf5423bbe9b"
+version = "0.6.3"
+
 [[deps.LAME_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "f6250b16881adf048549549fba48b1161acdac8c"
@@ -810,6 +1042,10 @@ deps = ["Formatting", "InteractiveUtils", "LaTeXStrings", "MacroTools", "Markdow
 git-tree-sha1 = "a6552bfeab40de157a297d84e03ade4b8177677f"
 uuid = "23fbe1c1-3f47-55db-b15f-69d7ec21a316"
 version = "0.15.12"
+
+[[deps.LazyArtifacts]]
+deps = ["Artifacts", "Pkg"]
+uuid = "4af54fe1-eca0-43a8-85a7-787d91b784e3"
 
 [[deps.LibCURL]]
 deps = ["LibCURL_jll", "MozillaCACerts_jll"]
@@ -891,6 +1127,12 @@ version = "0.3.6"
 [[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
+[[deps.MKL_jll]]
+deps = ["Artifacts", "IntelOpenMP_jll", "JLLWrappers", "LazyArtifacts", "Libdl", "Pkg"]
+git-tree-sha1 = "e595b205efd49508358f7dc670a940c790204629"
+uuid = "856f044c-d86e-5d09-b602-aeab76dc8ba7"
+version = "2022.0.0+0"
+
 [[deps.MacroTools]]
 deps = ["Markdown", "Random"]
 git-tree-sha1 = "3d3e902b31198a27340d0bf00d6ac452866021cf"
@@ -928,13 +1170,36 @@ uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
 
+[[deps.MultivariateStats]]
+deps = ["Arpack", "LinearAlgebra", "SparseArrays", "Statistics", "StatsAPI", "StatsBase"]
+git-tree-sha1 = "7008a3412d823e29d370ddc77411d593bd8a3d03"
+uuid = "6f286f6a-111f-5878-ab1e-185364afe411"
+version = "0.9.1"
+
 [[deps.NaNMath]]
 git-tree-sha1 = "737a5957f387b17e74d4ad2f440eb330b39a62c5"
 uuid = "77ba4419-2d1f-58cd-9bb1-8ffee604a2e3"
 version = "1.0.0"
 
+[[deps.NearestNeighbors]]
+deps = ["Distances", "StaticArrays"]
+git-tree-sha1 = "16baacfdc8758bc374882566c9187e785e85c2f0"
+uuid = "b8a86587-4115-5ab1-83bc-aa920d37bbce"
+version = "0.4.9"
+
 [[deps.NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
+
+[[deps.Observables]]
+git-tree-sha1 = "fe29afdef3d0c4a8286128d4e45cc50621b1e43d"
+uuid = "510215fc-4207-5dde-b226-833fc4488ee2"
+version = "0.4.0"
+
+[[deps.OffsetArrays]]
+deps = ["Adapt"]
+git-tree-sha1 = "043017e0bdeff61cfbb7afeb558ab29536bbb5ed"
+uuid = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
+version = "1.10.8"
 
 [[deps.Ogg_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -946,11 +1211,21 @@ version = "1.3.5+1"
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
 
+[[deps.OpenLibm_jll]]
+deps = ["Artifacts", "Libdl"]
+uuid = "05823500-19ac-5b8b-9628-191a04bc5112"
+
 [[deps.OpenSSL_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "648107615c15d4e09f7eca16307bc821c1f718d8"
 uuid = "458c3c95-2e84-50aa-8efc-19380b2a3a95"
 version = "1.1.13+0"
+
+[[deps.OpenSpecFun_jll]]
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "13652491f6856acfd2db29360e1bbcd4565d04f1"
+uuid = "efe28fd5-8261-553b-a9e1-b2916fc3738e"
+version = "0.5.5+0"
 
 [[deps.Opus_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -968,6 +1243,12 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "b2a7af664e098055a7529ad1a900ded962bca488"
 uuid = "2f80f16e-611a-54ab-bc61-aa92de5b98fc"
 version = "8.44.0+0"
+
+[[deps.PDMats]]
+deps = ["LinearAlgebra", "SparseArrays", "SuiteSparse"]
+git-tree-sha1 = "7e2166042d1698b6072352c74cfd1fca2a968253"
+uuid = "90014a1f-27ba-587c-ab20-58faa44d9150"
+version = "0.11.6"
 
 [[deps.Parsers]]
 deps = ["Dates"]
@@ -1037,6 +1318,12 @@ git-tree-sha1 = "ad368663a5e20dbb8d6dc2fddeefe4dae0781ae8"
 uuid = "ea2cea3b-5b76-57ae-a6ef-0a8af62496e1"
 version = "5.15.3+0"
 
+[[deps.QuadGK]]
+deps = ["DataStructures", "LinearAlgebra"]
+git-tree-sha1 = "78aadffb3efd2155af139781b8a8df1ef279ea39"
+uuid = "1fd47b50-473d-5c70-9696-f719f8f3bcdc"
+version = "2.4.2"
+
 [[deps.REPL]]
 deps = ["InteractiveUtils", "Markdown", "Sockets", "Unicode"]
 uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
@@ -1044,6 +1331,12 @@ uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 [[deps.Random]]
 deps = ["SHA", "Serialization"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+
+[[deps.Ratios]]
+deps = ["Requires"]
+git-tree-sha1 = "dc84268fe0e3335a62e315a3a7cf2afa7178a734"
+uuid = "c84ed2f1-dad5-54f0-aa8e-dbefe2724439"
+version = "0.4.3"
 
 [[deps.RecipesBase]]
 git-tree-sha1 = "6bf3f380ff52ce0832ddd3a2a7b9538ed1bcca7d"
@@ -1072,6 +1365,18 @@ deps = ["UUIDs"]
 git-tree-sha1 = "838a3a4188e2ded87a4f9f184b4b0d78a1e91cb7"
 uuid = "ae029012-a4dd-5104-9daa-d747884805df"
 version = "1.3.0"
+
+[[deps.Rmath]]
+deps = ["Random", "Rmath_jll"]
+git-tree-sha1 = "bf3188feca147ce108c76ad82c2792c57abe7b1f"
+uuid = "79098fc4-a85e-5d69-aa6a-4863f24498fa"
+version = "0.7.0"
+
+[[deps.Rmath_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "68db32dff12bb6127bac73c209881191bf0efbb7"
+uuid = "f50d1b31-88e8-58de-be2c-1cc44531875f"
+version = "0.3.0+0"
 
 [[deps.SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
@@ -1114,6 +1419,12 @@ version = "1.0.1"
 deps = ["LinearAlgebra", "Random"]
 uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
+[[deps.SpecialFunctions]]
+deps = ["ChainRulesCore", "IrrationalConstants", "LogExpFunctions", "OpenLibm_jll", "OpenSpecFun_jll"]
+git-tree-sha1 = "5ba658aeecaaf96923dce0da9e703bd1fe7666f9"
+uuid = "276daf66-3868-5448-9aa4-cd146d93841b"
+version = "2.1.4"
+
 [[deps.StaticArrays]]
 deps = ["LinearAlgebra", "Random", "Statistics"]
 git-tree-sha1 = "74fb527333e72ada2dd9ef77d98e4991fb185f04"
@@ -1136,15 +1447,37 @@ git-tree-sha1 = "8977b17906b0a1cc74ab2e3a05faa16cf08a8291"
 uuid = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 version = "0.33.16"
 
+[[deps.StatsFuns]]
+deps = ["ChainRulesCore", "InverseFunctions", "IrrationalConstants", "LogExpFunctions", "Reexport", "Rmath", "SpecialFunctions"]
+git-tree-sha1 = "f35e1879a71cca95f4826a14cdbf0b9e253ed918"
+uuid = "4c63d2b9-4356-54db-8cca-17b64c39e42c"
+version = "0.9.15"
+
+[[deps.StatsPlots]]
+deps = ["AbstractFFTs", "Clustering", "DataStructures", "DataValues", "Distributions", "Interpolations", "KernelDensity", "LinearAlgebra", "MultivariateStats", "Observables", "Plots", "RecipesBase", "RecipesPipeline", "Reexport", "StatsBase", "TableOperations", "Tables", "Widgets"]
+git-tree-sha1 = "4d9c69d65f1b270ad092de0abe13e859b8c55cad"
+uuid = "f3b207a7-027a-5e70-b257-86293d7955fd"
+version = "0.14.33"
+
 [[deps.StructArrays]]
 deps = ["Adapt", "DataAPI", "StaticArrays", "Tables"]
 git-tree-sha1 = "57617b34fa34f91d536eb265df67c2d4519b8b98"
 uuid = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
 version = "0.6.5"
 
+[[deps.SuiteSparse]]
+deps = ["Libdl", "LinearAlgebra", "Serialization", "SparseArrays"]
+uuid = "4607b0f0-06f3-5cda-b6b1-a6196a1729e9"
+
 [[deps.TOML]]
 deps = ["Dates"]
 uuid = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
+
+[[deps.TableOperations]]
+deps = ["SentinelArrays", "Tables", "Test"]
+git-tree-sha1 = "e383c87cf2a1dc41fa30c093b2a19877c83e1bc1"
+uuid = "ab02a1b2-a7df-11e8-156e-fb1833f50b87"
+version = "1.2.0"
 
 [[deps.TableTraits]]
 deps = ["IteratorInterfaceExtensions"]
@@ -1212,6 +1545,18 @@ deps = ["DataAPI", "InlineStrings", "Parsers"]
 git-tree-sha1 = "c69f9da3ff2f4f02e811c3323c22e5dfcb584cfa"
 uuid = "ea10d353-3f73-51f8-a26c-33c1cb351aa5"
 version = "1.4.1"
+
+[[deps.Widgets]]
+deps = ["Colors", "Dates", "Observables", "OrderedCollections"]
+git-tree-sha1 = "505c31f585405fc375d99d02588f6ceaba791241"
+uuid = "cc8bc4a8-27d6-5769-a93b-9d913e69aa62"
+version = "0.6.5"
+
+[[deps.WoodburyMatrices]]
+deps = ["LinearAlgebra", "SparseArrays"]
+git-tree-sha1 = "de67fa59e33ad156a590055375a30b23c40299d3"
+uuid = "efce3f68-66dc-5838-9240-27a6d6f5f9b6"
+version = "0.5.5"
 
 [[deps.XML2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libiconv_jll", "Pkg", "Zlib_jll"]
@@ -1431,15 +1776,17 @@ version = "0.9.1+5"
 # ╟─9ec97d94-274a-43e0-ae46-aa89d6149f0b
 # ╟─88143e8d-1a08-4aca-9f42-63c39c8ec0e9
 # ╠═ed832ad1-62f1-4ef6-a5d3-12e6bd2b60cd
-# ╠═f840ae5a-2646-48ee-9ca7-1e72758ae947
+# ╠═db816800-beb8-417b-a1dd-eab6b6939eb8
 # ╠═d2ec129a-e27e-46fe-a066-6883cab53aab
 # ╟─1213593e-89dc-44a7-94e9-9868bd08c715
 # ╟─fe5d30f7-74f8-4b4b-b604-ee2d30fe8f33
 # ╠═10c78be3-c1a3-4808-b136-189ddba7e53f
 # ╟─23509c7d-9e69-4f25-9839-ea9785cb7b75
 # ╟─dc930a35-3705-40bd-9832-b13b084da3f1
-# ╠═14fe27f9-3039-487d-b4d7-539b4c5c2b5b
-# ╟─52963a98-5479-4f2f-9892-68f59a9e5f0f
+# ╠═22592e54-a24b-446d-bde0-93ec4c802b9b
+# ╠═51626ee2-e509-4cae-9f0e-1cf448b5b5e0
+# ╠═dbc3c042-3bb8-492c-810a-a3caf45ff794
+# ╠═532ab0aa-bc85-49b7-a577-124109ab53a1
 # ╟─610cd280-d3b8-47c9-ad6e-4fb1577a6c4c
 # ╟─00ec87d6-4b4d-42d7-a315-885ef16649a6
 # ╟─3980b93b-dca5-41e8-9db5-b9ec5bb06b86
@@ -1451,7 +1798,6 @@ version = "0.9.1+5"
 # ╟─c21b3673-2c16-4e28-b155-9e9ec54ca84f
 # ╠═fded84d1-cb5b-4b51-940c-3772594e3aeb
 # ╟─f20230a5-2fe9-4907-b5e4-13a98482eb56
-# ╠═22592e54-a24b-446d-bde0-93ec4c802b9b
 # ╠═25b6f838-a496-4b4e-a456-478d4eb1b536
 # ╟─98330947-bb95-4f2e-a380-991891a3328b
 # ╠═84dc49a5-642f-42d1-8520-a1f338991531
@@ -1475,6 +1821,28 @@ version = "0.9.1+5"
 # ╠═cb17d0e7-3e69-4279-83c8-15e5a92815c2
 # ╟─ebe77f7a-b85b-409d-b57c-786354a385bc
 # ╠═50779ec0-0cc2-420d-9337-89240cd31548
+# ╟─e249afb3-2028-4b9e-828b-e757f2f27ee4
+# ╟─11d40f7a-2c4c-4d64-843e-50824e19d10b
+# ╠═11394695-2a1c-4192-be2f-32a5250d0edc
+# ╟─29959a13-a44b-49c9-86a1-c54c64403ebd
+# ╠═df8a3bc3-3980-4522-8a19-ee7264ea442e
+# ╟─0f017280-7a66-49f3-81a7-70dcba51a6a7
+# ╠═cd7b6262-004e-47bc-bacc-c23088a154b9
+# ╟─a45c2888-98fe-42fc-b9ca-f307efb6831f
+# ╟─f6fc5b01-6ea3-411f-bf12-878a4638bc01
+# ╠═22e24d5a-5f53-4c38-ab48-fe3de8589057
+# ╟─8a0f6def-dfb6-4aca-a440-dfda31dd232c
+# ╠═d50a9c8b-08d8-4fcf-a2da-0c1cb0ff4021
+# ╟─fa6d85be-0f22-438b-99b0-ec714ef2b514
+# ╠═9a681882-c8bd-4c99-979e-ca632e37e173
+# ╟─b6921ce5-7144-484b-96e0-5276eb244b36
+# ╟─d879445f-3379-4b82-8fbe-05354de4b7a7
+# ╠═e2018d1a-52ed-427b-9f1b-d6c50a1f18a5
+# ╟─ed6f00d8-9ade-47ca-86f6-7018f40426a2
+# ╠═bedcae55-ad81-485a-872e-6cafb82bde86
+# ╠═816438b7-4fc0-4581-a7a0-b375ec4e88be
+# ╟─59832eb9-b4fa-4a5b-97a0-d96f532e82cc
+# ╠═4de3b412-3ad3-448b-8f38-ea6ca09ce337
 # ╠═2b7f8f96-8e25-4155-89f0-c060e1d4a12e
 # ╠═88b5d4d2-9b4c-4f1b-841b-a18443e5e1d9
 # ╠═0bc863fa-9628-4f30-936f-6fed3a225ef1
