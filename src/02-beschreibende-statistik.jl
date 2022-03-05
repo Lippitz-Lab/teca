@@ -117,7 +117,7 @@ Auf den ersten Blick funktioniert die Klimaanlage ganz gut. Es ist keine systema
 md"""
 ### Histogram
 
-Relevanter ist die Darstellung der Stichprrobe als Histogramm. Man zählt, wie oft ein Wert innerhalb eines Intervalls vorkommt und zeichnet Balken entsprechender Höhe und Breite.
+Relevanter ist die Darstellung der Stichprobe als Histogramm. Man zählt, wie oft ein Wert innerhalb eines Intervalls, einer _Klasse_, vorkommt und zeichnet Balken entsprechender Höhe und Breite.
 """
 
 # ╔═╡ 10c78be3-c1a3-4808-b136-189ddba7e53f
@@ -125,12 +125,12 @@ Plots.histogram(stichprobe, xlabel="T_ist (deg C)", ylabel="Anzahl", legend=fals
 
 # ╔═╡ 23509c7d-9e69-4f25-9839-ea9785cb7b75
 md"""
-Da scheint eine gewisse Präferenz für Tempearturen im Abstand von ca. 0.02 Grad zu sein, wo immer das herkommt.
+Da scheint eine gewisse Präferenz für Temperaturen im Abstand von ca. 0.02 Grad zu sein, wo immer das herkommt.
 """
 
 # ╔═╡ dc930a35-3705-40bd-9832-b13b084da3f1
 md"""
-Wichtig ist bei Histogrammen, dass das Integral über die x-Achse die Gesamtzahl der Messwerte bzw. eine Wahrscheinlichkeit von 1 ergibt. Das wird insbesondere dann relevant, wenn man unterschiedlich breite Balken kombinieren möchte, weil beispielsweise am Rand nur wenige Ereignisse sind. Effektiv löst man dabei die Grenze zwischen den Balken auf. Der neue Balken hat den Mittelwert der alten als Höhe, nicht seine Summe!
+Wichtig ist bei Histogrammen, dass das Integral über die x-Achse die Gesamtzahl der Messwerte bzw. eine Wahrscheinlichkeit von 1 ergibt. Das wird insbesondere dann relevant, wenn man unterschiedlich breite Klassen kombinieren möchte, weil beispielsweise am Rand nur wenige Ereignisse sind. Effektiv löst man dabei die Grenze zwischen den Klassen auf. Der neue Balken hat den Mittelwert der alten als Höhe, nicht seine Summe!
 
 Das ist allerdings für die Histogramm-Funktion aus 'Plots' zu kompliziert. Wir benutzten 'StatsBase'.
 """
@@ -406,7 +406,7 @@ und das vierte die  **Wölbung** (engl. kurtosis)
 ```math
 \frac{1}{n} \sum \left( \frac{x_i - \bar{x}}{\sigma} \right)^4
 ```
-
+Durch die Division durch die Standardabweichung sind diese Momente einheitenfrei.
 """
 
 # ╔═╡ d879445f-3379-4b82-8fbe-05354de4b7a7
@@ -434,6 +434,18 @@ So kann man gut mehrere Verteilungen vergleichen.
 
 # ╔═╡ 4de3b412-3ad3-448b-8f38-ea6ca09ce337
 StatsPlots.boxplot([ datensatz.Tist, datensatz.Kuelhlluft,  datensatz.Zuluft], ylabel = "Temperatur (deg. C)",  xticks = (1:3, ["T ist", "Kühlluft", "Zuluft"]), legend=false)
+
+# ╔═╡ 0e889909-9ded-438f-bdd5-4989eb6cdddf
+md"""
+# Mehrdimensionale Daten
+"""
+
+# ╔═╡ 8997748b-bcd3-44e6-aecb-e003a3ed0a12
+begin
+	plot(datensatz.Time, datensatz.Zuluft)
+	plot!(datensatz.Time, datensatz.Tist)
+	
+end
 
 # ╔═╡ 2b7f8f96-8e25-4155-89f0-c060e1d4a12e
 md"""
@@ -556,7 +568,7 @@ md"""
 """
 
 # ╔═╡ d326a92d-23b2-43d4-b984-c51b9dd6a905
-TableOfContents()
+TableOfContents(title="Inhalt")
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1843,6 +1855,8 @@ version = "0.9.1+5"
 # ╠═816438b7-4fc0-4581-a7a0-b375ec4e88be
 # ╟─59832eb9-b4fa-4a5b-97a0-d96f532e82cc
 # ╠═4de3b412-3ad3-448b-8f38-ea6ca09ce337
+# ╠═0e889909-9ded-438f-bdd5-4989eb6cdddf
+# ╠═8997748b-bcd3-44e6-aecb-e003a3ed0a12
 # ╠═2b7f8f96-8e25-4155-89f0-c060e1d4a12e
 # ╠═88b5d4d2-9b4c-4f1b-841b-a18443e5e1d9
 # ╠═0bc863fa-9628-4f30-936f-6fed3a225ef1
