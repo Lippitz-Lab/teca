@@ -75,7 +75,7 @@ Durch eine *Messung* erhalten wir uns einen Messwert einer physikalischen Größ
 md"""
 # Temperaturverlauf
 
-Als konkretes Beispiel betrachten wir den Temperaturverlauf am 1. August 2021 in einem unserer (klimatisierten) Labore. In einer idealen Welt wäre die Temperatur genau $21^\circ$C, aber natürlich ändert sie sich im laufe des Tages. Diese Zeitabhängigkeit ignorieren wir zunächst und betrachten dies als wiederholte Messung bei unveränderten Bedingungen. 
+Als konkretes Beispiel betrachten wir den Temperaturverlauf am 1. August 2021 in einem unserer (klimatisierten) Labore. In einer idealen Welt wäre die Temperatur genau $21^\circ$C, aber natürlich ändert sie sich im Laufe des Tages. Diese Zeitabhängigkeit ignorieren wir zunächst und betrachten dies als wiederholte Messung bei unveränderten Bedingungen. 
 """
 
 # ╔═╡ dcba4d9e-89d9-4fac-820a-fb24da9b1916
@@ -454,12 +454,12 @@ md"""
 
 # ╔═╡ cc65205c-776a-4dbb-b8d3-625d268a24ef
 md"""
-Schon beim Histogramm hatten wir Daten in Klassen eingeteilt. Alle Messwerte, die in eingewisses Temperatur-Intervall gefallen sind, zählten zum gleichen Balken des Histogramms. Manchmal möchte man solche klassierte Daten weiter verarbeiten, manchmal liegen Daten auch dirket nur klassiert vor. Ein Beispiel ist die Notenverteilung einer Klausur. Die Noten können dabei nur wenige verschiedene Werte annehmen.
+Schon beim Histogramm hatten wir Daten in Klassen eingeteilt. Alle Messwerte, die in ein gewisses Temperatur-Intervall gefallen sind, zählten zum gleichen Balken des Histogramms. Manchmal möchte man solche klassierte Daten weiter verarbeiten, manchmal liegen Daten auch direkt nur klassiert vor. Ein Beispiel ist die Notenverteilung einer Klausur. Die Noten können dabei nur wenige verschiedene Werte annehmen.
 """
 
 # ╔═╡ be18fc94-6a7a-4959-8f02-9bc118969d18
 md"""
-Auch aus klassierten Daten kann man die oben besprochenen Kennzahlen berechnen. Sei $c_l$ die Grenze der Klassen, und somit $z_l = (c_{l-1} + c_l) /2$ die Mitten der Klassen. Beim Übergang zu klassierten Daten ersetzt man in den Gleichen oben jedes $x_i$ durch 'seine' Klassenmitte $z_{l(i)}$, summiert also weiterhin über $i$. Dabei sind dann natürlcihe viele $z_{l(i)}$ identisch, so dass man diese Teilsummen ausklammern kann und durch die Anzahl $h_l$ der Werte in der Klasse $l$ ersetzen kann.
+Auch aus klassierten Daten kann man die oben besprochenen Kennzahlen berechnen. Sei $c_l$ die Grenze der Klassen, und somit $z_l = (c_{l-1} + c_l) /2$ die Mitten der Klassen. Beim Übergang zu klassierten Daten ersetzt man in den Gleichen oben jedes $x_i$ durch 'seine' Klassenmitte $z_{l(i)}$, summiert also weiterhin über $i$. Dabei sind dann natürlich viele $z_{l(i)}$ identisch, so dass man diese Teilsummen ausklammern kann und durch die Anzahl $h_l$ der Werte in der Klasse $l$ ersetzen kann.
 """
 
 # ╔═╡ 07e79d80-b780-44e2-869a-5e97bcd075c1
@@ -501,9 +501,9 @@ md"""
 
 # ╔═╡ af438416-7d6f-44b3-980e-cd6823688008
 md"""
-Oft werden mit einer Beobachrung, einer Messung mehrere Größen gemessen. Damit erhält man mehrdimensionale oder multivariate Daten.
+Oft werden mit einer Beobachtung, einer Messung mehrere Größen gemessen. Damit erhält man mehrdimensionale oder multivariate Daten.
 
-Im Prinzip war schon unser Temperattur-beispiel von oben mehrdimensional, da wir zu jedem Zeitpunkt nicht nur die Raumtemperatir, sondern auch Temperaturen an anderen Stellen vorliegen hatten. Die hatten wir bisher ignoriert. Nun nehmen wir sie hinzu, und auch noch die gleichzeitige Messung der gleichen größen in anderen Räumen.
+Im Prinzip war schon unser Temperatur-Beispiel von oben mehrdimensional, da wir zu jedem Zeitpunkt nicht nur die Raumtemperatur, sondern auch Temperaturen an anderen Stellen vorliegen hatten. Die hatten wir bisher ignoriert. Nun nehmen wir sie hinzu, und auch noch die gleichzeitige Messung der gleichen Größen in anderen Räumen.
 """
 
 # ╔═╡ 64fe649e-9b17-451f-8d3f-7112514bb7fe
@@ -516,6 +516,8 @@ begin
 	räume = ["1_0_05_1","1_0_05_3","2_0_08","3_0_07"]
 	files = ["https://raw.githubusercontent.com/MarkusLippitz/teca/simple/res/02-beschreibende-statistik/Temperatur_$(r)_Tag_210801.dat" for r in räume]
 	datensätze = CSV.read.(download.(files), DataFrame; delim='\t', header=5)
+	# man beachte den Punkt in "read.(download" und den in "download.(files" !
+	# -> Wende alles auf alle Eintröge in "räume" an
 end;
 
 # ╔═╡ aa04f999-0979-47a3-8694-7de7df4ebf21
@@ -540,9 +542,9 @@ In einem **Streudiagramm** stellt man eine Größe gegenüber der anderen dar, u
 # ╔═╡ 30c6734d-4aad-4065-8604-7e3d91fa59fb
 let
 	dec = 50
-	scatter(datensätze[1].Zuluft[1:dec:end], datensätze[2].Zuluft[1:dec:end], 
+	Plots.scatter(datensätze[1].Zuluft[1:dec:end], datensätze[2].Zuluft[1:dec:end], 
 		label="1 vs 2",  markersize=2, markerstrokewidth=0)
-	scatter!(datensätze[3].Zuluft[1:dec:end], datensätze[4].Zuluft[1:dec:end],  
+	Plots.scatter!(datensätze[3].Zuluft[1:dec:end], datensätze[4].Zuluft[1:dec:end],  
 		label="3 vs 4",markersize=2, markerstrokewidth=0, 
 		xlabel="Zuluft A", ylabel="Zuluft B",aspect_ratio=:equal,)
 end
@@ -557,7 +559,7 @@ Plots.histogram2d(datensätze[3].Zuluft, datensätze[4].Zuluft, bins=100,aspect_
 
 # ╔═╡ 2b1f9027-176f-46f9-981e-387042dddb2b
 md"""
-# Produkmomenten-Korrelation
+# Produktmomenten-Korrelation
 """
 
 # ╔═╡ f5d85c34-d26d-4e72-b64d-5baa966555db
@@ -567,11 +569,11 @@ Eine Kennzahl für den Zusammenhang zwischen zwei Messgrößen ist die *Korrelat
 
 # ╔═╡ 39dd4490-fbce-43c2-b216-721e73613281
 md"""
-Zunächst normieren wir die einzelnen Messwerte so, dass deren Mittelwert 0 und deren Standrardabweichung 1 beträgt. Wir definieren also
+Zunächst normieren wir die einzelnen Messwerte so, dass deren Mittelwert 0 und deren Standardabweichung 1 beträgt. Wir definieren also
 ```math
 \tilde{x}_i = \frac{x_i - \bar{x}}{\sigma_x}
 ```
-und analog für die zweite Größe $y_i$. Wenn nun $\tilde{x}_i$ und $\tilde{y}_i$ beide gleichzeitg positiv, oder beide gleichzeitig negativ sind, dann entsperciht dies einem gewissen positiven Zusammenhang zwischne $x_i$ und $y_i$. Ein einfahces Maß für diesen Zusammenhang ist das Pordukt $\tilde{x}_i \tilde{y}_i$, also 
+und analog für die zweite Größe $y_i$. Wenn nun $\tilde{x}_i$ und $\tilde{y}_i$ beide gleichzeitig positiv, oder beide gleichzeitig negativ sind, dann entspricht dies einem gewissen positiven Zusammenhang zwischen $x_i$ und $y_i$. Ein einfaches Maß für diesen Zusammenhang ist das Produkt $\tilde{x}_i \tilde{y}_i$, also 
 ```math
 r_{xy} = \frac{1}{n-1} \sum_i \tilde{x}_i \tilde{y}_i
 ```
@@ -584,12 +586,12 @@ Dies ist die (einfache) **Korrelation**, oder  auch *Produktmomenten-Korrelation
 ```math
 r_{xy} = \frac{\text{var}_{xy}}{\sigma_x \sigma_y} \quad \text{mit} \quad  \text{var}_{xy} = \frac{1}{n-1} \sum_i (x_i - \bar{x})(y_i - \bar{y})
 ```
-Die Kovarianz $\text{var}_{xy}$  ist sehr analog zur Varianz, nur das das Quadrat einer Größe durch das Produk von zwei Größen ersetzt wird.
+Die Kovarianz $\text{var}_{xy}$  ist sehr analog zur Varianz, nur das das Quadrat einer Größe durch das Produkt von zwei Größen ersetzt wird.
 """
 
 # ╔═╡ b68d6412-2656-43f3-a393-10e325b35d24
 md"""
-Einfache Spezialfälle sind $x_i = y_i$, was $r_{xy} = 1$ ergibt. Falls ein linearer Zusammenhang besteht  in der Art $y_i = a + b x_i$, dann ist ebenfalls $r_{xy} = 1$, falls $b>0$, und $r_{xy} = -1$, falls $b<0$. Die Produktmomenten-Korrelation  misst also die Sträke des linearen Zusammenhangs.
+Einfache Spezialfälle sind $x_i = y_i$, was $r_{xy} = 1$ ergibt. Falls ein linearer Zusammenhang besteht  in der Art $y_i = a + b x_i$, dann ist ebenfalls $r_{xy} = 1$, falls $b>0$, und $r_{xy} = -1$, falls $b<0$. Die Produktmomenten-Korrelation  misst also die Stärke des linearen Zusammenhangs.
 """
 
 # ╔═╡ 510f698a-dee9-4e67-9ade-57289689f189
@@ -621,7 +623,7 @@ end
 
 # ╔═╡ 80e3d9db-e6e9-4e64-9a28-123141079edb
 md"""
-**Achtrung** Diese Produktmomenten-Korrelation misst nur die Sträkle eines linearen Zusammenhangs. Es können noch andere Zusammenhänge höherer Ordnung vorhanden sein, die bei gleichem $r_{xy}$ sehr verschiedne Streuidiagramme bewirken! Die Korrelation ist nicht robust gegen Ausreißer.
+**Achtung** Diese Produktmomenten-Korrelation misst nur die Stärke eines linearen Zusammenhangs. Es können noch andere Zusammenhänge höherer Ordnung vorhanden sein, die bei gleichem $r_{xy}$ sehr verschiedene Streudiagramme bewirken! Die Korrelation ist nicht robust gegen Ausreißer.
 """
 
 # ╔═╡ 79810bad-ceb4-42a0-8b16-53f25004250b
@@ -631,12 +633,12 @@ md"""
 
 # ╔═╡ 7ca6a708-e123-406a-9987-ad52f9323224
 md"""
-Ähnloich zum Unterschied zwischen Mittelwert und Median, kann man auch eine Korrealtion nicht zwishcne den Werten an sich, sondern zwischen den Rängen berechnen. Hier spielen Ausreißer dann quais keine Rolle mehr.
+Ähnlich zum Unterschied zwischen Mittelwert und Median, kann man auch eine Korrelation nicht zwischen den Werten an sich, sondern zwischen den Rängen berechnen. Hier spielen Ausreißer dann quais keine Rolle mehr.
 """
 
 # ╔═╡ 58a063d6-6dd3-4e08-abe7-357e96d5eac9
 md"""
-Ananlog definietren wir die Spearman'shce Rangkorrelation
+Analog definieren wir die Spearmansche Rangkorrelation
 ```math
 r_{xy}^\text{(Sp)} = \frac{\text{var}_\text{Rang(x) Rang(y)}}{\sigma_\text{Rang(x)} \sigma_\text{Rang(y)}} 
 ```
@@ -652,7 +654,7 @@ Die Standardabweichung ist **XXX TODO** und die Kovarianz
 ```math
 \text{var}_\text{Rang(x) Rang(y)} = \frac{1}{n-1} \sum_i \left( \text{Rang}(x_i) - \frac{n-1}{2} \right)\left( \text{Rang}(y_i) - \frac{n-1}{2} \right)
 ```
-Zusammen ergbit das
+Zusammen ergibt das
 ```math
 r_{xy}^\text{(Sp)} = 1 - \frac{6}{n(n^2 -1)} \sum_i ( \text{Rang}(x_i)  -  \text{Rang}(y_i) )^2
 ```
@@ -673,9 +675,9 @@ StatsBase.corspearman(datensätze[1].Zuluft, datensätze[2].Zuluft)
 md"""
 ## Achtung
 
-- Eine Korrelation ist keine Kausalität. Nur wweil eteas korreliert ist, heisst das noch nicht, dass es einen interessanten Grund dafür gibt. Die größe der Storchpoulation in Deutschland ist sicherlich mit der Geburtenrate der letzten 50 Jahre korreliert.
+- Eine Korrelation ist keine Kausalität. Nur weil etwas korreliert ist, heißt das noch nicht, dass es einen interessanten Grund dafür gibt. Die Größe der Storchenpopulation in Deutschland ist sicherlich mit der Geburtenrate der letzten 50 Jahre korreliert.
 
-- Korrelationen können auch entstehen, in dem man beide größen $x$ und $y$ mit einer gemeinsamen Größe $z$ normiert. Dann ist ggf. $x/z$ mit $y/z$ korreliert, obwohl $x$ nicht mit $y$ korreliert ist.
+- Korrelationen können auch entstehen, in dem man beide Größen $x$ und $y$ mit einer gemeinsamen Größe $z$ normiert. Dann ist ggf. $x/z$ mit $y/z$ korreliert, obwohl $x$ nicht mit $y$ korreliert ist.
 """
 
 # ╔═╡ d6660328-b1af-4c1b-94d4-48c58858f166
@@ -685,7 +687,7 @@ md"""
 
 # ╔═╡ 6715ac8c-207c-4ec1-8b8d-c7e7ff5d8a6c
 md"""
-Auch eine lineare Regression sucht nach einem linearen Zusammenhang zwiasxchen $x_i$ und $y_i$. Der Unterschied liegt in der Interopretation der $x_i$. Bei der Korrelation waren die $x_i$ und die $y_i$ völlig gleichberechtig. Es ist ja sogar $r_{xy} =  r_{yx}$. Bei einer linearen regression nimmt man die $x_i$ als 'unabhängige Variable' oder 'Ausgangsgröße' an. Diese Werte im Experiment vorgegeben, sind fest und fehlerfrei bekannt. Die $y_i$ sind die 'Zielgröße', der 'Messwert'. Die Aufgabe der linearen regression ist es, aus bekanntem $x$ ein noch zu messends $y$ vorherzusagen. B
+Auch eine lineare Regression sucht nach einem linearen Zusammenhang zwischen $x_i$ und $y_i$. Der Unterschied liegt in der Interpretation der $x_i$. Bei der Korrelation waren die $x_i$ und die $y_i$ völlig gleichberechtigt. Es ist ja sogar $r_{xy} =  r_{yx}$. Bei einer linearen regression nimmt man die $x_i$ als 'unabhängige Variable' oder 'Ausgangsgröße' an. Diese Werte im Experiment vorgegeben, sind fest und fehlerfrei bekannt. Die $y_i$ sind die 'Zielgröße', der 'Messwert'. Die Aufgabe der linearen Regression ist es, aus bekanntem $x$ ein noch zu messendes $y$ vorherzusagen. B
 """
 
 # ╔═╡ 99734a5a-f5f7-4168-9232-653802efaced
@@ -694,7 +696,7 @@ Bei der linearen Regression suchen wir die Parameter $(a,b)$ einer Funktion
 ```math
 f(x) = a + b x
 ```
-so dass die Abweichung zwischen vorhergesagtem Wert $f(x_i)$ und gemessenn Wert $y_i$ möglichst klein wird. Dazu betrachten wir die *Residuen*
+so dass die Abweichung zwischen vorhergesagtem Wert $f(x_i)$ und gemessenen Wert $y_i$ möglichst klein wird. Dazu betrachten wir die *Residuen*
 ```math
 \Delta_i (a,b) = y_i - (a + b x_i)
 ```
@@ -703,7 +705,7 @@ so dass die Abweichung zwischen vorhergesagtem Wert $f(x_i)$ und gemessenn Wert 
 
 # ╔═╡ 80a96166-c072-4e5f-991e-9400ae506959
 md"""
-Ein oft verwebndetes Maß ist die Summer der Quadrate der Abweichungen (*Methpde der kleinsten Quadrate*)
+Ein oft verwendetes Maß ist die Summe der Quadrate der Abweichungen (*Methode der kleinsten Quadrate*)
 ```math
 Q(a,b) = \sum_i [\Delta_i(a,b)]^2
 ```
@@ -711,7 +713,7 @@ Q(a,b) = \sum_i [\Delta_i(a,b)]^2
 
 # ╔═╡ a6d27afc-3984-4262-87e8-85eee8928560
 md"""
-Wir wollen $Q(a,b)$ minimieren, suchen also Nullstellen der Ableitungen nach $a$ und $b$. Man findet (siehe zB Stahel)
+Wir wollen $Q(a,b)$ minimieren, suchen also Nullstellen der Ableitungen nach $a$ und $b$. Man findet (siehe z.B. Stahel)
 ```math
 b = r_{xy} \frac{\sigma_y}{\sigma_x} \quad \text{und} \quad a = \bar{y} - b \bar{x}
 ```
@@ -719,7 +721,7 @@ b = r_{xy} \frac{\sigma_y}{\sigma_x} \quad \text{und} \quad a = \bar{y} - b \bar
 
 # ╔═╡ 1270488f-b477-4385-86eb-46d4f5955d7f
 md"""
-Man erkennt den Zusammenhang zwischen Regressiuon und Korrelation durch das Auftachenvon $r_{xy}$.
+Man erkennt den Zusammenhang zwischen Regression und Korrelation durch das Auftauchen von $r_{xy}$.
 """
 
 # ╔═╡ 12fc470d-34cc-4ef2-9f56-cd3daf740818
@@ -759,7 +761,7 @@ let
 	y = datensätze[4].Zuluft
 	model(x, p) = p[1]  .+ p[2] .* x  # Zielfunktion
 	p0 = [0.5, 0.5]  # Start-Parameter
-	fit = curve_fit(model, x, y, p0)
+	fit = LsqFit.curve_fit(model, x, y, p0)
 	fit.param
 end
 
