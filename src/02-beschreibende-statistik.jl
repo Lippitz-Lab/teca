@@ -27,6 +27,12 @@ using StatsBase
 # ╔═╡ bedcae55-ad81-485a-872e-6cafb82bde86
 using StatsPlots
 
+# ╔═╡ f03912ab-9f15-46fb-87f9-b7f38d7c61e1
+using Polynomials
+
+# ╔═╡ 69726543-b247-44ce-b5e3-1672e9b5b3a1
+using LsqFit
+
 # ╔═╡ 2ee624de-2124-4f5e-82e6-46fd1c7dc62b
 using PlutoUI,  LinearAlgebra
 
@@ -83,7 +89,7 @@ Dann laden wir die Datei in die Variable 'datensatz'. Die Spalten sind durch ein
 """
 
 # ╔═╡ 1868cca5-3cfb-4376-8468-d13831366cc9
-datensatz = CSV.read(download("https://raw.githubusercontent.com/MarkusLippitz/teca/62afb27f3db187a2a784ac4a88d7170eb9f0abe3/res/02-beschreibende-statistik/01.08.2021%201.0.05.1%20Temperatur%20Tagesgang_1.dat"), DataFrame; delim='\t', header=5)
+datensatz = CSV.read(download("https://raw.githubusercontent.com/MarkusLippitz/teca/simple/res/02-beschreibende-statistik/Temperatur_1_0_05_1_Tag_210801.dat"), DataFrame; delim='\t', header=5)
 
 # ╔═╡ 436b8f12-d833-42ec-b85c-31eb96ad862a
 md"""
@@ -306,7 +312,7 @@ end
 md"""
 # Kennzahlen 
 
-Mit einigen Kennzahlen können wir die Stichprobe beschreiben. Die bekannteste ist sicherlich der Mittelwert (engl. mean), Durchschnitt oder Schwerpunkt
+Mit einigen Kennzahlen können wir die Stichprobe beschreiben. Die bekannteste ist sicherlich der **Mittelwert** (engl. mean), Durchschnitt oder Schwerpunkt
 ```math
 \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i
 ```
@@ -493,34 +499,289 @@ md"""
 # Mehrdimensionale Daten
 """
 
+# ╔═╡ af438416-7d6f-44b3-980e-cd6823688008
+md"""
+Oft werden mit einer Beobachrung, einer Messung mehrere Größen gemessen. Damit erhält man mehrdimensionale oder multivariate Daten.
+
+Im Prinzip war schon unser Temperattur-beispiel von oben mehrdimensional, da wir zu jedem Zeitpunkt nicht nur die Raumtemperatir, sondern auch Temperaturen an anderen Stellen vorliegen hatten. Die hatten wir bisher ignoriert. Nun nehmen wir sie hinzu, und auch noch die gleichzeitige Messung der gleichen größen in anderen Räumen.
+"""
+
+# ╔═╡ 64fe649e-9b17-451f-8d3f-7112514bb7fe
+md"""
+Wir laden vier Dateien in eine gemeinsame Variable
+"""
+
+# ╔═╡ 11affb9f-2d9a-47a4-9cb1-2e6ead3de727
+begin 
+	räume = ["1_0_05_1","1_0_05_3","2_0_08","3_0_07"]
+	files = ["https://raw.githubusercontent.com/MarkusLippitz/teca/simple/res/02-beschreibende-statistik/Temperatur_$(r)_Tag_210801.dat" for r in räume]
+	datensätze = CSV.read.(download.(files), DataFrame; delim='\t', header=5)
+end;
+
+# ╔═╡ aa04f999-0979-47a3-8694-7de7df4ebf21
+md"""
+Zunächst stellen wir wieder die Daten als Funktion der Zeit dar. Die erste Ziffer der Raumnummer bezeichnet das Gebäudeteil im BGI. In Bauteil 1 scheint die Zuluft im Sommer merklich warm zu werden, in den Bauteilen 2 und 3 nicht.
+"""
+
 # ╔═╡ 8997748b-bcd3-44e6-aecb-e003a3ed0a12
 begin
-	plot(datensatz.Time, datensatz.Zuluft)
-	plot!(datensatz.Time, datensatz.Tist)
-	
+	plot()  # generate empty plot
+	for i in 1:length(räume) # plot 4 traces on top of each other
+	   plot!(datensätze[i].Time, datensätze[i].Zuluft, label=räume[i]) 
+	end
+	plot!() # show last plot
 end
 
-# ╔═╡ 2b7f8f96-8e25-4155-89f0-c060e1d4a12e
+# ╔═╡ 6becffb6-1810-4c21-8d81-28cb2021cdfe
 md"""
-*Aufgabe 1*
+In einem **Streudiagramm** stellt man eine Größe gegenüber der anderen dar, um so Zusammenhänge zu erkennen. Wenn die Punkte sehr dicht liegen reduziert das die Aussagekraft. Hier ist einfach nur jeder 50. Datenpunkt gezeichnet.
+"""
 
-Sie haben jetzt Zugriff auf den STAHEL „Statistische Datenanalyse“.
-Lesen Sie zur Einführung im STAHEL die Kapitel 1 und 2 „Beschreibung eindimensionaler Stichproben“ (das klingt nach mehr, als es wirklich ist). Wichtig sind vor allem die mit schwarzen Balken am Rand markierten Abschnitte. 
+# ╔═╡ 30c6734d-4aad-4065-8604-7e3d91fa59fb
+let
+	dec = 50
+	scatter(datensätze[1].Zuluft[1:dec:end], datensätze[2].Zuluft[1:dec:end], 
+		label="1 vs 2",  markersize=2, markerstrokewidth=0)
+	scatter!(datensätze[3].Zuluft[1:dec:end], datensätze[4].Zuluft[1:dec:end],  
+		label="3 vs 4",markersize=2, markerstrokewidth=0, 
+		xlabel="Zuluft A", ylabel="Zuluft B",aspect_ratio=:equal,)
+end
+
+# ╔═╡ a844007c-4e7d-4c47-b7e8-4ae39e9c0f02
+md"""
+Alternativ kann man ein zweidimensionales Histogramm zeichnen, und die Anzahl pro bin farbkodieren.
+"""
+
+# ╔═╡ e908d5e3-563b-4982-8e5b-5e642bb62ef0
+Plots.histogram2d(datensätze[3].Zuluft, datensätze[4].Zuluft, bins=100,aspect_ratio=:equal, xlabel="Zuluft 3", ylabel="Zuluft 4", colorbar_title="Anzahl")
+
+# ╔═╡ 2b1f9027-176f-46f9-981e-387042dddb2b
+md"""
+# Produkmomenten-Korrelation
+"""
+
+# ╔═╡ f5d85c34-d26d-4e72-b64d-5baa966555db
+md"""
+Eine Kennzahl für den Zusammenhang zwischen zwei Messgrößen ist die *Korrelation*, von der es verschiedene Varianten gibt.
+"""
+
+# ╔═╡ 39dd4490-fbce-43c2-b216-721e73613281
+md"""
+Zunächst normieren wir die einzelnen Messwerte so, dass deren Mittelwert 0 und deren Standrardabweichung 1 beträgt. Wir definieren also
+```math
+\tilde{x}_i = \frac{x_i - \bar{x}}{\sigma_x}
+```
+und analog für die zweite Größe $y_i$. Wenn nun $\tilde{x}_i$ und $\tilde{y}_i$ beide gleichzeitg positiv, oder beide gleichzeitig negativ sind, dann entsperciht dies einem gewissen positiven Zusammenhang zwischne $x_i$ und $y_i$. Ein einfahces Maß für diesen Zusammenhang ist das Pordukt $\tilde{x}_i \tilde{y}_i$, also 
+```math
+r_{xy} = \frac{1}{n-1} \sum_i \tilde{x}_i \tilde{y}_i
+```
+
+"""
+
+# ╔═╡ 5799aa7b-ef1c-430e-8739-b755c6e743ad
+md"""
+Dies ist die (einfache) **Korrelation**, oder  auch *Produktmomenten-Korrelation nach Pearson*. Wir können das noch etwas umformen
+```math
+r_{xy} = \frac{\text{var}_{xy}}{\sigma_x \sigma_y} \quad \text{mit} \quad  \text{var}_{xy} = \frac{1}{n-1} \sum_i (x_i - \bar{x})(y_i - \bar{y})
+```
+Die Kovarianz $\text{var}_{xy}$  ist sehr analog zur Varianz, nur das das Quadrat einer Größe durch das Produk von zwei Größen ersetzt wird.
+"""
+
+# ╔═╡ b68d6412-2656-43f3-a393-10e325b35d24
+md"""
+Einfache Spezialfälle sind $x_i = y_i$, was $r_{xy} = 1$ ergibt. Falls ein linearer Zusammenhang besteht  in der Art $y_i = a + b x_i$, dann ist ebenfalls $r_{xy} = 1$, falls $b>0$, und $r_{xy} = -1$, falls $b<0$. Die Produktmomenten-Korrelation  misst also die Sträke des linearen Zusammenhangs.
+"""
+
+# ╔═╡ 510f698a-dee9-4e67-9ade-57289689f189
+md"""
+In Julia ist geht das via StatsBase
+"""
+
+# ╔═╡ f7d815df-8c7c-4994-9f4a-5d3697bac3ca
+StatsBase.cor(datensätze[3].Zuluft, datensätze[4].Zuluft)
+
+# ╔═╡ 7847ec0b-df92-4dd0-abe9-37dc8eae5b56
+StatsBase.cor(datensätze[1].Zuluft, datensätze[2].Zuluft)
+
+# ╔═╡ ab22c5f2-908e-4bbf-a67a-4b1157a10023
+md"""
+oder von Hand
+"""
+
+# ╔═╡ e7281c97-750b-473b-9860-e786a44e26a0
+let
+	x = datensätze[3].Zuluft
+	y = datensätze[4].Zuluft
+	(m_x, σ_x) =  StatsBase.mean_and_std( x, corrected=true)
+	(m_y, σ_y) =  StatsBase.mean_and_std( y, corrected=true)
+	xt = (x .- m_x) ./ σ_x
+	yt = (y .- m_y) ./ σ_y
+	cor = sum( xt .* yt) / (length(xt)-1)
+end
+
+# ╔═╡ 80e3d9db-e6e9-4e64-9a28-123141079edb
+md"""
+**Achtrung** Diese Produktmomenten-Korrelation misst nur die Sträkle eines linearen Zusammenhangs. Es können noch andere Zusammenhänge höherer Ordnung vorhanden sein, die bei gleichem $r_{xy}$ sehr verschiedne Streuidiagramme bewirken! Die Korrelation ist nicht robust gegen Ausreißer.
+"""
+
+# ╔═╡ 79810bad-ceb4-42a0-8b16-53f25004250b
+md"""
+# Rangkorrelation
+"""
+
+# ╔═╡ 7ca6a708-e123-406a-9987-ad52f9323224
+md"""
+Ähnloich zum Unterschied zwischen Mittelwert und Median, kann man auch eine Korrealtion nicht zwishcne den Werten an sich, sondern zwischen den Rängen berechnen. Hier spielen Ausreißer dann quais keine Rolle mehr.
+"""
+
+# ╔═╡ 58a063d6-6dd3-4e08-abe7-357e96d5eac9
+md"""
+Ananlog definietren wir die Spearman'shce Rangkorrelation
+```math
+r_{xy}^\text{(Sp)} = \frac{\text{var}_\text{Rang(x) Rang(y)}}{\sigma_\text{Rang(x)} \sigma_\text{Rang(y)}} 
+```
+"""
+
+# ╔═╡ eaff35b0-be07-495d-9aec-92f1f64a2b22
+md"""
+Der Mittelwert aller Ränge ist 
+```math
+\bar{\text{Rang}(x)}  = \frac{1 + 2 + \dots + n}{n} = \frac{n+1}{2}
+```
+Die Standardabweichung ist **XXX TODO** und die Kovarianz
+```math
+\text{var}_\text{Rang(x) Rang(y)} = \frac{1}{n-1} \sum_i \left( \text{Rang}(x_i) - \frac{n-1}{2} \right)\left( \text{Rang}(y_i) - \frac{n-1}{2} \right)
+```
+Zusammen ergbit das
+```math
+r_{xy}^\text{(Sp)} = 1 - \frac{6}{n(n^2 -1)} \sum_i ( \text{Rang}(x_i)  -  \text{Rang}(y_i) )^2
+```
+"""
+
+# ╔═╡ c100060d-1a84-47a6-bcdd-0105e23190d9
+md"""
+In Julia ist das
+"""
+
+# ╔═╡ 288f3592-ab4c-434b-a882-5708959543ef
+StatsBase.corspearman(datensätze[3].Zuluft, datensätze[4].Zuluft)
+
+# ╔═╡ 47f61db3-26fe-4dee-9bc9-438434a94530
+StatsBase.corspearman(datensätze[1].Zuluft, datensätze[2].Zuluft)
+
+# ╔═╡ 8e1ad6b0-07ec-4d6d-baed-33046cb539dc
+md"""
+## Achtung
+
+- Eine Korrelation ist keine Kausalität. Nur wweil eteas korreliert ist, heisst das noch nicht, dass es einen interessanten Grund dafür gibt. Die größe der Storchpoulation in Deutschland ist sicherlich mit der Geburtenrate der letzten 50 Jahre korreliert.
+
+- Korrelationen können auch entstehen, in dem man beide größen $x$ und $y$ mit einer gemeinsamen Größe $z$ normiert. Dann ist ggf. $x/z$ mit $y/z$ korreliert, obwohl $x$ nicht mit $y$ korreliert ist.
+"""
+
+# ╔═╡ d6660328-b1af-4c1b-94d4-48c58858f166
+md"""
+# Lineare Regression
+"""
+
+# ╔═╡ 6715ac8c-207c-4ec1-8b8d-c7e7ff5d8a6c
+md"""
+Auch eine lineare Regression sucht nach einem linearen Zusammenhang zwiasxchen $x_i$ und $y_i$. Der Unterschied liegt in der Interopretation der $x_i$. Bei der Korrelation waren die $x_i$ und die $y_i$ völlig gleichberechtig. Es ist ja sogar $r_{xy} =  r_{yx}$. Bei einer linearen regression nimmt man die $x_i$ als 'unabhängige Variable' oder 'Ausgangsgröße' an. Diese Werte im Experiment vorgegeben, sind fest und fehlerfrei bekannt. Die $y_i$ sind die 'Zielgröße', der 'Messwert'. Die Aufgabe der linearen regression ist es, aus bekanntem $x$ ein noch zu messends $y$ vorherzusagen. B
+"""
+
+# ╔═╡ 99734a5a-f5f7-4168-9232-653802efaced
+md"""
+Bei der linearen Regression suchen wir die Parameter $(a,b)$ einer Funktion 
+```math
+f(x) = a + b x
+```
+so dass die Abweichung zwischen vorhergesagtem Wert $f(x_i)$ und gemessenn Wert $y_i$ möglichst klein wird. Dazu betrachten wir die *Residuen*
+```math
+\Delta_i (a,b) = y_i - (a + b x_i)
+```
+
+"""
+
+# ╔═╡ 80a96166-c072-4e5f-991e-9400ae506959
+md"""
+Ein oft verwebndetes Maß ist die Summer der Quadrate der Abweichungen (*Methpde der kleinsten Quadrate*)
+```math
+Q(a,b) = \sum_i [\Delta_i(a,b)]^2
+```
+"""
+
+# ╔═╡ a6d27afc-3984-4262-87e8-85eee8928560
+md"""
+Wir wollen $Q(a,b)$ minimieren, suchen also Nullstellen der Ableitungen nach $a$ und $b$. Man findet (siehe zB Stahel)
+```math
+b = r_{xy} \frac{\sigma_y}{\sigma_x} \quad \text{und} \quad a = \bar{y} - b \bar{x}
+```
+"""
+
+# ╔═╡ 1270488f-b477-4385-86eb-46d4f5955d7f
+md"""
+Man erkennt den Zusammenhang zwischen Regressiuon und Korrelation durch das Auftachenvon $r_{xy}$.
+"""
+
+# ╔═╡ 12fc470d-34cc-4ef2-9f56-cd3daf740818
+md"""
+In Julia geht das beispielsweise über das Anpassen eines Polynoms 1. Grades
+"""
+
+# ╔═╡ 5283eb9f-c65e-4aaa-aa2a-3e4624cce6f9
+Polynomials.fit(datensätze[3].Zuluft, datensätze[4].Zuluft, 1)
+
+# ╔═╡ dafcdb72-fbcd-4602-93f4-ed3df42ac060
+md"""
+oder 'von Hand'
+"""
+
+# ╔═╡ 00fd8596-437c-4a02-b6b1-d61c92931e3f
+let
+	x = datensätze[3].Zuluft
+	y = datensätze[4].Zuluft
+	(m_x, σ_x) =  StatsBase.mean_and_std( x, corrected=true)
+	(m_y, σ_y) =  StatsBase.mean_and_std( y, corrected=true)
+	r_xy = StatsBase.cor(x,y)
+
+	b = r_xy * σ_y  / σ_x
+	a = m_y - b * m_x
+	(a,b)
+end
+
+# ╔═╡ 4cc419da-89a8-4f12-b94c-881b4c1ba20e
+md"""
+Oder ganz allgemein über einen 'least square fit' (kleinste Quadrate [der Residuen])
+"""
+
+# ╔═╡ 1749f0c5-ae4b-47e7-8733-e719d1386933
+let
+	x = datensätze[3].Zuluft
+	y = datensätze[4].Zuluft
+	model(x, p) = p[1]  .+ p[2] .* x  # Zielfunktion
+	p0 = [0.5, 0.5]  # Start-Parameter
+	fit = curve_fit(model, x, y, p0)
+	fit.param
+end
+
+# ╔═╡ 4464a5a5-3de2-4735-8050-16c3d83f84b0
+md"""
+# RESTE
 """
 
 # ╔═╡ 88b5d4d2-9b4c-4f1b-841b-a18443e5e1d9
 md"""
-Zur Kontrolle: Haben Sie die folgenden Begriffe verstanden?
-Was stellt man bei einem Histogramm genau dar? Wie verändern sich die y-Werte, wenn man die sog. Klassenbreite verdoppelt?
-Was ist mit einer Stichprobe gemeint?
-Was ist eine geordnete Stichprobe und der Rang einer Zahl xi  darin?
-Wie berechnet man die kumulative Verteilungsfunktion? Wenn man sie von einer Notenverteilung (Noten 1 bis 6) einer Klausur bilden würde, was sagt ihr y-Wert z.B. zum x-Wert „Note=2“ aus? Ist es der Anteil y aller Klausuren, die schlechter oder besser als Note 2 sind? 
-Was sind die beiden wichtigsten Kennzahlen einer statistischen Verteilung?
-Ist der physikalische Schwerpunkt mathematisch dem Median oder dem Mittelwert verwandt?
-Wie ist die Varianz, wie die Standardabweichung einer Stichprobe mathematisch definiert?
-Was meint man mit der Aussage, diese beiden Streumaße seien nicht „robust“?
-Bei welchem Wert liegt typischerweise die sogenannte Standard-Lage?
-Mit welcher allgemeinen mathematischen Operation („Trick“) erzeugt man „nicht-schiefe“ Stichproben?
+Zur Kontrolle: 
+- Was stellt man bei einem Histogramm genau dar? 
+- Wie verändern sich die y-Werte, wenn man die sog. Klassenbreite verdoppelt?
+- Was ist mit einer Stichprobe gemeint?
+- Was ist eine geordnete Stichprobe und der Rang einer Zahl xi  darin?
+- Wie berechnet man die kumulative Verteilungsfunktion? Wenn man sie von einer Notenverteilung (Noten 1 bis 6) einer Klausur bilden würde, was sagt ihr y-Wert z.B. zum x-Wert „Note=2“ aus? Ist es der Anteil y aller Klausuren, die schlechter oder besser als Note 2 sind? 
+- Was sind die beiden wichtigsten Kennzahlen einer statistischen Verteilung?
+- Ist der physikalische Schwerpunkt mathematisch dem Median oder dem Mittelwert verwandt?
+- Wie ist die Varianz, wie die Standardabweichung einer Stichprobe mathematisch definiert?
+- Was meint man mit der Aussage, diese beiden Streumaße seien nicht „robust“?
+- Bei welchem Wert liegt typischerweise die sogenannte Standard-Lage?
+- Mit welcher allgemeinen mathematischen Operation („Trick“) erzeugt man „nicht-schiefe“ Stichproben?
 """
 
 # ╔═╡ 0bc863fa-9628-4f30-936f-6fed3a225ef1
@@ -551,75 +812,6 @@ legen Sie „per-Hand“ eine lineare Gerade durch die Daten mittels
 2. Bestimmen Sie die Regressionsgerade nach der Methode der Kleinsten Quadrate und plotten Sie sie mittels „hold on“ in die selbe Figure.
 """
 
-# ╔═╡ a7d55631-51a3-4a0f-b4bd-5dc1b737c7bf
-md"""
-### Beschreibende Statistik mehrdimens. Daten
-
-Korrelation (genauer: Produktmomenten-Korrelation): Maß für Stärke eines Zusammenhangs multivariater Stichproben. 
-
-Am Beispiel für bivariate Stichprobe aus (𝑥_𝑖, 𝑦_𝑖)-s. Dazu: Standardisieren der Lage und Normieren der Streuung durch Standardabweichung:  〖(𝑥_𝑖 ) ̃=(𝑥_𝑖−𝑥 ̅)/〖𝑠𝑑〗_𝑋  〗_ , entsprechend 𝑦_𝑖.
-
-Als Gesamtmaß ergibt sich die Korrelation 𝑟_𝑋𝑌  aus allen Beiträgen: 
-
-𝑟_𝑋𝑌=1/(𝑛−1) ∑_𝑖▒〖(𝑥_𝑖 ) ̃(𝑦_𝑖 ) ̃=𝑠_𝑋𝑌/(〖𝑠𝑑〗_𝑋 〖𝑠𝑑〗_𝑌 )〗
-
-mit der Kovarianz: 𝑠_𝑋𝑌= 1/(𝑛−1) ∑_𝑖▒〖=(𝑥_𝑖−𝑥 ̅)(𝑦_𝑖−𝑦 ̅)〗
-"""
-
-# ╔═╡ 559038d5-e38c-4180-bf67-8a4f7533f0b7
-md"""
-### Wichtige Punkte bzgl. der Korrelation
-
-Produktmomentenkorrelation ist Maß für linearen Zusammenhang!!
-     Ggf. sind andere Korrelationen besser geeignet Zusammenhänge darzustellen   
-     (z.B. Spearmansche Rankkorrelation: alg. monotone Zusammenhänge, diese ist    
-     auch robuster) 
-
-Korrelation und ihre Interpretation: hoher Korrelationswerte bedeutet nicht zwangsläufig ursächlicher Zusammenhang! 
-Artefakte z.B. durch Inhomogenitäts-Korrelation: Zusammenhang von Merkmalen in inhomogenen Stichproben (Jahrgänge, Geschlechter,…) 
-Schein-Korrelation: Durch Standardisierung durch dritte  (unkorrelierte) Größe Z entsteht formale Korrelation von X/Z und Y/Z ,
-„Unsinn“-Korrelation: Vergleich zweier beliebiger linearer Daten-Trends liefert immer (wenn auch unsinnige) Korrelation (z.B. zeitliches Anwachsen von Storch-Zahl und Geburtenzahl zwischen 1900-1970).
-"""
-
-# ╔═╡ ba4ab3c1-bda6-4b6b-9821-2767cf57b4d4
-md"""
-### Regression
-
-Fragestellung: 
-Wie hängt hervorgehobene Zielgröße Y von Ausgangsgröße X ab (z.B. via Kausalzusammenhang)?
-Wie kann für beliebigen Wert von X der entsprechende Wert aus Y vorhergesagt, bzw. prognostiziert werden?
-
-"""
-
-# ╔═╡ 89391ed9-32a0-45d4-ab08-5d3e5f591ba3
-md"""
-Grundidee: Funktioneller Zusammenhang zwischen X und Y:
-
-𝑦_𝑖  ≈ℎ(𝑥_𝑖)
-
-Einfachster & wichtigster Fall: lineare Funktion ℎ(𝑥_  )=𝑎+𝑏𝑥, 
-
-mit  𝑎: Achsenabschnitt, 𝑏: Steigung.  
-"""
-
-# ╔═╡ 8f24de1d-6961-472b-ae44-47b8e413cb93
-md"""
-
-Die Abweichungen 𝑟_𝑖  (Residuen) einer Gerade mit 𝑎,𝑏 von den Messdaten ist:
-
-𝑟_𝑖  ≈𝑦_𝑖−(𝑎+𝑏𝑥_𝑖)
-"""
-
-# ╔═╡ 514f184a-2d7a-4791-a668-353c42b559cb
-md"""
-### Methode der Kleinsten Quadrate (least squares)
-"""
-
-# ╔═╡ b3f27851-b77d-4907-9747-545d53348533
-md"""
-### Transformation von Daten
-"""
-
 # ╔═╡ d326a92d-23b2-43d4-b984-c51b9dd6a905
 TableOfContents(title="Inhalt")
 
@@ -629,16 +821,20 @@ PLUTO_PROJECT_TOML_CONTENTS = """
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+LsqFit = "2fda8390-95c7-5789-9bda-21331edee243"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+Polynomials = "f27b6e38-b328-58d1-80ce-0feddd5e7a45"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 StatsPlots = "f3b207a7-027a-5e70-b257-86293d7955fd"
 
 [compat]
 CSV = "~0.10.2"
 DataFrames = "~1.3.2"
+LsqFit = "~0.12.1"
 Plots = "~1.26.0"
 PlutoUI = "~0.7.35"
+Polynomials = "~3.0.0"
 StatsBase = "~0.33.16"
 StatsPlots = "~0.14.33"
 """
@@ -683,6 +879,12 @@ git-tree-sha1 = "5ba6c757e8feccf03a1554dfaf3e26b3cfc7fd5e"
 uuid = "68821587-b530-5797-8361-c406ea357684"
 version = "3.5.1+1"
 
+[[deps.ArrayInterface]]
+deps = ["Compat", "IfElse", "LinearAlgebra", "Requires", "SparseArrays", "Static"]
+git-tree-sha1 = "9f8186bc19cd1c129d367cb667215517cc03e144"
+uuid = "4fba245c-0d91-5ea0-9b3e-6abc04ee57a9"
+version = "5.0.1"
+
 [[deps.Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
 
@@ -712,6 +914,12 @@ deps = ["Artifacts", "Bzip2_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll",
 git-tree-sha1 = "4b859a208b2397a7a623a03449e4636bdb17bcf2"
 uuid = "83423d85-b0ee-5818-9007-b63ccbeb887a"
 version = "1.16.1+1"
+
+[[deps.Calculus]]
+deps = ["LinearAlgebra"]
+git-tree-sha1 = "f641eb0a4f00c343bbc32346e1217b86f3ce9dad"
+uuid = "49dc2e85-a5d0-5ad3-a950-438e2897f1b9"
+version = "0.5.1"
 
 [[deps.ChainRulesCore]]
 deps = ["Compat", "LinearAlgebra", "SparseArrays"]
@@ -755,11 +963,17 @@ git-tree-sha1 = "417b0ed7b8b838aa6ca0a87aadf1bb9eb111ce40"
 uuid = "5ae59095-9a9b-59fe-a467-6f913c188581"
 version = "0.12.8"
 
+[[deps.CommonSubexpressions]]
+deps = ["MacroTools", "Test"]
+git-tree-sha1 = "7b8a93dba8af7e3b42fecabf646260105ac373f7"
+uuid = "bbf7d656-a473-5ed7-a52c-81e309532950"
+version = "0.3.0"
+
 [[deps.Compat]]
 deps = ["Base64", "Dates", "DelimitedFiles", "Distributed", "InteractiveUtils", "LibGit2", "Libdl", "LinearAlgebra", "Markdown", "Mmap", "Pkg", "Printf", "REPL", "Random", "SHA", "Serialization", "SharedArrays", "Sockets", "SparseArrays", "Statistics", "Test", "UUIDs", "Unicode"]
-git-tree-sha1 = "44c37b4636bc54afac5c574d2d02b625349d6582"
+git-tree-sha1 = "96b0bc6c52df76506efc8a441c6cf1adcb1babc4"
 uuid = "34da2185-b29b-5c13-b0c7-acf172513d20"
-version = "3.41.0"
+version = "3.42.0"
 
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
@@ -818,6 +1032,18 @@ git-tree-sha1 = "80c3e8639e3353e5d2912fb3a1916b8455e2494b"
 uuid = "b429d917-457f-4dbc-8f4c-0cc954292b1d"
 version = "0.4.0"
 
+[[deps.DiffResults]]
+deps = ["StaticArrays"]
+git-tree-sha1 = "c18e98cba888c6c25d1c3b048e4b3380ca956805"
+uuid = "163ba53b-c6d8-5494-b064-1a9d43ac40c5"
+version = "1.0.3"
+
+[[deps.DiffRules]]
+deps = ["IrrationalConstants", "LogExpFunctions", "NaNMath", "Random", "SpecialFunctions"]
+git-tree-sha1 = "dd933c4ef7b4c270aacd4eb88fa64c147492acf0"
+uuid = "b552c78f-8df3-52c6-915a-8e097449b14b"
+version = "1.10.0"
+
 [[deps.Distances]]
 deps = ["LinearAlgebra", "SparseArrays", "Statistics", "StatsAPI"]
 git-tree-sha1 = "3258d0659f812acde79e8a74b11f17ac06d0ca04"
@@ -843,6 +1069,12 @@ version = "0.8.6"
 [[deps.Downloads]]
 deps = ["ArgTools", "LibCURL", "NetworkOptions"]
 uuid = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
+
+[[deps.DualNumbers]]
+deps = ["Calculus", "NaNMath", "SpecialFunctions"]
+git-tree-sha1 = "90b158083179a6ccbce2c7eb1446d5bf9d7ae571"
+uuid = "fa6b7ba4-c1ee-5f82-b5fc-ecf0adba8f74"
+version = "0.6.7"
 
 [[deps.EarCut_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -892,6 +1124,12 @@ git-tree-sha1 = "4c7d3757f3ecbcb9055870351078552b7d1dbd2d"
 uuid = "1a297f60-69ca-5386-bcde-b61e274b549b"
 version = "0.13.0"
 
+[[deps.FiniteDiff]]
+deps = ["ArrayInterface", "LinearAlgebra", "Requires", "SparseArrays", "StaticArrays"]
+git-tree-sha1 = "56956d1e4c1221000b7781104c58c34019792951"
+uuid = "6a86dc24-6348-571c-b903-95158fe2bd41"
+version = "2.11.0"
+
 [[deps.FixedPointNumbers]]
 deps = ["Statistics"]
 git-tree-sha1 = "335bfdceacc84c5cdf16aadc768aa5ddfc5383cc"
@@ -909,6 +1147,12 @@ deps = ["Printf"]
 git-tree-sha1 = "8339d61043228fdd3eb658d86c926cb282ae72a8"
 uuid = "59287772-0a20-5a39-b81b-1366585eb4c0"
 version = "0.4.2"
+
+[[deps.ForwardDiff]]
+deps = ["CommonSubexpressions", "DiffResults", "DiffRules", "LinearAlgebra", "LogExpFunctions", "NaNMath", "Preferences", "Printf", "Random", "SpecialFunctions", "StaticArrays"]
+git-tree-sha1 = "1bd6fc0c344fc0cbee1f42f8d2e7ec8253dda2d2"
+uuid = "f6369f11-7733-5829-9624-2563aa707210"
+version = "0.10.25"
 
 [[deps.FreeType2_jll]]
 deps = ["Artifacts", "Bzip2_jll", "JLLWrappers", "Libdl", "Pkg", "Zlib_jll"]
@@ -985,6 +1229,12 @@ git-tree-sha1 = "129acf094d168394e80ee1dc4bc06ec835e510a3"
 uuid = "2e76f6c2-a576-52d4-95c1-20adfe4de566"
 version = "2.8.1+1"
 
+[[deps.HypergeometricFunctions]]
+deps = ["DualNumbers", "LinearAlgebra", "SpecialFunctions", "Test"]
+git-tree-sha1 = "65e4589030ef3c44d3b90bdc5aac462b4bb05567"
+uuid = "34004b35-14d8-5ef3-9330-4cdb6864b03a"
+version = "0.3.8"
+
 [[deps.Hyperscript]]
 deps = ["Test"]
 git-tree-sha1 = "8d511d5b81240fc8e6802386302675bdf47737b9"
@@ -1001,6 +1251,11 @@ deps = ["Logging", "Random"]
 git-tree-sha1 = "f7be53659ab06ddc986428d3a9dcc95f6fa6705a"
 uuid = "b5f81e59-6552-4d32-b1f0-c071b021bf89"
 version = "0.2.2"
+
+[[deps.IfElse]]
+git-tree-sha1 = "debdd00ffef04665ccbb3e150747a77560e8fad1"
+uuid = "615f187c-cbe4-4ef1-ba3b-2fcf58d6d173"
+version = "0.1.1"
 
 [[deps.IniFile]]
 git-tree-sha1 = "f550e6e32074c939295eb5ea6de31849ac2c9625"
@@ -1104,9 +1359,9 @@ version = "1.3.0"
 
 [[deps.Latexify]]
 deps = ["Formatting", "InteractiveUtils", "LaTeXStrings", "MacroTools", "Markdown", "Printf", "Requires"]
-git-tree-sha1 = "a6552bfeab40de157a297d84e03ade4b8177677f"
+git-tree-sha1 = "4f00cc36fede3c04b8acf9b2e2763decfdcecfa6"
 uuid = "23fbe1c1-3f47-55db-b15f-69d7ec21a316"
-version = "0.15.12"
+version = "0.15.13"
 
 [[deps.LazyArtifacts]]
 deps = ["Artifacts", "Pkg"]
@@ -1185,12 +1440,18 @@ uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [[deps.LogExpFunctions]]
 deps = ["ChainRulesCore", "ChangesOfVariables", "DocStringExtensions", "InverseFunctions", "IrrationalConstants", "LinearAlgebra"]
-git-tree-sha1 = "e5718a00af0ab9756305a0392832c8952c7426c1"
+git-tree-sha1 = "3f7cb7157ef860c637f3f4929c8ed5d9716933c6"
 uuid = "2ab3a3ac-af41-5b50-aa03-7779005ae688"
-version = "0.3.6"
+version = "0.3.7"
 
 [[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
+
+[[deps.LsqFit]]
+deps = ["Distributions", "ForwardDiff", "LinearAlgebra", "NLSolversBase", "OptimBase", "Random", "StatsBase"]
+git-tree-sha1 = "91aa1442e63a77f101aff01dec5a821a17f43922"
+uuid = "2fda8390-95c7-5789-9bda-21331edee243"
+version = "0.12.1"
 
 [[deps.MKL_jll]]
 deps = ["Artifacts", "IntelOpenMP_jll", "JLLWrappers", "LazyArtifacts", "Libdl", "Pkg"]
@@ -1241,10 +1502,22 @@ git-tree-sha1 = "7008a3412d823e29d370ddc77411d593bd8a3d03"
 uuid = "6f286f6a-111f-5878-ab1e-185364afe411"
 version = "0.9.1"
 
-[[deps.NaNMath]]
-git-tree-sha1 = "737a5957f387b17e74d4ad2f440eb330b39a62c5"
-uuid = "77ba4419-2d1f-58cd-9bb1-8ffee604a2e3"
+[[deps.MutableArithmetics]]
+deps = ["LinearAlgebra", "SparseArrays", "Test"]
+git-tree-sha1 = "ba8c0f8732a24facba709388c74ba99dcbfdda1e"
+uuid = "d8a4904e-b15c-11e9-3269-09a3773c0cb0"
 version = "1.0.0"
+
+[[deps.NLSolversBase]]
+deps = ["DiffResults", "Distributed", "FiniteDiff", "ForwardDiff"]
+git-tree-sha1 = "50310f934e55e5ca3912fb941dec199b49ca9b68"
+uuid = "d41bc354-129a-5804-8e4c-c37616107c6c"
+version = "7.8.2"
+
+[[deps.NaNMath]]
+git-tree-sha1 = "b086b7ea07f8e38cf122f5016af580881ac914fe"
+uuid = "77ba4419-2d1f-58cd-9bb1-8ffee604a2e3"
+version = "0.3.7"
 
 [[deps.NearestNeighbors]]
 deps = ["Distances", "StaticArrays"]
@@ -1292,6 +1565,12 @@ git-tree-sha1 = "13652491f6856acfd2db29360e1bbcd4565d04f1"
 uuid = "efe28fd5-8261-553b-a9e1-b2916fc3738e"
 version = "0.5.5+0"
 
+[[deps.OptimBase]]
+deps = ["NLSolversBase", "Printf", "Reexport"]
+git-tree-sha1 = "9cb1fee807b599b5f803809e85c81b582d2009d6"
+uuid = "87e2bd06-a317-5318-96d9-3ecbac512eee"
+version = "2.0.2"
+
 [[deps.Opus_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "51a08fb14ec28da2ec7a927c4337e4332c2a4720"
@@ -1317,9 +1596,9 @@ version = "0.11.6"
 
 [[deps.Parsers]]
 deps = ["Dates"]
-git-tree-sha1 = "13468f237353112a01b2d6b32f3d0f80219944aa"
+git-tree-sha1 = "85b5da0fa43588c75bb1ff986493443f821c70b7"
 uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
-version = "2.2.2"
+version = "2.2.3"
 
 [[deps.Pixman_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1354,6 +1633,12 @@ deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "Hyperscript"
 git-tree-sha1 = "85bf3e4bd279e405f91489ce518dedb1e32119cb"
 uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 version = "0.7.35"
+
+[[deps.Polynomials]]
+deps = ["LinearAlgebra", "MutableArithmetics", "RecipesBase"]
+git-tree-sha1 = "0107e2f7f90cc7f756fee8a304987c574bbd7583"
+uuid = "f27b6e38-b328-58d1-80ce-0feddd5e7a45"
+version = "3.0.0"
 
 [[deps.PooledArrays]]
 deps = ["DataAPI", "Future"]
@@ -1490,6 +1775,12 @@ git-tree-sha1 = "5ba658aeecaaf96923dce0da9e703bd1fe7666f9"
 uuid = "276daf66-3868-5448-9aa4-cd146d93841b"
 version = "2.1.4"
 
+[[deps.Static]]
+deps = ["IfElse"]
+git-tree-sha1 = "87e9954dfa33fd145694e42337bdd3d5b07021a6"
+uuid = "aedffcd0-7271-4cad-89d0-dc628f76c6d3"
+version = "0.6.0"
+
 [[deps.StaticArrays]]
 deps = ["LinearAlgebra", "Random", "Statistics"]
 git-tree-sha1 = "74fb527333e72ada2dd9ef77d98e4991fb185f04"
@@ -1513,10 +1804,10 @@ uuid = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 version = "0.33.16"
 
 [[deps.StatsFuns]]
-deps = ["ChainRulesCore", "InverseFunctions", "IrrationalConstants", "LogExpFunctions", "Reexport", "Rmath", "SpecialFunctions"]
-git-tree-sha1 = "f35e1879a71cca95f4826a14cdbf0b9e253ed918"
+deps = ["ChainRulesCore", "HypergeometricFunctions", "InverseFunctions", "IrrationalConstants", "LogExpFunctions", "Reexport", "Rmath", "SpecialFunctions"]
+git-tree-sha1 = "25405d7016a47cf2bd6cd91e66f4de437fd54a07"
 uuid = "4c63d2b9-4356-54db-8cca-17b64c39e42c"
-version = "0.9.15"
+version = "0.9.16"
 
 [[deps.StatsPlots]]
 deps = ["AbstractFFTs", "Clustering", "DataStructures", "DataValues", "Distributions", "Interpolations", "KernelDensity", "LinearAlgebra", "MultivariateStats", "Observables", "Plots", "RecipesBase", "RecipesPipeline", "Reexport", "StatsBase", "TableOperations", "Tables", "Widgets"]
@@ -1551,10 +1842,10 @@ uuid = "3783bdb8-4a98-5b6b-af9a-565f29a5fe9c"
 version = "1.0.1"
 
 [[deps.Tables]]
-deps = ["DataAPI", "DataValueInterfaces", "IteratorInterfaceExtensions", "LinearAlgebra", "TableTraits", "Test"]
-git-tree-sha1 = "bb1064c9a84c52e277f1096cf41434b675cd368b"
+deps = ["DataAPI", "DataValueInterfaces", "IteratorInterfaceExtensions", "LinearAlgebra", "OrderedCollections", "TableTraits", "Test"]
+git-tree-sha1 = "5ce79ce186cc678bbb5c5681ca3379d1ddae11a1"
 uuid = "bd369af6-aec1-5ad0-b16a-f7cc5008161c"
-version = "1.6.1"
+version = "1.7.0"
 
 [[deps.Tar]]
 deps = ["ArgTools", "SHA"]
@@ -1607,9 +1898,9 @@ version = "1.25.0+0"
 
 [[deps.WeakRefStrings]]
 deps = ["DataAPI", "InlineStrings", "Parsers"]
-git-tree-sha1 = "c69f9da3ff2f4f02e811c3323c22e5dfcb584cfa"
+git-tree-sha1 = "b1be2855ed9ed8eac54e5caff2afcdb442d52c23"
 uuid = "ea10d353-3f73-51f8-a26c-33c1cb351aa5"
-version = "1.4.1"
+version = "1.4.2"
 
 [[deps.Widgets]]
 deps = ["Colors", "Dates", "Observables", "OrderedCollections"]
@@ -1914,19 +2205,53 @@ version = "0.9.1+5"
 # ╠═816438b7-4fc0-4581-a7a0-b375ec4e88be
 # ╟─59832eb9-b4fa-4a5b-97a0-d96f532e82cc
 # ╠═4de3b412-3ad3-448b-8f38-ea6ca09ce337
-# ╠═0e889909-9ded-438f-bdd5-4989eb6cdddf
+# ╟─0e889909-9ded-438f-bdd5-4989eb6cdddf
+# ╟─af438416-7d6f-44b3-980e-cd6823688008
+# ╟─64fe649e-9b17-451f-8d3f-7112514bb7fe
+# ╠═11affb9f-2d9a-47a4-9cb1-2e6ead3de727
+# ╟─aa04f999-0979-47a3-8694-7de7df4ebf21
 # ╠═8997748b-bcd3-44e6-aecb-e003a3ed0a12
-# ╠═2b7f8f96-8e25-4155-89f0-c060e1d4a12e
+# ╟─6becffb6-1810-4c21-8d81-28cb2021cdfe
+# ╠═30c6734d-4aad-4065-8604-7e3d91fa59fb
+# ╟─a844007c-4e7d-4c47-b7e8-4ae39e9c0f02
+# ╠═e908d5e3-563b-4982-8e5b-5e642bb62ef0
+# ╟─2b1f9027-176f-46f9-981e-387042dddb2b
+# ╟─f5d85c34-d26d-4e72-b64d-5baa966555db
+# ╟─39dd4490-fbce-43c2-b216-721e73613281
+# ╟─5799aa7b-ef1c-430e-8739-b755c6e743ad
+# ╟─b68d6412-2656-43f3-a393-10e325b35d24
+# ╟─510f698a-dee9-4e67-9ade-57289689f189
+# ╠═f7d815df-8c7c-4994-9f4a-5d3697bac3ca
+# ╠═7847ec0b-df92-4dd0-abe9-37dc8eae5b56
+# ╟─ab22c5f2-908e-4bbf-a67a-4b1157a10023
+# ╠═e7281c97-750b-473b-9860-e786a44e26a0
+# ╟─80e3d9db-e6e9-4e64-9a28-123141079edb
+# ╟─79810bad-ceb4-42a0-8b16-53f25004250b
+# ╟─7ca6a708-e123-406a-9987-ad52f9323224
+# ╟─58a063d6-6dd3-4e08-abe7-357e96d5eac9
+# ╟─eaff35b0-be07-495d-9aec-92f1f64a2b22
+# ╟─c100060d-1a84-47a6-bcdd-0105e23190d9
+# ╠═288f3592-ab4c-434b-a882-5708959543ef
+# ╠═47f61db3-26fe-4dee-9bc9-438434a94530
+# ╟─8e1ad6b0-07ec-4d6d-baed-33046cb539dc
+# ╟─d6660328-b1af-4c1b-94d4-48c58858f166
+# ╟─6715ac8c-207c-4ec1-8b8d-c7e7ff5d8a6c
+# ╟─99734a5a-f5f7-4168-9232-653802efaced
+# ╟─80a96166-c072-4e5f-991e-9400ae506959
+# ╟─a6d27afc-3984-4262-87e8-85eee8928560
+# ╟─1270488f-b477-4385-86eb-46d4f5955d7f
+# ╠═12fc470d-34cc-4ef2-9f56-cd3daf740818
+# ╠═f03912ab-9f15-46fb-87f9-b7f38d7c61e1
+# ╠═5283eb9f-c65e-4aaa-aa2a-3e4624cce6f9
+# ╟─dafcdb72-fbcd-4602-93f4-ed3df42ac060
+# ╠═00fd8596-437c-4a02-b6b1-d61c92931e3f
+# ╟─4cc419da-89a8-4f12-b94c-881b4c1ba20e
+# ╠═69726543-b247-44ce-b5e3-1672e9b5b3a1
+# ╠═1749f0c5-ae4b-47e7-8733-e719d1386933
+# ╟─4464a5a5-3de2-4735-8050-16c3d83f84b0
 # ╠═88b5d4d2-9b4c-4f1b-841b-a18443e5e1d9
 # ╠═0bc863fa-9628-4f30-936f-6fed3a225ef1
 # ╠═b62b28cb-0450-4717-a37a-b41295fedaeb
-# ╠═a7d55631-51a3-4a0f-b4bd-5dc1b737c7bf
-# ╠═559038d5-e38c-4180-bf67-8a4f7533f0b7
-# ╠═ba4ab3c1-bda6-4b6b-9821-2767cf57b4d4
-# ╠═89391ed9-32a0-45d4-ab08-5d3e5f591ba3
-# ╠═8f24de1d-6961-472b-ae44-47b8e413cb93
-# ╠═514f184a-2d7a-4791-a668-353c42b559cb
-# ╠═b3f27851-b77d-4907-9747-545d53348533
 # ╠═2ee624de-2124-4f5e-82e6-46fd1c7dc62b
 # ╠═d326a92d-23b2-43d4-b984-c51b9dd6a905
 # ╟─00000000-0000-0000-0000-000000000001
