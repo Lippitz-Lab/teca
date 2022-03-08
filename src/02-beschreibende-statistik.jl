@@ -35,8 +35,11 @@ using PlutoUI,  LinearAlgebra
 HTML("    <nav >\n    Vorbereitungen:\n\n<a class=\"sidebar-nav-item {{ispage /index}}active{{end}}\" href=\"index\"><em>Intro</em></a> / \n<a class=\"sidebar-nav-item {{ispage /software}}active{{end}}\" href=\"software\"><em>Software</em></a> / \n<a class=\"sidebar-nav-item {{ispage /links}}active{{end}}\" href=\"links\"><em>Hints</em></a> / \n<a class=\"sidebar-nav-item {{ispage /01-basic_syntax}}active{{end}}\" href=\"01-basic_syntax\"><em>Julia Basics</em></a> / \n\n<br>\nStatistik:\n\n<a class=\"sidebar-nav-item {{ispage /02-beschreibende-statistik}}active{{end}}\" href=\"02-beschreibende-statistik\"><em>Beschreibende Statistik</em></a> / \n<a class=\"sidebar-nav-item {{ispage /03-wahrscheinlichkeit}}active{{end}}\" href=\"03-wahrscheinlichkeit\"><em>Wahrscheinlichkeit</em></a> / \n<a class=\"sidebar-nav-item {{ispage /04-messunsicherheit}}active{{end}}\" href=\"04-messunsicherheit\"><em>Messunsicherheit</em></a> / \n<a class=\"sidebar-nav-item {{ispage /05-schaetzung}}active{{end}}\" href=\"05-schaetzung\"><em>Schätzung</em></a> / \n\n<br>\nFourier-Transformation:\n\n<a class=\"sidebar-nav-item {{ispage /06-Fourier-Transformation}}active{{end}}\" href=\"06-Fourier-Transformation\"><em>Fourier-Transformation</em></a> / \n<a class=\"sidebar-nav-item {{ispage /07-Frequenzraum}}active{{end}}\" href=\"07-Frequenzraum\"><em>Frequenzraum</em></a> / \n<a class=\"sidebar-nav-item {{ispage /08-Filter}}active{{end}}\" href=\"08-Filter\"><em>Filter</em></a> / \n\n<br>\nMesstechnik:\n\n<a class=\"sidebar-nav-item {{ispage /09-Rauschen}}active{{end}}\" href=\"09-Rauschen\"><em>Rauschen</em></a> / \n<a class=\"sidebar-nav-item {{ispage /10-Detektoren}}active{{end}}\" href=\"10-Detektoren\"><em>Detektoren</em></a> / \n<a class=\"sidebar-nav-item {{ispage /11-Lock-In}}active{{end}}\" href=\"11-Lock-In\"><em>Lock-In-Verstärler</em></a> / \n<a class=\"sidebar-nav-item {{ispage /12-heterodyn}}active{{end}}\" href=\"12-heterodyn\"><em>Heterodyn-Detektrion</em></a> / \n\n<br>\nReste:\n\n<a class=\"sidebar-nav-item {{ispage /99-newton_method}}active{{end}}\" href=\"99-newton_method\"><em>Newton Method</em></a> / \n\n<br>\n\n\n    </nav>\n\t")
 
 # ╔═╡ c58f76d9-45e8-4d72-9bce-f69321ee64d4
-html"""
-<font size="7"><b>Beschreibende Statistik</b></font>
+html"""<div>
+<font size="7"><b>Beschreibende Statistik</b></font> </div>
+
+<div><font size="5"> Markus Lippitz </font> </div>
+<div><font size="5"> 8. März 2022 </font> </div>
 """
 
 # ╔═╡ f4be8945-c54d-4162-8ee1-2fe3cfb078f1
@@ -58,7 +61,7 @@ Datensätze zu treffen.
 md"""
 # Überblick
 
-Durch eine *Messung* erhalten wir uns einen Messwert einer physikalischen Größe. Wir könenn die Messung bei ansonstanen unveränderten Bedingungen wiederholen und erhalten viele Messwerte, die nur im idealisierten Fall identisch sind. Diese Menge von Messwerten wird in der Statistik *Stichprobe* genannt. In diesem Kapitel versuchen wir zunächst, Aussagen über diese Stichprobe zu machen. Eigentlioch wollen wir aber natprlcih etwas über die Wirklichkeit sagen können. Der Schluss von den Messwerten auf die  Natur wird in der Statistik *Schätzung* genannt. Das ist dann Inhalt eines späteren Kapitels.
+Durch eine *Messung* erhalten wir uns einen Messwert einer physikalischen Größe. Wir können die Messung bei ansonsten unveränderten Bedingungen wiederholen und erhalten viele Messwerte, die nur im idealisierten Fall identisch sind. Diese Menge von Messwerten wird in der Statistik *Stichprobe* genannt. In diesem Kapitel versuchen wir zunächst, Aussagen über diese Stichprobe zu machen. Eigentlich wollen wir aber natürlich etwas über die Wirklichkeit sagen können. Der Schluss von den Messwerten auf die  Natur wird in der Statistik *Schätzung* genannt. Das ist dann Inhalt eines späteren Kapitels.
 
 """
 
@@ -66,7 +69,7 @@ Durch eine *Messung* erhalten wir uns einen Messwert einer physikalischen Größ
 md"""
 # Temperaturverlauf
 
-Als konkretes Beispiel betrachten wir den Temperaturverlauf am 1. Auguist 2021 in einem unserer (klimatiserten) Labore. In einer idealen Welt wäre die Tempreatur genau $21^\circ$C, aber natürloich ändetr sie sich im laufe des Tages. Diese Zeitabhängigkeit ignoitreiren wir zunäcsht und betrachten dies als wiedserholte Messung bei unveränderten Bedingungen. 
+Als konkretes Beispiel betrachten wir den Temperaturverlauf am 1. August 2021 in einem unserer (klimatisierten) Labore. In einer idealen Welt wäre die Temperatur genau $21^\circ$C, aber natürlich ändert sie sich im laufe des Tages. Diese Zeitabhängigkeit ignorieren wir zunächst und betrachten dies als wiederholte Messung bei unveränderten Bedingungen. 
 """
 
 # ╔═╡ dcba4d9e-89d9-4fac-820a-fb24da9b1916
@@ -84,7 +87,7 @@ datensatz = CSV.read(download("https://raw.githubusercontent.com/MarkusLippitz/t
 
 # ╔═╡ 436b8f12-d833-42ec-b85c-31eb96ad862a
 md"""
-Unsere Stichprobe sei die Ist-Tempearatur
+Unsere Stichprobe sei die Ist-Temperatur
 """
 
 # ╔═╡ 70e91e6e-864a-4e9a-ab7d-c592833c1f59
@@ -115,7 +118,7 @@ Auf den ersten Blick funktioniert die Klimaanlage ganz gut. Es ist keine systema
 
 # ╔═╡ fe5d30f7-74f8-4b4b-b604-ee2d30fe8f33
 md"""
-### Histogram
+## Histogramm
 
 Relevanter ist die Darstellung der Stichprobe als Histogramm. Man zählt, wie oft ein Wert innerhalb eines Intervalls, einer _Klasse_, vorkommt und zeichnet Balken entsprechender Höhe und Breite.
 """
@@ -165,6 +168,27 @@ let
 			ylabel=yaxis[Symbol(histo_mode)])
 end
 
+# ╔═╡ 1f7dc3da-ab8d-4bc5-8bba-ee1d82d6b7a4
+md"""
+### Histogramme selbst gemacht
+"""
+
+# ╔═╡ 975e9fa8-d627-40a7-96ec-206b7e4809c7
+let
+	binsize = 0.005
+	edges = range(20.9, 21.1; step=binsize)
+	counts = zeros(length(edges))
+	
+	for id = 1:length(edges)-1
+		edge_low = edges[id]
+		edge_high = edges[id+1]
+		counts[id] = count(x -> edge_low <= x <edge_high , stichprobe)
+	end
+	
+	bar(edges .+ binsize/2, counts, 
+		xlabel="T_ist (deg C)", ylabel="Anzahl", legend=false)
+end
+
 # ╔═╡ 610cd280-d3b8-47c9-ad6e-4fb1577a6c4c
 md"""
 # Rang und kumulative Verteilungsfunktion
@@ -172,7 +196,7 @@ md"""
 
 # ╔═╡ 00ec87d6-4b4d-42d7-a315-885ef16649a6
 md"""
-Unsere Stichprobe besteht aus den Werten $x_i$ mit dem laufenden Index $i = 1 \dots n$. Wir können die $x_i$ der größe nach sortieren und bezeichnen dann mit $x_{[i]}$ den $i$-ten Eintrag nach Sortierung. Also ist $x_{[1]}$ die kleinste Zahl und $x_{[n]}$ die größte.
+Unsere Stichprobe besteht aus den Werten $x_i$ mit dem laufenden Index $i = 1 \dots n$. Wir können die $x_i$ der Größe nach sortieren und bezeichnen dann mit $x_{[i]}$ den $i$-ten Eintrag nach Sortierung. Also ist $x_{[1]}$ die kleinste Zahl und $x_{[n]}$ die größte.
 """
 
 # ╔═╡ 3980b93b-dca5-41e8-9db5-b9ec5bb06b86
@@ -243,7 +267,7 @@ StatsBase.tiedrank(x)
 
 # ╔═╡ 73c659cb-22df-460b-97ea-ddccb2ebb1bb
 md"""
-Die **empirische kumulative Verteilungsfunktion** (engl. empirical umulative distribution function, ecdf) ordnet jedem Wert $x$  den  Anteil der Wert $x_i$ zu, die kleiner oder gleich $x$ sind. 
+Die **empirische kumulative Verteilungsfunktion** (engl. empirical cumulative distribution function, ecdf) ordnet jedem Wert $x$  den  Anteil der Wert $x_i$ zu, die kleiner oder gleich $x$ sind. 
 ```math
  F(x) = \frac{1}{n} \, \text{Anzahl} \, \left(i | x_i \le x \right)
 ```
@@ -282,7 +306,7 @@ end
 md"""
 # Kennzahlen 
 
-Mit einigen Kennzahlen können wir die Stichprobe beschreiben. Die bekannteste ist sicherloich der Mittelwert (engl. mean), Durchschnitt oder Schwerpiunkt
+Mit einigen Kennzahlen können wir die Stichprobe beschreiben. Die bekannteste ist sicherlich der Mittelwert (engl. mean), Durchschnitt oder Schwerpunkt
 ```math
 \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i
 ```
@@ -306,7 +330,7 @@ sum(stichprobe) / length(stichprobe)
 
 # ╔═╡ 7108dfab-f3f0-4c83-ba59-e5cb7307418c
 md"""
-Manchmal ist der **Median** oder Zentralwert aussagekräftiger. Das ist der mittlere Wert einer geordneten Sichprobe, also 
+Manchmal ist der **Median** oder Zentralwert aussagekräftiger. Das ist der mittlere Wert einer geordneten Stichprobe, also 
 ```math
 \text{med}_i \left< x_i \right> = x_{[ (n+1)/2]} \quad \text{bzw.} \quad =\frac{1}{2} \left( x_{[n/2]} +  x_{[(n/2) +1]} \right)
 ```
@@ -323,7 +347,7 @@ StatsBase.median(stichprobe)
 
 # ╔═╡ ebe77f7a-b85b-409d-b57c-786354a385bc
 md"""
-oder 'von Hand'. Die Division liefert einen Fließkomma-Zahl, die erst in ein Integrer gewandelt werden muss, bevor sie als Index verwendert werden kann.
+oder 'von Hand'. Die Division liefert einen Fließkomma-Zahl, die erst in ein Integrer gewandelt werden muss, bevor sie als Index verwendet werden kann.
 """
 
 # ╔═╡ 50779ec0-0cc2-420d-9337-89240cd31548
@@ -336,7 +360,7 @@ Analog zum Median kann man die sortierte Stichprobe an anderen Stellen als der M
 
 # ╔═╡ 11d40f7a-2c4c-4d64-843e-50824e19d10b
 md"""
-Das 2%-Percentil unseres Datensatzes ist
+Das 2%-Perzentil unseres Datensatzes ist
 """
 
 # ╔═╡ 11394695-2a1c-4192-be2f-32a5250d0edc
@@ -344,7 +368,7 @@ StatsBase.percentile(stichprobe, 2)
 
 # ╔═╡ 29959a13-a44b-49c9-86a1-c54c64403ebd
 md"""
-Die Quartillen sind 
+Die Quartilen sind 
 """
 
 # ╔═╡ df8a3bc3-3980-4522-8a19-ee7264ea442e
@@ -369,7 +393,7 @@ Die **Standardabweichung** ist die Wurzel der Varianz
 ```math
  \sigma = \sqrt{\text{var}} = \sqrt{\frac{1}{n-1} \sum_{i=1}^n \, (x_i - \bar{x})^2}
 ```
-Man beachte den Term $n-1$ in dieser Definition. Es gibt eine sehr ähnliche Defintion mit $n$ an Stelle von $n-1$, nur dass dann auch $\bar{x}$ durch $\mu$ ersetzt ist. Doch dazu mehr in dem Kapitel über Schätzer.
+Man beachte den Term $n-1$ in dieser Definition. Es gibt eine sehr ähnliche Definition mit $n$ an Stelle von $n-1$, nur dass dann auch $\bar{x}$ durch $\mu$ ersetzt ist. Doch dazu mehr in dem Kapitel über Schätzer.
 """
 
 # ╔═╡ f6fc5b01-6ea3-411f-bf12-878a4638bc01
@@ -382,7 +406,7 @@ sqrt(sum( (stichprobe .- mean(stichprobe)).^2) / (length(stichprobe)-1))
 
 # ╔═╡ 8a0f6def-dfb6-4aca-a440-dfda31dd232c
 md"""
-Es geht auch mit der 'eingebauten' Funktion 'std'. Durch 'corrected' kann man zwsichen der Variante $n-1$ (true) und $n$ (flase) umschalten.
+Es geht auch mit der 'eingebauten' Funktion 'std'. Durch 'corrected' kann man zwischen der Variante $n-1$ (true) und $n$ (false) umschalten.
 """
 
 # ╔═╡ d50a9c8b-08d8-4fcf-a2da-0c1cb0ff4021
@@ -417,11 +441,40 @@ In Julia
 # ╔═╡ e2018d1a-52ed-427b-9f1b-d6c50a1f18a5
 StatsBase.skewness(stichprobe), StatsBase.kurtosis(stichprobe)
 
+# ╔═╡ fcdde392-2566-4d03-a759-b736f5a26455
+md"""
+## Kennzahlen klassierter Daten
+"""
+
+# ╔═╡ cc65205c-776a-4dbb-b8d3-625d268a24ef
+md"""
+Schon beim Histogramm hatten wir Daten in Klassen eingeteilt. Alle Messwerte, die in eingewisses Temperatur-Intervall gefallen sind, zählten zum gleichen Balken des Histogramms. Manchmal möchte man solche klassierte Daten weiter verarbeiten, manchmal liegen Daten auch dirket nur klassiert vor. Ein Beispiel ist die Notenverteilung einer Klausur. Die Noten können dabei nur wenige verschiedene Werte annehmen.
+"""
+
+# ╔═╡ be18fc94-6a7a-4959-8f02-9bc118969d18
+md"""
+Auch aus klassierten Daten kann man die oben besprochenen Kennzahlen berechnen. Sei $c_l$ die Grenze der Klassen, und somit $z_l = (c_{l-1} + c_l) /2$ die Mitten der Klassen. Beim Übergang zu klassierten Daten ersetzt man in den Gleichen oben jedes $x_i$ durch 'seine' Klassenmitte $z_{l(i)}$, summiert also weiterhin über $i$. Dabei sind dann natürlcihe viele $z_{l(i)}$ identisch, so dass man diese Teilsummen ausklammern kann und durch die Anzahl $h_l$ der Werte in der Klasse $l$ ersetzen kann.
+"""
+
+# ╔═╡ 07e79d80-b780-44e2-869a-5e97bcd075c1
+md"""
+Ausgeschrieben ergibt sich für den **Mittelwert**
+```math
+\bar{x} \approx \frac{1}{n} \sum_l h_l z_l
+```
+und die **Varianz**
+```math
+\text{var} \approx \frac{1}{n-1} \sum_l h_l (z_l - \bar{x})^2 = 
+\frac{1}{n-1} \left( \sum_l h_l z_l^2  - n\bar{x}^2 \right) 
+```
+weil $\sum_l h_l = n$.
+"""
+
 # ╔═╡ ed6f00d8-9ade-47ca-86f6-7018f40426a2
 md"""
 # Boxplot
 
-Wenn man verschiedene Stichproben auf einen Blick vergleichen will, dann ist der 'boxplot' hilfreich. Er zeichnet eine Kiste vom  oberen zum unteren Quartil mit einem Strich beim Median. Die 'Fehlerbalken' haben typischerweise die Länge von 1.5 mal der Kistenhöhe, werden aber zum nächstgelegenen Wert nach 'innen' gerundet. Alle weiter aussen liegenden Werte werden eingezeichnet.
+Wenn man verschiedene Stichproben auf einen Blick vergleichen will, dann ist der 'boxplot' hilfreich. Er zeichnet eine Kiste vom  oberen zum unteren Quartil mit einem Strich beim Median. Die 'Fehlerbalken' haben typischerweise die Länge von 1.5 mal der Kistenhöhe, werden aber zum nächstgelegenen Wert nach 'innen' gerundet. Alle weiter außen liegenden Werte werden eingezeichnet.
 """
 
 # ╔═╡ 816438b7-4fc0-4581-a7a0-b375ec4e88be
@@ -504,7 +557,7 @@ md"""
 
 Korrelation (genauer: Produktmomenten-Korrelation): Maß für Stärke eines Zusammenhangs multivariater Stichproben. 
 
-Am Beispiel für bivariate Stichprobe aus (𝑥_𝑖, 𝑦_𝑖)-s. Dazu: Standardisieren der Lage und Normieren der Streuung durch Standaradabweichung:  〖(𝑥_𝑖 ) ̃=(𝑥_𝑖−𝑥 ̅)/〖𝑠𝑑〗_𝑋  〗_ , entsprechend 𝑦_𝑖.
+Am Beispiel für bivariate Stichprobe aus (𝑥_𝑖, 𝑦_𝑖)-s. Dazu: Standardisieren der Lage und Normieren der Streuung durch Standardabweichung:  〖(𝑥_𝑖 ) ̃=(𝑥_𝑖−𝑥 ̅)/〖𝑠𝑑〗_𝑋  〗_ , entsprechend 𝑦_𝑖.
 
 Als Gesamtmaß ergibt sich die Korrelation 𝑟_𝑋𝑌  aus allen Beiträgen: 
 
@@ -1799,6 +1852,8 @@ version = "0.9.1+5"
 # ╠═51626ee2-e509-4cae-9f0e-1cf448b5b5e0
 # ╠═dbc3c042-3bb8-492c-810a-a3caf45ff794
 # ╠═532ab0aa-bc85-49b7-a577-124109ab53a1
+# ╟─1f7dc3da-ab8d-4bc5-8bba-ee1d82d6b7a4
+# ╠═975e9fa8-d627-40a7-96ec-206b7e4809c7
 # ╟─610cd280-d3b8-47c9-ad6e-4fb1577a6c4c
 # ╟─00ec87d6-4b4d-42d7-a315-885ef16649a6
 # ╟─3980b93b-dca5-41e8-9db5-b9ec5bb06b86
@@ -1850,6 +1905,10 @@ version = "0.9.1+5"
 # ╟─b6921ce5-7144-484b-96e0-5276eb244b36
 # ╟─d879445f-3379-4b82-8fbe-05354de4b7a7
 # ╠═e2018d1a-52ed-427b-9f1b-d6c50a1f18a5
+# ╟─fcdde392-2566-4d03-a759-b736f5a26455
+# ╟─cc65205c-776a-4dbb-b8d3-625d268a24ef
+# ╟─be18fc94-6a7a-4959-8f02-9bc118969d18
+# ╟─07e79d80-b780-44e2-869a-5e97bcd075c1
 # ╟─ed6f00d8-9ade-47ca-86f6-7018f40426a2
 # ╠═bedcae55-ad81-485a-872e-6cafb82bde86
 # ╠═816438b7-4fc0-4581-a7a0-b375ec4e88be
