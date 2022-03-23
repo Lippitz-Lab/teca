@@ -542,7 +542,8 @@ In einem **Streudiagramm** stellt man eine Größe gegenüber der anderen dar, u
 # ╔═╡ 30c6734d-4aad-4065-8604-7e3d91fa59fb
 let
 	dec = 50
-	Plots.scatter(datensätze[1].Zuluft[1:dec:end], datensätze[2].Zuluft[1:dec:end], 
+	plot([20.9, 23.8], [20.9, 23.8], label="Diagonale")
+	Plots.scatter!(datensätze[1].Zuluft[1:dec:end], datensätze[2].Zuluft[1:dec:end], 
 		label="1 vs 2",  markersize=2, markerstrokewidth=0)
 	Plots.scatter!(datensätze[3].Zuluft[1:dec:end], datensätze[4].Zuluft[1:dec:end],  
 		label="3 vs 4",markersize=2, markerstrokewidth=0, 
@@ -2122,7 +2123,7 @@ version = "0.9.1+5"
 # ╔═╡ Cell order:
 # ╟─f5450eab-0f9f-4b7f-9b80-992d3c553ba9
 # ╟─c58f76d9-45e8-4d72-9bce-f69321ee64d4
-# ╟─f4be8945-c54d-4162-8ee1-2fe3cfb078f1
+# ╠═f4be8945-c54d-4162-8ee1-2fe3cfb078f1
 # ╟─dad2a7b0-f900-4a77-b7a3-b2b49d38ce14
 # ╟─8cd8d8ea-5ece-4eec-8e46-13a52aed1d3a
 # ╟─dcba4d9e-89d9-4fac-820a-fb24da9b1916
