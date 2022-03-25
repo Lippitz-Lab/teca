@@ -35,7 +35,7 @@ html"""<div>
 <font size="7"><b>Wahrscheinlichkeit</b></font> </div>
 
 <div><font size="5"> Markus Lippitz </font> </div>
-<div><font size="5"> 8. März 2022 </font> </div>
+<div><font size="5"> 25. März 2022 </font> </div>
 """
 
 # ╔═╡ 4a5520a2-bf90-40da-8b64-dea62aeeb5c7
@@ -312,7 +312,7 @@ Mit $P( \text{positiv} | \text{gesund} ) = 1- P( \text{negativ} | \text{gesund} 
 """
 
 # ╔═╡ e72f25d0-b6e8-4e63-b54e-64e4a261832e
-@bind inzidenz Slider(0:1000; show_value=true )
+@bind inzidenz Slider(0:1000; show_value=true, default=300 )
 
 # ╔═╡ 7ff0257f-cbe2-47b5-9e07-02a001afa5f5
 begin
@@ -406,7 +406,7 @@ Beispiele sind alle vom Typ 'viele ($n$ groß) seltene ($\lambda /n$ klein) Erei
 
 # ╔═╡ 2561cbbf-ed9b-4431-b147-037e7f1ea059
 md"""
-Der Erwartungswert der Poissonverteilung und die Varianz sind beide $\lambda$. Die Summe von zwei Poissonverteilungen mit den Parametern $\lambda_1$ und $\lambda_2$ ist wieder einer Poissonverteilung mit dem Parameter $\lambda_1 + lambda_2$.
+Der Erwartungswert der Poissonverteilung und die Varianz sind beide $\lambda$. Die Summe von zwei Poissonverteilungen mit den Parametern $\lambda_1$ und $\lambda_2$ ist wieder einer Poissonverteilung mit dem Parameter $\lambda_1 + \lambda_2$.
 """
 
 # ╔═╡ 23588033-586a-480b-87c1-9f5c1c73eeb8
@@ -439,10 +439,11 @@ und es gilt natürlich
 ```math
  P(a < X \le b) = F(b) - F(a)
 ```
-Wir können aber eine *Wahrscheinlichkeitsdichte* $f$ definieren mit
+Damit können wir aber eine *Wahrscheinlichkeitsdichte* $f$ definieren mit
 ```math
 f(x) = F'(x)
 ```
+die an die Stelle der alten Wahrscheinlochkeit $P$ tritt.
 """
 
 # ╔═╡ 36e13b17-2a39-49b0-8f5e-71c6eb17679e
@@ -472,87 +473,196 @@ Für die Exponentialverteilung erhält man den Wert $1/\lambda$. Analog kann die
 Sie hat den Wert $1/\lambda^2$ für die Exponentialverteilung
 """
 
-# ╔═╡ 5dd0c0e6-4b2c-4b70-8509-5f499ed8c31b
+# ╔═╡ 6c33fb5c-56e7-4062-8437-6e5a74aa7e34
+@bind p_exponential Slider(0.1:0.1:1)
+
+# ╔═╡ ea779cf4-628c-4594-8ad4-a756c8764bd4
+let
+ 	x = range(0, 10; step=0.1)
+	# the parameter is 1/λ
+ 	plot(x, pdf.(Exponential(1/p_exponential), x), legend=false, xlabel="x", ylabel="WK Dichte")
+end
+
+# ╔═╡ 570fa9e0-6a41-4284-ae00-2085d905f992
 md"""
-Gesetz der großen Zahlen
+## Normalverteilung
+
+Die Normalverteilung hat die Form einer Gauss-Funktion. Für die *Standard-Normalverteiliung* ist die Wahrscheinlichkeitsdichte um die Null zentriert mit der Varianz 1, also
+```math
+f(x) = \frac{1}{\sqrt{2\pi}} \, e^{- x^2/2}
+```
 """
 
-# ╔═╡ 6b367593-fec6-41db-b671-160b35db1928
+# ╔═╡ 3d86ebd6-6ae9-4804-8fff-eafccaf82eaa
 md"""
-Zentraler Grenzwertsatz
+Andere Formen der Normalverteilung erhält man durch lineare Transformation. Sei $Z$ eine Zufallsvariable, die der Standard-Normalverteilung folgt, dann transformiert
+```math
+X = \mu + \sigma Z
+```
+hin zu einer Normalverteilung mit dem Erwartungswert $\mu$ und der Standardabweichung $\sigma$. Die Wahrscheinlichkeitsdichte ist dann also
+```math
+f(x) = \frac{1}{\sigma \, \sqrt{2\pi}} \, e^{- \frac{1}{2} (\frac{x - \mu}{\sigma})^2}
+```
+
 """
+
+# ╔═╡ 0c8f9387-896b-4e4b-ba07-b4494fabda23
+@bind sigma_normal Slider(0.5:0.5:5)
+
+# ╔═╡ 8746abb3-48c5-4a57-8721-60b54435d15a
+let
+ 	x = range(-10, 10; step=0.1)
+ 	plot(x, pdf.(Normal(0, sigma_normal), x), legend=false, xlabel="x", ylabel="WK Dichte")
+end
+
+# ╔═╡ 5373a711-a823-4bc2-9183-0e2d0f485ac7
+md"""
+Die kumulative Verteilungsfunktion $F$ der Normalverteilung, also
+```math
+F(x) = \frac{1}{\sigma \, \sqrt{2\pi}} \int_{-\infty}^x \, e^{- \frac{1}{2} (\frac{y - \mu}{\sigma})^2} \, dy
+```
+nennt sich *error function*. Das Integral lasst sich nicht anayltisch lösen. Wir brauchen es allerdings häufig, inbesondere um zu sagen, mit welcher Wahrscheibnlichkeit ein Messwert innerhalb eines gewissen Intervalls liegt.
+"""
+
+# ╔═╡ e838eb36-9d4f-4d75-9ef6-a65276c60533
+md"""
+In Interval $\mu \pm$ 1, 2 oder 3 $\sigma$ liegen 68.3%, 95.5% oder 99.7% der Ereignisse. Oder in Julia
+"""
+
+# ╔═╡ 12701bce-4c4f-4ec3-b20c-2c06a54b6787
+let
+	sigmas = (1,2,3)
+    @. cdf(Normal(0, 1), sigmas) - cdf(Normal(0, 1), - sigmas)
+end
+
+# ╔═╡ cb1347f3-89b3-46ed-a0e5-d85b255c37cc
+md"""
+Summen von Normalverteilungen sind wieder eine Normalbverteiilung. Dabei addieren sich die Mittelwerte und die Varianzen (nicht die Standardabweichungen), also
+```math
+ \mu_{sum} = \mu_1 + \mu_2 + \cdots \quad \text{und} \quad
+ \sigma_{sum}^2 = \sigma_1^2 + \sigma_2^2 + \cdots
+```
+"""
+
+# ╔═╡ 3d2a3ea3-2434-423a-9a6c-e7b31a4c28b2
+md"""
+### Beziehung zur Poisson-Verteilung
+
+Die Poisson-Verteilung bestitzt nur einen Parameter $\lambda$. Für große Werte von $\lambda$ geht sie in eine Normalverteilung mit dem Mittelwert $\mu = \lambda$ und der Standard-Abweichung $\sigma = \sqrt{\lambda}$ über.
+"""
+
+# ╔═╡ dbebf6b3-54d6-4aeb-a6a0-7d0c9c4ab01e
+@bind lambda_vgl Slider(0:30; show_value=true, default=10)
+
+# ╔═╡ 66cde5d5-ca2b-44e2-9b6c-8b731a2fa1ed
+let
+ 	x = range(0, 30)
+	plot(x, pdf.(Poisson(lambda_vgl), x) , label="Poisson")
+ 	plot!(x, pdf.(Normal(lambda_vgl, sqrt(lambda_vgl)), x), label="Normal",
+		xlabel="x", ylabel="WK Dichte")
+end
+
+# ╔═╡ e7af08b6-77a8-4cf6-9d19-5244052f5877
+md"""
+### Log-Normalverteilung
+
+Bei der Log-Normalverteilung ist der Logarithmus der Werte normalverteilt. Negative Werte treten also nicht auf und die Verteilung wird (auf einer linearen Achse) asymmetrisch.
+"""
+
+# ╔═╡ 36765066-f666-43b7-9418-beacd821e82e
+let
+ 	x = range(0, 10; step=0.1)
+ 	plot(x, pdf.(LogNormal(1, 0.4), x), legend=false, xlabel="x", ylabel="WK Dichte")
+end
+
+# ╔═╡ 2c35fa4c-eb7f-4e24-b9c1-9ecceeabfe70
+md"""
+# Funktionen von Zufallsvariablen 
+
+Nehmen wir an, dass wir wissen, eine Zufallsvariable $X$ entsrpungt einer derr obigen Verteilungen. Welchen Aussagen können wir dann über die verteilung der Werte von $g(X)$ machen? Wir wenden also die Funktion $g$ auf jede gezogenen Wert an und bilden daraus eine neue Verteilung. Die Log-Normalverteilung oben ist ein Beispiel: wir ziehen Zahlen aus einer Normalverteilung und wenden die Exponentialfunktion an.
+
+
+"""
+
+# ╔═╡ 2fe7d80e-1152-4c71-b73f-feb483a6ab8b
+md"""
+Der Erwartungswert von $g(X)$ ist näherungsweise die Funktion $g$ ausgewertet am Erwartungswert von $X$, also 
+```math
+\mathcal{E}(g(X)) \approx g(\mathcal{E}(X))
+```
+"""
+
+# ╔═╡ cc3eb8f0-3a9d-4bc2-a678-fcfae2eea942
+md"""
+Die Beschreibung der Varianz von $g(X)$ ist Inhalt der **Gauss'schen Fehlerfortpflanzung**. Es gilt
+```math
+\text{var}( \alpha + \beta X) = \beta^2 \text{var}(X)
+\quad
+\text{bzw}
+\quad
+\sigma_{\alpha + \beta X} = \beta \, \sigma_X
+```
+bzw. allgemein für eine Variable 
+```math
+\sigma_{g(X)} \approx | g'(\mu)|  \sigma_X
+```
+Für Funktionen mehrere *unabhängiger* Variablen gilt
+```math
+\sigma_{g(X, Y)} \approx \sqrt{ \left(\frac{\partial g}{\partial X} \sigma_X \right)^2 +\left(\frac{\partial g}{\partial Y} \sigma_Y \right)^2 }
+```
+Im nächsten Kapitel werden wir dauaf genauer eingehen.
+"""
+
+# ╔═╡ e31df594-146d-48d8-a8e0-8485fb1488d5
+md"""
+# Zentraler Grenzwertsatz
+
+Warum ist die Normalverteilung 'normal'? Die Normalverrteilung ist dadurch ausgezeichnet, dass sie im Grenzwert der Summe von vielen Zufallsvariablen entspricht, egal welcher Verteilung diese Zufallsvariablen entstammen.
+
+Seien $X_1, X_2, X_i, \dots$ Zufallsvariablen aus der gleichen Verteilung mit dem Erwartungswert $\mu$ und der Standardabweichung $\sigma$. Diese Verteilung kann quasi belibige Form haben. Wir betrachten als neue Zufallsvariable den Mittelwert über die ersten $n$ $X_i$ und nennen diese $\bar{X}$. Aus der Gauss'schen Fehlerfortpfalunzung kennen wir derren Erwtrungswert $\mathcal{E}(\bar{X})$ und Standardabweichung $\sigma_\bar{X}$, nämlich
+```math
+\mathcal{E}(\bar{X}) = \mu \quad \text{und} \quad \sigma_\bar{X} = \sigma_X / \sqrt{n}
+```
+"""
+
+# ╔═╡ 67ace1ef-ff1c-4bf4-98bf-4a76cac54429
+md"""
+Jetzt interessiert uns die Form der Verteilung unserer neuen Zufallsvariable $\bar{X}$. Dazu standardisieren wir diese, skalieren also so zu einer dritten Zufallsvariabeln $Z$, dass Erwartungswert Null und Standardabweichung Eins werden 
+```math
+Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}}
+```
+"""
+
+# ╔═╡ 6279a1d0-a496-4805-979b-a75e3774a089
+md"""
+Der Zentrale Grenzwertsatz besagt, dass sich die Verteilung von $Z$ mit steigender Mittelungszahl $n$ immer weiter einer Standard-Normalverteilung annhähert.
+"""
+
+# ╔═╡ 44e80799-7380-4ff1-b0bc-f20b9f4e099f
+@bind n_mittel Slider(1:10; show_value=true)
+
+# ╔═╡ b01cca80-c3d5-4d4f-b737-893674d02af4
+let
+	N_Z = 1000    # Anzahl Punkte in Z-Verteilung
+	x = range(-3,3; step=0.1)
+	
+	zufall = rand(Exponential(1),  N_Z, n_mittel) # exponentialverteilt, λ=1
+    Xbar = sum(zufall; dims=2)  # sum along n_mittel
+	Z = (Xbar .- n_mittel) ./ sqrt(n_mittel)  # hier ist σ=1 und μ=n_mittel
+	
+	h1 = StatsBase.fit(Histogram, vec(Z), x)  # histogram
+	h1 = LinearAlgebra.normalize(h1, mode=:pdf) # normieren auf pdf
+	plot( h1, label="Summe über exponential")  # plotten
+	
+	plot!(x, pdf.(Normal(),x), label="Standard-Normal")  # Normalverteilung zum Vgl
+end
 
 # ╔═╡ 1842a8aa-5819-4719-8d73-02206be09594
 md"""
-# RESTE
+# Reste
 
- Begriffe,
-Pseudozufallszahlen
-
-"""
-
-# ╔═╡ 8a0285b2-bb39-4103-99b3-69ff20a6d2ad
-md"""
-Lesen Sie im STAHEL das Kapitel 4 „Wahrscheinlichkeit“.
-
-
-Zur Kontrolle: Haben Sie die folgenden Begriffe verstanden?
-
-Was ist ein Elementarereignis  ? Betrachten Sie Würfeln als typ. „Experiment“
-Was ist ein Ereignis, was der Ereignisraum? 
-Kombinationen / Operatoren von Teilmengen: 𝐴∪𝐵,  𝐴∩𝐵, 〖  𝐴〗^∁ ?
-Eigenschaften eines W‘keits-Modells:   𝑃⟨𝐴⟩≥0
-									  𝑃⟨Ω⟩=1
-									  𝑃⟨𝐴∪𝐵⟩=𝑃⟨𝐴⟩+𝑃⟨𝐵⟩, 𝑚𝑖𝑡 𝐴∩𝐵=∅
-Disjunkte Ereignisse?
-Was ist der Unterschied zwischen Elementarereignis, Zufallsvariable X und Zufallszahl?
-
-Wie lautet die Formel für die W‘keit eines Ereignisses 𝐶 mit 𝑃⟨𝐶⟩ unter der Bedingung, dass Ereignis 𝐴 eingetreten ist? Machen Sie sich das entsprechende „Venn-Diagramm“ klar.
-
-Was ist der Satz von Bayes?
-"""
-
-# ╔═╡ d71f97d7-bd45-439c-b48d-ced754d9e340
-md"""
-### Pseudozufallszahlengenerator
-"""
-
-# ╔═╡ b9247124-6b5e-458e-82d7-6b12817fb8c2
-md"""
-### Uniform verteilte Zufallszahlen in MATLAB
-"""
-
-# ╔═╡ b8d81a45-cbcb-48ff-9d51-a4a370aaf59e
-md"""
-*Aufagbe 4*
-Zeichnen Sie einen Smiley in einer 2D-Matrix. 
-Definieren Sie das Gesicht als Kreis mit dem Wert 0.7, Rest=1, zwei Augen=1 und einen Mund =0.4 (ähnlich der Abb. unten).
-
-Wählen Sie als Colormap ‚hot‘ unter Edit->Colormap; 
-Tools->Standard-Colormaps->hot.
-
-Fügen Sie eine Farbskala hinzu (Insert->Colorbar)
-"""
-
-# ╔═╡ 35616b3b-b42d-4c79-b04a-c5affcdda055
-md"""
-*Aufagbe 5*
-Erzeugen Sie gleichverteilte Zufallszahlen in zwei Dimensionen zwischen 0..1.
-
-Zählen Sie, wie häufig die Zahlen innerhalb eines Viertel-Kreises mit Radius r=1 liegen und bestimmen Sie die relative Häufigkeit für eine von Ihnen gewählte Gesamtanzahl. 
-
-Multiplizieren Sie Ihr Ergebnis mit 4. Welche Zahl erhalten Sie näherungsweise?
-
-Fügen Sie die Zahl an beliebiger Stelle in Ihr Smiley-Bild hinzu, exportieren Sie es als 
-.png und schicken es mir zu.
-
-"""
-
-# ╔═╡ c9f64fe6-2943-41fd-a4e6-4077a659af78
-md"""
-GH: Bedingte W’keiten, Stat. Verteilungen: Bernoulli, Binomial.  
-
-
+- Gesetz der großen Zahlen
+- Erzeugung von willk. verteilen Zufallszahlen
 
 """
 
@@ -1570,7 +1680,7 @@ version = "0.9.1+5"
 
 # ╔═╡ Cell order:
 # ╟─f5450eab-0f9f-4b7f-9b80-992d3c553ba9
-# ╟─e19a8fb0-1814-4b09-bb64-2fa1df689659
+# ╠═e19a8fb0-1814-4b09-bb64-2fa1df689659
 # ╟─4a5520a2-bf90-40da-8b64-dea62aeeb5c7
 # ╟─b8b5eeac-5934-4085-9202-9b1d2ad40208
 # ╟─9277a2d9-08b9-4362-83f4-bf9e5fde004c
@@ -1594,7 +1704,7 @@ version = "0.9.1+5"
 # ╠═ec2dbc61-97a0-4ab1-ba98-b67e54afff08
 # ╟─0be5ce70-fe75-48e1-bce9-dda7cbe4c3e0
 # ╟─7b2d63dc-8a2b-4b35-bb9a-d1dea9c6b2df
-# ╠═b719d95d-c38d-4f4c-a80f-982e01100dad
+# ╟─b719d95d-c38d-4f4c-a80f-982e01100dad
 # ╟─6df6dcf1-6e38-42ba-b748-568cf50dd22b
 # ╠═483f1c2e-f4ef-40dd-a70d-8ec000619167
 # ╟─c46261d0-9e3c-40a0-abd3-daa881810fb7
@@ -1622,23 +1732,38 @@ version = "0.9.1+5"
 # ╠═655e3df7-65eb-41b1-ade4-0ea2c8f6dda3
 # ╟─b2c7d291-3020-4776-bc95-a65cbefe0228
 # ╟─f4118979-8e51-47b4-ab90-c49838be057e
-# ╠═2561cbbf-ed9b-4431-b147-037e7f1ea059
+# ╟─2561cbbf-ed9b-4431-b147-037e7f1ea059
 # ╟─23588033-586a-480b-87c1-9f5c1c73eeb8
 # ╠═d7a06eb0-3df4-48d8-b245-0b0af5aec685
 # ╠═9e63ed05-4e4c-40de-ae22-d5fa41b9a397
 # ╠═015ff221-c280-45ac-a554-083e2547fb16
-# ╠═c6a9da46-d67a-4fcc-b25b-b2b1ec0c8d5b
-# ╠═36e13b17-2a39-49b0-8f5e-71c6eb17679e
-# ╠═f42ba88f-0f0b-45a8-accf-080c10e5600b
-# ╠═5dd0c0e6-4b2c-4b70-8509-5f499ed8c31b
-# ╠═6b367593-fec6-41db-b671-160b35db1928
-# ╠═1842a8aa-5819-4719-8d73-02206be09594
-# ╠═8a0285b2-bb39-4103-99b3-69ff20a6d2ad
-# ╠═d71f97d7-bd45-439c-b48d-ced754d9e340
-# ╠═b9247124-6b5e-458e-82d7-6b12817fb8c2
-# ╠═b8d81a45-cbcb-48ff-9d51-a4a370aaf59e
-# ╠═35616b3b-b42d-4c79-b04a-c5affcdda055
-# ╠═c9f64fe6-2943-41fd-a4e6-4077a659af78
+# ╟─c6a9da46-d67a-4fcc-b25b-b2b1ec0c8d5b
+# ╟─36e13b17-2a39-49b0-8f5e-71c6eb17679e
+# ╟─f42ba88f-0f0b-45a8-accf-080c10e5600b
+# ╠═6c33fb5c-56e7-4062-8437-6e5a74aa7e34
+# ╠═ea779cf4-628c-4594-8ad4-a756c8764bd4
+# ╟─570fa9e0-6a41-4284-ae00-2085d905f992
+# ╟─3d86ebd6-6ae9-4804-8fff-eafccaf82eaa
+# ╠═0c8f9387-896b-4e4b-ba07-b4494fabda23
+# ╠═8746abb3-48c5-4a57-8721-60b54435d15a
+# ╟─5373a711-a823-4bc2-9183-0e2d0f485ac7
+# ╟─e838eb36-9d4f-4d75-9ef6-a65276c60533
+# ╠═12701bce-4c4f-4ec3-b20c-2c06a54b6787
+# ╟─cb1347f3-89b3-46ed-a0e5-d85b255c37cc
+# ╟─3d2a3ea3-2434-423a-9a6c-e7b31a4c28b2
+# ╠═dbebf6b3-54d6-4aeb-a6a0-7d0c9c4ab01e
+# ╠═66cde5d5-ca2b-44e2-9b6c-8b731a2fa1ed
+# ╟─e7af08b6-77a8-4cf6-9d19-5244052f5877
+# ╠═36765066-f666-43b7-9418-beacd821e82e
+# ╟─2c35fa4c-eb7f-4e24-b9c1-9ecceeabfe70
+# ╟─2fe7d80e-1152-4c71-b73f-feb483a6ab8b
+# ╟─cc3eb8f0-3a9d-4bc2-a678-fcfae2eea942
+# ╟─e31df594-146d-48d8-a8e0-8485fb1488d5
+# ╟─67ace1ef-ff1c-4bf4-98bf-4a76cac54429
+# ╟─6279a1d0-a496-4805-979b-a75e3774a089
+# ╠═44e80799-7380-4ff1-b0bc-f20b9f4e099f
+# ╠═b01cca80-c3d5-4d4f-b737-893674d02af4
+# ╟─1842a8aa-5819-4719-8d73-02206be09594
 # ╠═415d2c7d-b4a3-4565-99ed-9b04e6569b73
 # ╠═e7f7f02a-b6cc-4f77-adbb-515a5bb45a45
 # ╟─00000000-0000-0000-0000-000000000001
