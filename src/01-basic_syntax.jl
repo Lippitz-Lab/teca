@@ -4,37 +4,24 @@
 using Markdown
 using InteractiveUtils
 
-# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
-macro bind(def, element)
-    quote
-        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
-        local el = $(esc(element))
-        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
-        el
-    end
-end
+# ╔═╡ 6e618eb2-037a-4688-bc7b-53fda57993a1
+using PlutoUI
 
 # ╔═╡ f5450eab-0f9f-4b7f-9b80-992d3c553ba9
 # DO NOT MODIFY, will be updated by update_navbar.jl
 HTML("    <nav >\n    Vorbereitungen:\n\n<a class=\"sidebar-nav-item {{ispage /index}}active{{end}}\" href=\"index\"><em>Intro</em></a> / \n<a class=\"sidebar-nav-item {{ispage /software}}active{{end}}\" href=\"software\"><em>Software</em></a> / \n<a class=\"sidebar-nav-item {{ispage /links}}active{{end}}\" href=\"links\"><em>Hints</em></a> / \n<a class=\"sidebar-nav-item {{ispage /01-basic_syntax}}active{{end}}\" href=\"01-basic_syntax\"><em>Julia Basics</em></a> / \n\n<br>\nStatistik:\n\n<a class=\"sidebar-nav-item {{ispage /02-beschreibende-statistik}}active{{end}}\" href=\"02-beschreibende-statistik\"><em>Beschreibende Statistik</em></a> / \n<a class=\"sidebar-nav-item {{ispage /03-wahrscheinlichkeit}}active{{end}}\" href=\"03-wahrscheinlichkeit\"><em>Wahrscheinlichkeit</em></a> / \n<a class=\"sidebar-nav-item {{ispage /04-messunsicherheit}}active{{end}}\" href=\"04-messunsicherheit\"><em>Messunsicherheit</em></a> / \n<a class=\"sidebar-nav-item {{ispage /05-schaetzung}}active{{end}}\" href=\"05-schaetzung\"><em>Schätzung</em></a> / \n\n<br>\nFourier-Transformation:\n\n<a class=\"sidebar-nav-item {{ispage /06-Fourier-Transformation}}active{{end}}\" href=\"06-Fourier-Transformation\"><em>Fourier-Transformation</em></a> / \n<a class=\"sidebar-nav-item {{ispage /07-Frequenzraum}}active{{end}}\" href=\"07-Frequenzraum\"><em>Frequenzraum</em></a> / \n<a class=\"sidebar-nav-item {{ispage /08-Filter}}active{{end}}\" href=\"08-Filter\"><em>Filter</em></a> / \n\n<br>\nMesstechnik:\n\n<a class=\"sidebar-nav-item {{ispage /09-Rauschen}}active{{end}}\" href=\"09-Rauschen\"><em>Rauschen</em></a> / \n<a class=\"sidebar-nav-item {{ispage /10-Detektoren}}active{{end}}\" href=\"10-Detektoren\"><em>Detektoren</em></a> / \n<a class=\"sidebar-nav-item {{ispage /11-Lock-In}}active{{end}}\" href=\"11-Lock-In\"><em>Lock-In-Verstärler</em></a> / \n<a class=\"sidebar-nav-item {{ispage /12-heterodyn}}active{{end}}\" href=\"12-heterodyn\"><em>Heterodyn-Detektrion</em></a> / \n\n<br>\nReste:\n\n<a class=\"sidebar-nav-item {{ispage /99-newton_method}}active{{end}}\" href=\"99-newton_method\"><em>Newton Method</em></a> / \n\n<br>\n\n\n    </nav>\n\t")
 
-# ╔═╡ 55f7f108-3ed0-4098-b66c-c476ec45bd36
-myxc
-
-# ╔═╡ bf06f5de-1e18-4f42-9d7f-3549e50e15aa
-@bind myxc Slider(1:10; show_value=true)
-
 # ╔═╡ 0d3aec92-edeb-11ea-3adb-cd0dc17cbdab
-md"# Get started with Julia - live
+md"# Erste Schritte mit Julia - live
 
-Before being able to run this notebook succesfully locally, you will need to [set up Julia and Pluto.](/Spring21/installation/)
+Bevor Sie dieses Notebook erfolgreich lokal ausführen können, müssen Sie [Julia und Pluto einrichten] (/teca/software).
 "
 
 
 # ╔═╡ 3b038ee0-edeb-11ea-0977-97cc30d1c6ff
-md"## Variables
+md"## Variablen
 
-We can define a variable using `=` (assignment). Then we can use its value in other expressions:
+Wir können eine Variable mit `=` (Zuweisung) definieren. Dann können wir ihren Wert in anderen Ausdrücken verwenden:
 "
 
 # ╔═╡ 3e8e0ea0-edeb-11ea-22e0-c58f7c2168ce
@@ -44,26 +31,26 @@ x = 3
 y = 2x
 
 # ╔═╡ 5e062a24-edeb-11ea-256a-d938f77d7815
-md"By default Julia displays the output of the last operation. (You can suppress the output by adding `;` (a semicolon) at the end.)
+md"Standardmäßig zeigt Julia die Ausgabe der letzten Operation an. (Sie können die Ausgabe unterdrücken, indem Sie `;` (ein Semikolon) am Ende hinzufügen.)
 "
 
 # ╔═╡ 7e46f0e8-edeb-11ea-1092-4b5e8acd9ee0
-md"We can ask what type a variable has using `typeof`:"
+md"Wir können herausfinden, welchen Typ eine Variable hat, indem wir `typeof` benutzen:"
 
 # ╔═╡ 8a695b86-edeb-11ea-08cc-17263bec09df
 typeof(y)
 
 # ╔═╡ 8e2dd3be-edeb-11ea-0703-354fb31c12f5
-md"## Functions"
+md"## Funktionen"
 
 # ╔═╡ 96b5a28c-edeb-11ea-11c0-597615962f54
-md"We can use a short-form, one-line function definition for simple functions:"
+md"Für einfache Funktionen kann eine kurze, einzeilige Funktionsdefinition verwendet werden:"
 
 # ╔═╡ a7453572-edeb-11ea-1e27-9f710fd856a6
 f(x) = 2 + x
 
 # ╔═╡ b341db4e-edeb-11ea-078b-b71ac00089d7
-md"Typing the function's name gives information about the function. To call it we must use parentheses:"
+md"Wenn Sie den Namen der Funktion eingeben, erhalten Sie Informationen über diese Funktion. Um sie aufzurufen, müssen wir Klammern verwenden:"
 
 # ╔═╡ 23f9afd4-eded-11ea-202a-9f0f1f91e5ad
 f
@@ -72,7 +59,7 @@ f
 f(10)
 
 # ╔═╡ ce9667c2-edeb-11ea-2665-d789032abd11
-md"For longer functions we use the following syntax with the `function` keyword and `end`:"
+md"Für längere Funktionen verwenden wir die folgende Syntax mit dem Schlüsselwort `function` und `end`:"
 
 # ╔═╡ d73d3400-edeb-11ea-2dea-95e8c4a6563b
 function g(x, y)
@@ -84,10 +71,10 @@ end
 g(1, 2)
 
 # ╔═╡ e297c5cc-edeb-11ea-3bdd-090f415685ab
-md"## For loops"
+md"## For-Schleifen"
 
 # ╔═╡ ec751446-edeb-11ea-31ba-2372e7c71b42
-md"Use `for` to loop through a pre-determined set of values:"
+md"Verwenden Sie `for`, um eine Schleife über eine vorher festgelegte Menge von Werten laufen zu lassen:"
 
 # ╔═╡ fe3fa290-edeb-11ea-121e-7114e5c573c1
 let s = 0
@@ -100,14 +87,14 @@ let s = 0
 end
 
 # ╔═╡ 394b0ec8-eded-11ea-31fb-27392068ef8f
-md"Here, `1:10` is a **range** representing the numbers from 1 to 10:"
+md"Hier ist `1:10` ein **Bereich** (range), der die Zahlen von 1 bis 10 darstellt:"
 
 # ╔═╡ 4dc00908-eded-11ea-25c5-0f7b2b7e18f9
 typeof(1:10)
 
 # ╔═╡ 6c44abb4-edec-11ea-16bd-557800b5f9d2
-md"Above we used a `let` block to define a new local variable `s`. 
-But blocks of code like this are usually better inside functions, so that they can be reused. For example, we could rewrite the above as follows:
+md"Oben haben wir einen `let`-Block verwendet, um eine neue lokale Variable `s` zu definieren. 
+Aber solche Codeblöcke sind normalerweise besser innerhalb von Funktionen aufgehoben, so dass sie wiederverwendet werden können. Beispielsweise könnten wir den obigen Code wie folgt umschreiben:
 "
 
 # ╔═╡ 683af3e2-eded-11ea-25a5-0d90bf099d98
@@ -125,10 +112,10 @@ end
 mysum(100)
 
 # ╔═╡ 93a231f4-edec-11ea-3b39-299b3be2da78
-md"## Conditionals: `if`"
+md"## Bedingungen: `if`"
 
 # ╔═╡ 82e63a24-eded-11ea-3887-15d6bfabea4b
-md"We can evaluate whether a condition is true or not by simply writing the condition:"
+md"Wir können auswerten, ob eine Bedingung wahr ist oder nicht, indem wir einfach die Bedingung schreiben:"
 
 # ╔═╡ 9b339b2a-eded-11ea-10d7-8fc9a907c892
 a = 3
@@ -137,9 +124,9 @@ a = 3
 a < 5
 
 # ╔═╡ a16299a2-eded-11ea-2b56-93eb7a1010a7
-md"We see that conditions have a Boolean (`true` or `false`) value. 
+md"Wir sehen, dass Bedingungen einen booleschen Wert (`true` oder `false`) haben. 
 
-We can then use `if` to control what we do based on that value:"
+Wir können dann `if` verwenden, um zu steuern, was wir auf der Grundlage dieses Wertes tun:"
 
 # ╔═╡ bc6b124e-eded-11ea-0290-b3760cb81024
 if a < 5
@@ -151,16 +138,16 @@ else
 end
 
 # ╔═╡ cfb21014-eded-11ea-1261-3bc30952a88e
-md"""Note that the `if` also returns the last value that was evaluated, in this case the string `"small"` or `"big"`, Since Pluto is reactive, changing the definition of `a` above will automatically cause this to be reevaluated!"""
+md"""Beachten Sie, dass das `if` auch den zuletzt ausgewerteten Wert zurückgibt, in diesem Fall die Zeichenkette `"small"` oder `"big"`, Da Pluto reaktiv ist, führt eine Änderung der Definition von `a` oben automatisch dazu, dass dieser Wert neu ausgewertet wird!"""
 
 # ╔═╡ ffee7d80-eded-11ea-26b1-1331df204c67
-md"## Arrays"
+md"## Felder (Arrays)"
 
 # ╔═╡ cae4137e-edee-11ea-14af-59a32227de1b
-md"### 1D arrays (`Vector`s)"
+md"### 1D Felder (`Vector`)"
 
 # ╔═╡ 714f4fca-edee-11ea-3410-c9ab8825d836
-md"We can make a `Vector` (1-dimensional, or 1D array) using square brackets:"
+md"Wir können einen `Vector` (1-dimensional, oder 1D array) durch eckige Klammern erzeugen:"
 
 # ╔═╡ 82cc2a0e-edee-11ea-11b7-fbaa5ad7b556
 v = [1, 2, 3]
@@ -169,9 +156,9 @@ v = [1, 2, 3]
 typeof(v)
 
 # ╔═╡ 881b7d0c-edee-11ea-0b4a-4bd7d5be2c77
-md"The `1` in the type shows that this is a 1D array.
+md"Die `1` im Typ zeigt, dass es sich um ein 1D-Array handelt.
 
-We access elements also using square brackets:"
+Wir greifen auf die Elemente auch mit eckigen Klammern zu:"
 
 # ╔═╡ a298e8ae-edee-11ea-3613-0dd4bae70c26
 v[2]
@@ -180,19 +167,19 @@ v[2]
 v[2] = 10
 
 # ╔═╡ a9b48e54-edee-11ea-1333-a96181de0185
-md"Note that Pluto does not automatically update cells when you modify elements of an array, but the value does change."
+md"Beachten Sie, dass Pluto die Zellen nicht automatisch aktualisiert, wenn Sie Elemente eines Arrays ändern, aber der Wert ändert sich schon."
 
 # ╔═╡ 68c4ead2-edef-11ea-124a-03c2d7dd6a1b
-md"A nice way to create `Vector`s following a certain pattern is to use an **array comprehension**:"
+md"Eine gute Möglichkeit, einen Vektor nach einem bestimmten Muster zu erzeugen, ist **array comprehension**:"
 
 # ╔═╡ 84129294-edef-11ea-0c77-ffa2b9592a26
 v2 = [i^2 for i in 1:10]
 
 # ╔═╡ d364fa16-edee-11ea-2050-0f6cb70e1bcf
-md"### 2D arrays (matrices)"
+md"### 2D Felder (matrices)"
 
 # ╔═╡ db99ae9a-edee-11ea-393e-9de420a545a1
-md"We can make small matrices (2D arrays) with square brackets too:"
+md"Wir können auch kleine Matrizen (2D-Arrays) mit eckigen Klammern erstellen:"
 
 # ╔═╡ 04f175f2-edef-11ea-0882-712548ebb7a3
 M = [1 2
@@ -202,48 +189,45 @@ M = [1 2
 typeof(M)
 
 # ╔═╡ 1295f48a-edef-11ea-22a5-61e8a2e1d005
-md"The `2` in the type confirms that this is a 2D array."
+md"Das `2` im Typ bestätigt, dass es sich um ein 2D-Array handelt."
 
 # ╔═╡ 3e1fdaa8-edef-11ea-2f03-eb41b2b9ea0f
-md"This won't work for larger matrices, though. For that we can use e.g."
+md"Das funktioniert allerdings nicht bei größeren Matrizen. Dafür können wir z.B. verwenden"
 
 # ╔═╡ 48f3deca-edef-11ea-2c18-e7419c9030a0
 zeros(5, 5)
 
 # ╔═╡ a8f26af8-edef-11ea-2fc7-2b776f515aea
-md"Note that `zeros` gives `Float64`s by default. We can also specify a type for the elements:"
+md"Beachten Sie, dass `zeros` standardmäßig `Float64` ergibt. Wir können auch einen Typ für die Elemente angeben:"
 
 # ╔═╡ b595373e-edef-11ea-03e2-6599ef14af20
 zeros(Int, 4, 5)
 
 # ╔═╡ 4cb33c04-edef-11ea-2b35-1139c246c331
-md"We can then fill in the values we want by manipulating the elements, e.g. with a `for` loop."
+md"Wir können dann die gewünschten Werte eintragen, indem wir die Elemente manipulieren, z. B. mit einer `for`-Schleife."
 
 # ╔═╡ 54e47e9e-edef-11ea-2d75-b5f550902528
-md"A nice alternative syntax to create matrices following a certain pattern is an array comprehension with a *double* `for` loop:"
+md"Eine schöne alternative Syntax zur Erstellung von Matrizen nach einem bestimmten Muster ist ein *array comprehension* mit einer *doppelten* `for`-Schleife:"
 
 # ╔═╡ 6348edce-edef-11ea-1ab4-019514eb414f
 [i + j for i in 1:5, j in 1:6]
 
 # ╔═╡ e03be0e6-160c-46ac-a417-32e7299be02d
 md"""
-# Acknowledgement
+## Acknowledgement
 """
 
 # ╔═╡ 2548306d-ed5d-4793-b925-7b36e932841c
 Markdown.MD(
-	Markdown.Admonition("warning", "This notebook is taken from", 
+	Markdown.Admonition("warning", "This notebook is translated from", 
 [md"""
 		
 _**Computational Thinking**, a live online Julia/Pluto textbook._ ([computationalthinking.mit.edu](https://computationalthinking.mit.edu), [original notebook](https://github.com/mitmath/18S191/blob/Fall20/lecture_notebooks/Basic%20Julia%20syntax.jl))
 """] 
 	))
 
-# ╔═╡ 6e618eb2-037a-4688-bc7b-53fda57993a1
-using PlutoUI
-
 # ╔═╡ f15d5b3e-7639-4d20-9cfd-ef6bc07451c3
-TableOfContents()
+TableOfContents(title="Inhalt")
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -462,8 +446,6 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 
 # ╔═╡ Cell order:
 # ╟─f5450eab-0f9f-4b7f-9b80-992d3c553ba9
-# ╠═55f7f108-3ed0-4098-b66c-c476ec45bd36
-# ╠═bf06f5de-1e18-4f42-9d7f-3549e50e15aa
 # ╟─0d3aec92-edeb-11ea-3adb-cd0dc17cbdab
 # ╟─3b038ee0-edeb-11ea-0977-97cc30d1c6ff
 # ╠═3e8e0ea0-edeb-11ea-22e0-c58f7c2168ce
@@ -518,7 +500,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─4cb33c04-edef-11ea-2b35-1139c246c331
 # ╟─54e47e9e-edef-11ea-2d75-b5f550902528
 # ╠═6348edce-edef-11ea-1ab4-019514eb414f
-# ╟─e03be0e6-160c-46ac-a417-32e7299be02d
+# ╠═e03be0e6-160c-46ac-a417-32e7299be02d
 # ╟─2548306d-ed5d-4793-b925-7b36e932841c
 # ╠═6e618eb2-037a-4688-bc7b-53fda57993a1
 # ╠═f15d5b3e-7639-4d20-9cfd-ef6bc07451c3
