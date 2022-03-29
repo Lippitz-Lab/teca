@@ -66,6 +66,24 @@ md"""
 
 """
 
+# ╔═╡ ba95eeaa-d5f3-4032-ac9b-c28f7e23fc6a
+md"""
+# Überblick
+
+Im letzten Kapitel haben wir die Stichprobe beschrieben. In diesem Kapitel geht es im die Verteilung, aus der die Stcihprobe gezogen wurde. Das letzte Kapitel beschreibt also die messwrte, dieses die Wirklichkeit. Im nächsten geht es dann daraum, wie man von den Messwerten auf die Wikrlichkeit kommt ('schätzt'). Die Kennzahlen sind sehr ähnlich. Im follgenden wird ein Hut über die Kennzahlen gesetzt, wenn es um die Stichprobe geht.
+
+| Sichprobe                  | Verteilung (diskret)|  Verteilung (kont.)|
+|:----------                 | :--------- | :--------- |
+| relative Häufigkeit $r_k$  | Wahrscheinlichkeit $P\left<X=k\right>$ | Wahrscheinlichkeitsdichte $f\left<k\right>$ |
+| Mittelwert $\bar{x} = \sum k r_k$  | Erwartungswert $\mathcal{E}\left<X\right> = \mu = \sum k P\left<X=k\right>$| Erwartungswert $\mathcal{E}\left<X\right> = \mu = \int k f\left<k\right> dk$|
+| Varianz $\hat{\text{var}} = \frac{n}{n-1}  \sum (k - \bar{x})^2 r_k$| Varianz $\text{var}\left<X\right> = \sum (k - \mu)^2 P\left<X=k\right>$ | Varianz $\text{var}\left<X\right> = \int(k - \mu)^2 f\left<k\right> dk$ |
+| Standardabweichung $\hat{\sigma} = \sqrt{\hat{\text{var}}}$ | Standardabweichung $\sigma = \sigma_X = \sqrt{\text{var}}$| Standardabweichung $\sigma = \sigma_X = \sqrt{\text{var}}$|
+*gekürzt aus Stahel, Tabelle 5.3.b*
+
+Zwei Punkte sind hierbei relevant: beim Übergang von diskreten zu kontinuoirielcihen Wahrscheiblochkeitsverteilunghen muss man zu einer Wahrscheiblochkeits**dichte** übergehen. Und der (bislang) etwas merküwrdige Faktor $\frac{n}{n-1}$ tritt nur bei der Beschreibung der Stichprobe auf, nicht aber bei der von Verteilungen. Das wird sich im nächsten Kapitel klären.
+
+"""
+
 # ╔═╡ 7c903e39-fb09-4ab0-83e4-1034830f138b
 md"""
 # Grundbegriffe
@@ -101,15 +119,15 @@ md"""
 
 Damit ergeben sich für die Wahrscheinlichkeit $P$ einige grundlegende Beziehungen. Die Wahrscheinlichkeit eines Ereignisses kann nicht negativ sei:
 ```math
-P(A) \ge 0 \quad \text{für alle } A
+P\left<A\right> \ge 0 \quad \text{für alle } A
 ```
 Die Wahrscheinlichkeit, dass irgend was eintritt, ist eins: 
 ```math
-P(\Omega) = 1
+P\left<\Omega\right> = 1
 ```
  Wahrscheinlichkeiten addieren sich, falls die Ereignisse disjunkt sind:
 ```math
-P(A \cup B) = P(A) + P(B) \quad \text{falls} \quad A \cap B = \emptyset
+P\left<A \cup B\right> = P\left<A\right> + P\left<B\right> \quad \text{falls} \quad A \cap B = \emptyset
 ```
 """
 
@@ -117,7 +135,7 @@ P(A \cup B) = P(A) + P(B) \quad \text{falls} \quad A \cap B = \emptyset
 md"""
 Daraus folgt
 ```math
-P(\emptyset) = 0 \quad ; \quad P(A) \le 1 \quad ; \quad P(A^C) = 1 - P(A)
+P\left<\emptyset\right> = 0 \quad ; \quad P\left<A\right> \le 1 \quad ; \quad P\left<A^C\right> = 1 - P\left<A\right>
 ```
 """
 
@@ -462,15 +480,7 @@ f(x) =  \lambda e^{- \lambda x} \quad \text{für} \quad x \ge 0
 
 # ╔═╡ f42ba88f-0f0b-45a8-accf-080c10e5600b
 md"""
-Der Erwartungswert einer stetigen Verteilung ist gegeben durch
-```math
-\mathcal{E} = \int_{-\infty}^{\infty} x f(x) dx
-```
-Für die Exponentialverteilung erhält man den Wert $1/\lambda$. Analog kann die Varianz definiert werden als
-```math
-\text{var} = \int_{-\infty}^{\infty} \left( x - \mathcal{E} \right)^2 f(x) dx
-```
-Sie hat den Wert $1/\lambda^2$ für die Exponentialverteilung
+Der Erwartungswert der Exponentialverteilung ist $1/\lambda$, die Varianz $1/\lambda^2$.
 """
 
 # ╔═╡ 6c33fb5c-56e7-4062-8437-6e5a74aa7e34
@@ -1680,10 +1690,11 @@ version = "0.9.1+5"
 
 # ╔═╡ Cell order:
 # ╟─f5450eab-0f9f-4b7f-9b80-992d3c553ba9
-# ╠═e19a8fb0-1814-4b09-bb64-2fa1df689659
+# ╟─e19a8fb0-1814-4b09-bb64-2fa1df689659
 # ╟─4a5520a2-bf90-40da-8b64-dea62aeeb5c7
 # ╟─b8b5eeac-5934-4085-9202-9b1d2ad40208
 # ╟─9277a2d9-08b9-4362-83f4-bf9e5fde004c
+# ╟─ba95eeaa-d5f3-4032-ac9b-c28f7e23fc6a
 # ╟─7c903e39-fb09-4ab0-83e4-1034830f138b
 # ╟─9490ef1a-cab2-4b81-8ccb-385446d220be
 # ╟─67457022-5fc6-4ced-9490-9390bf4fa84f
