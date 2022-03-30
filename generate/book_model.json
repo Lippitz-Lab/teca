@@ -10,10 +10,6 @@
                 "name": "Software",
                 "notebook_path": "software.jl"
             },
-            {
-                "name": "Hints",
-                "notebook_path": "links.jl"
-            },
              {
                 "name": "Julia Basics",
                 "notebook_path": "01-basic_syntax.jl"
@@ -32,12 +28,12 @@
                 "notebook_path": "03-wahrscheinlichkeit.jl"
             },
             {
-                "name": "Messunsicherheit",
-                "notebook_path": "04-messunsicherheit.jl"
+                "name": "Schätzung",
+                "notebook_path": "04-schaetzung.jl"
             },
             {
-                "name": "Schätzung",
-                "notebook_path": "05-schaetzung.jl"
+                "name": "Messunsicherheit",
+                "notebook_path": "05-messunsicherheit.jl"
             }
         ]
     },
@@ -70,21 +66,12 @@
                 "notebook_path": "10-Detektoren.jl"
             },
             {
-                "name": "Lock-In-Verstärler",
+                "name": "Lock-In-Verstärker",
                 "notebook_path": "11-Lock-In.jl"
             },
             {
-                "name": "Heterodyn-Detektrion",
+                "name": "Heterodyn-Detektion",
                 "notebook_path": "12-heterodyn.jl"
-            }
-        ]
-    },
-    {
-        "title": "Reste",
-        "contents": [          
-            {
-                "name": "Newton Method",
-                "notebook_path": "99-newton_method.jl"
             }
         ]
     }

@@ -20,9 +20,15 @@ using Distributions, StatsBase, LinearAlgebra, Plots
 # ╔═╡ ea9b0a84-3b02-433a-b5df-d1b76b16ceaf
 using PlutoUI
 
+# ╔═╡ b1c02d6f-d50d-43cb-a01b-08ae7f4fb30d
+using StatsPlots
+
+# ╔═╡ 764a07f5-e3ab-4db3-a5be-5728aab422bb
+using Optim
+
 # ╔═╡ f5450eab-0f9f-4b7f-9b80-992d3c553ba9
 # DO NOT MODIFY, will be updated by update_navbar.jl
-HTML("    <nav >\n    Vorbereitungen:\n\n<a class=\"sidebar-nav-item {{ispage /index}}active{{end}}\" href=\"index\"><em>Intro</em></a> / \n<a class=\"sidebar-nav-item {{ispage /software}}active{{end}}\" href=\"software\"><em>Software</em></a> / \n<a class=\"sidebar-nav-item {{ispage /links}}active{{end}}\" href=\"links\"><em>Hints</em></a> / \n<a class=\"sidebar-nav-item {{ispage /01-basic_syntax}}active{{end}}\" href=\"01-basic_syntax\"><em>Julia Basics</em></a> / \n\n<br>\nStatistik:\n\n<a class=\"sidebar-nav-item {{ispage /02-beschreibende-statistik}}active{{end}}\" href=\"02-beschreibende-statistik\"><em>Beschreibende Statistik</em></a> / \n<a class=\"sidebar-nav-item {{ispage /03-wahrscheinlichkeit}}active{{end}}\" href=\"03-wahrscheinlichkeit\"><em>Wahrscheinlichkeit</em></a> / \n<a class=\"sidebar-nav-item {{ispage /04-messunsicherheit}}active{{end}}\" href=\"04-messunsicherheit\"><em>Messunsicherheit</em></a> / \n<a class=\"sidebar-nav-item {{ispage /05-schaetzung}}active{{end}}\" href=\"05-schaetzung\"><em>Schätzung</em></a> / \n\n<br>\nFourier-Transformation:\n\n<a class=\"sidebar-nav-item {{ispage /06-Fourier-Transformation}}active{{end}}\" href=\"06-Fourier-Transformation\"><em>Fourier-Transformation</em></a> / \n<a class=\"sidebar-nav-item {{ispage /07-Frequenzraum}}active{{end}}\" href=\"07-Frequenzraum\"><em>Frequenzraum</em></a> / \n<a class=\"sidebar-nav-item {{ispage /08-Filter}}active{{end}}\" href=\"08-Filter\"><em>Filter</em></a> / \n\n<br>\nMesstechnik:\n\n<a class=\"sidebar-nav-item {{ispage /09-Rauschen}}active{{end}}\" href=\"09-Rauschen\"><em>Rauschen</em></a> / \n<a class=\"sidebar-nav-item {{ispage /10-Detektoren}}active{{end}}\" href=\"10-Detektoren\"><em>Detektoren</em></a> / \n<a class=\"sidebar-nav-item {{ispage /11-Lock-In}}active{{end}}\" href=\"11-Lock-In\"><em>Lock-In-Verstärler</em></a> / \n<a class=\"sidebar-nav-item {{ispage /12-heterodyn}}active{{end}}\" href=\"12-heterodyn\"><em>Heterodyn-Detektrion</em></a> / \n\n<br>\nReste:\n\n<a class=\"sidebar-nav-item {{ispage /99-newton_method}}active{{end}}\" href=\"99-newton_method\"><em>Newton Method</em></a> / \n\n<br>\n\n\n    </nav>\n\t")
+HTML("    <nav >\n    Vorbereitungen:\n\n<a class=\"sidebar-nav-item {{ispage /index}}active{{end}}\" href=\"index\"><em>Intro</em></a> / \n<a class=\"sidebar-nav-item {{ispage /software}}active{{end}}\" href=\"software\"><em>Software</em></a> / \n<a class=\"sidebar-nav-item {{ispage /01-basic_syntax}}active{{end}}\" href=\"01-basic_syntax\"><em>Julia Basics</em></a> / \n\n<br>\nStatistik:\n\n<a class=\"sidebar-nav-item {{ispage /02-beschreibende-statistik}}active{{end}}\" href=\"02-beschreibende-statistik\"><em>Beschreibende Statistik</em></a> / \n<a class=\"sidebar-nav-item {{ispage /03-wahrscheinlichkeit}}active{{end}}\" href=\"03-wahrscheinlichkeit\"><em>Wahrscheinlichkeit</em></a> / \n<a class=\"sidebar-nav-item {{ispage /04-schaetzung}}active{{end}}\" href=\"04-schaetzung\"><em>Schätzung</em></a> / \n<a class=\"sidebar-nav-item {{ispage /05-messunsicherheit}}active{{end}}\" href=\"05-messunsicherheit\"><em>Messunsicherheit</em></a> / \n\n<br>\nFourier-Transformation:\n\n<a class=\"sidebar-nav-item {{ispage /06-Fourier-Transformation}}active{{end}}\" href=\"06-Fourier-Transformation\"><em>Fourier-Transformation</em></a> / \n<a class=\"sidebar-nav-item {{ispage /07-Frequenzraum}}active{{end}}\" href=\"07-Frequenzraum\"><em>Frequenzraum</em></a> / \n<a class=\"sidebar-nav-item {{ispage /08-Filter}}active{{end}}\" href=\"08-Filter\"><em>Filter</em></a> / \n\n<br>\nMesstechnik:\n\n<a class=\"sidebar-nav-item {{ispage /09-Rauschen}}active{{end}}\" href=\"09-Rauschen\"><em>Rauschen</em></a> / \n<a class=\"sidebar-nav-item {{ispage /10-Detektoren}}active{{end}}\" href=\"10-Detektoren\"><em>Detektoren</em></a> / \n<a class=\"sidebar-nav-item {{ispage /11-Lock-In}}active{{end}}\" href=\"11-Lock-In\"><em>Lock-In-Verstärker</em></a> / \n<a class=\"sidebar-nav-item {{ispage /12-heterodyn}}active{{end}}\" href=\"12-heterodyn\"><em>Heterodyn-Detektion</em></a> / \n\n<br>\n\n\n    </nav>\n\t")
 
 # ╔═╡ 8f76e7fd-7481-40ff-8e54-e31aab7eff1f
 html"""<div>
@@ -219,6 +225,7 @@ Das wird einfacher, wenn man auf beiden Seiten den Logarithmus zieht. So erhält
 ```math
 L\left<x_1, x_2 \dots x_n ; \theta \right> = \sum \ln p_\theta\left<x_i\right>
 ```
+Wir maximieren also  $L\left<x_1, x_2 \dots x_n ; \theta \right> $ durch Variation des Parameter(-Satzes) $\theta$. Das gefundene $\theta$ ist dann der plausibelste Parameter, der die gemessenen $x_i$ beschreibt.
 """
 
 # ╔═╡ 55ba0ba0-96d0-4248-82fb-f9b8509fa0b8
@@ -230,7 +237,7 @@ Betrachten wir als Beispiel einen sehr schwachen Laserstrahl. Wir messen in $n$ 
 
 # ╔═╡ bcef0d0b-45eb-4866-84eb-4b0444afdd2b
 begin
-	n = 300
+	n = 3
 	λ_true = 5
 	data = rand(Poisson(λ_true), n)
 
@@ -240,10 +247,9 @@ begin
 	λ_est_range = range(0,2 * λ_true; length=1000)
 	plot(λ_est_range, @. L(λ_est_range); legend=false, 
 		xlabel="λ estimated", ylabel="log likelihood")
-	
-	Lmax = maximum( @. L(λ_est_range))
-	λ_est = λ_est_range[argmax( @. L(λ_est_range))]
-	scatter!([λ_est], [Lmax]) # mark maximum
+
+	res = Optim.optimize(x -> -1 .* L(x), 0, 1e3) # minimize -L
+	scatter!([res.minimizer], [-1 .* res.minimum]) # mark maximum
 end
 
 # ╔═╡ abf2f5d6-7ea8-4752-8a80-9ad66670e458
@@ -252,7 +258,235 @@ Natürlich ist in diesem Fall der Mittelwert auch ein guter Schätzer.
 """
 
 # ╔═╡ 2249131d-b137-486d-a9d3-503a1bd6876e
-mean(data), λ_est
+mean(data), res.minimizer
+
+# ╔═╡ c001f17b-7a94-433c-8fee-d4e4975e5e0c
+md"""
+# Methode der kleinsten Quadrate
+
+Wir hatten schon im Kapitel zur beschriebenden statistik die Methode der kleinsten Quadrate erwähnt. Man kann ein Modell an Daten anpassen, indem man die Parameter des Modells so variiert, dass die Summe der qwuadratsichen Abweichung zwsichzen Modell und Daten minimal wird. Bei gegebenen $x_i$ und gemessenen $y_i$ sucht man also Parameter $\theta$ eines Modells $y = f(x_i; \theta)$ so dass
+```math
+\text{Summe der Residuen} = \sum_i \left( y_i - f(x_i; \theta) \right)^2
+```
+minimal wird.
+"""
+
+# ╔═╡ 6860ac98-2744-4889-a477-f9f9137c2221
+md"""
+Warum funktioniert das? Die Begründung liefer die Maximum Likelihood Methode. Aus dieser Sichtweise beschreibt das Modell $f(x_i; \theta)$ den Erwartungswert einer Normalverteilung mit der Standardabweching $\sigma$, die für alle Messpunkte identisch ist. Die Wahrscheinnloichkeit, einen Wert $y_i$ zu messen, obwogl das Modell dioch $f(x_i; \theta)$ vorhersagt, ist also
+```math
+p_\theta(x_i) = c \, e^{- \frac{(y_i - f(x_i; \theta))^2}{\sigma^2}}
+```
+Der Vorfaktor $c$ normioert die Verteilung, ist abver für alle $i$ identisch, so dass wir ihn bei der Optimierung vernachlössigen können. Die Log-Likelihood Funktion ist dann
+```math
+L\left<x_1, x_2 \dots x_n ; \theta \right> = \sum \ln p_\theta\left<x_i\right>
+=  - \frac{c}{\sigma^2} \, \sum_i (y_i - f(x_i; \theta))^2 
+```
+Wir maxmimieren $L$, minimieren also die Summe der Resiuden. Die Methode der kleinsten Quadrate ist also die Maximum Likelihood Methode unter der Annahme einer Nornmalverteilung der (konstanten) Messunsicherheit.
+"""
+
+# ╔═╡ 9b612cf5-0c99-4e70-b070-f7c0e7f7f151
+md"""
+Die erste Konseqeunz ist, dass wir eine variable Messunsicherheit $\sigma_i$ berücksichtigen können, in dem wir 
+```math
+\text{Summe der gewichteten Residuen} = \chi^2 = \sum_i \frac{\left( y_i - f(x_i; \theta) \right)^2}{\sigma_i^2}
+```
+minimieren.
+"""
+
+# ╔═╡ 5f5e0319-a22b-41f9-bc29-058645411b1d
+md"""
+Die zweite Konsequenz ist, dass wir die Verteilung der Messunsicherheit im Auge behakten müssen. Sollte es begründete Zweifel an deren Normalverteilung geben, dann sollte man von der Methide der kleinsten Quadrate Abstand nehmen und direkt die Maximum Likelihood Methode anwenden. Dies ist beispielsweeise der Fall, wenn ein Modell an Photonenzahlen angepasst werden soll, und die typischen Photonenzahlen unterhabl un ungefähr 10 liegen. Deren Fehler ist dann gerade Poisson-verteilt.
+"""
+
+# ╔═╡ f7d16791-425b-42c3-bffb-45518dc88d79
+md"""
+## Bsp. Modell an Photonen-Zahlen anpassen
+
+Beim [zeitkorelierten Einzelphotonenzählen](https://de.wikipedia.org/wiki/Zeitkorrelierte_Einzelphotonenz%C3%A4hlung) bestimmt man die Anzahl an deketeirten Fluoreszenz-Photonen eines Molelküls als Funktion des zeitlichen Abstands zum anregenden Laserpuls. Typische Abständei liegen im bereich von einer Nanosekunde und sind durch die Lebenbszeit des anregergten Zustands im Molekül bestimmt. Die Idee ist, diesen dadurch zu bestimmen. Man findet einen exponenztiellen Abfall der Zählereignisse mit dem zeitlichen Abdstand zur Anregung. Die Zerfallskonstante ist gearde die Lebebnszeit des Zustands.
+
+Das Modell ist also
+```math
+f(t; \tau, c_{fl}, c_{bg}) = c_{fl} \, e^{- t / \tau} + c_{bg}
+```
+wobei $t$ die Zeit zwsichen Laserpuls und Detektion des Photons ist und $\tau$ die Lebenszeit des angregetne Zustanbds besxchreibt. Die beiden $c_i$ bestimmen den Helligkeit des Moleküls und die des Untergrunds, beuspilsweise aufgrund von Raumlicht oder der Dunekzählrate des Detektors.
+
+Die gemessene Photonezahl in einem Intveall $[t, t+dt]$ ist also Poisson-Verteilt um einen Mittelwert, der druch $f$ gegeben ist.
+"""
+
+# ╔═╡ 1868b86a-c26e-4f76-b6d2-9c1143159bd9
+begin
+	t = range(0, 10; step= 0.1)
+	
+	f(t, τ, c_fl, c_bg) = c_fl * exp(- t / τ) + c_bg
+	f(p::Vector) = f.(t, p[1], p[2], p[3])
+	
+	p_model = [2, 5, 2]
+	data_p = rand.(Poisson.(f(p_model)))
+
+	lower = zeros(size(p_model))
+	upper = 1 ./ lower # = inf
+	initial = ones(size(p_model))
+	
+	L(p::Vector) = -1 .* sum(log.(pdf.(Poisson.(f(p)),data_p)))
+	res_MLE = optimize(L,  lower, upper, initial, Fminbox(NelderMead()))
+	
+	chisq(p::Vector) = sum((data_p .- f(p)).^2)
+	res_quadrate = optimize(chisq,  lower, upper, initial, Fminbox(NelderMead()))
+	
+	plot(t, f(p_model), yaxis=:log10, label="ideal model")
+	plot!(t, map(x -> iszero(x) ? NaN : x, data_p), # clip zero values for log plot
+		yaxis=:log10, xlabel="delay time t", ylabel="counts / intervall", label="data")
+	plot!(t, f(res_quadrate.minimizer), yaxis=:log10, label="chisq model")
+	plot!(t, f(res_MLE.minimizer), yaxis=:log10, label="MLE model")
+end
+
+# ╔═╡ 3dc0acfb-c45a-4f4c-a91e-b4be3aa07bf9
+res_quadrate.minimizer
+
+# ╔═╡ 6a7e4c76-82ab-45d1-96ba-aac67308d289
+res_MLE.minimizer
+
+# ╔═╡ 09c25e45-55c5-458e-a867-d901eb9b64a8
+md"""
+Da hatte ich den Unterschied dramasticher in Erinnerung
+"""
+
+# ╔═╡ f52a564f-af2c-4be1-81e8-7124c2339bea
+md"""
+# Intervallschätzung
+
+Mit der Punktschätzung haben wir den plasusibelsten Wert des Parameters gefunden, der die Verteilung beschreibt, aus der unsere Messdaten gezogen wurden. Nun geht es um die Frage, welche anderen Werte dieser Parameter auch noch annehmen könnte. Wir sind also auf der Suche nach einem Intervall, in dem der wirkliche Parameter dann mit einer gewissen Wahrschienlichkeit liegen wird. Dieses Intervall nennt man **Konfidenzintervall**
+"""
+
+# ╔═╡ c5b024ed-11c4-4f01-a7f3-00ee90069cef
+md"""
+## Bsp. geometrische Verteilung
+"""
+
+# ╔═╡ af005e08-1af7-4742-8b90-174ba1f91a40
+md"""
+Betrachten wir noch einmal als Beipiel die gemoetrische verteilung von oben. Mit der Wahtrscheinliochkeit $p$ gelingt ein Versuch, nach $x$ Versuchen tritt zum ersten mal ein Misserfolg auf. Die Wahrscheinlichkeit für einen Misserfolgt nach $x$ versuchen ist also 
+```math
+P\left<X=x\right> = (1-p)\, p^x
+```
+Wir messen einen Misserfolg nach $x=3$ versuchen. Wie oben gesehn ist der plasuibelste Parameter 
+```math
+\hat{p} = \frac{x}{x+1} = \frac{3}{4}
+```
+Die Grenzen des Intervalls wählt man typsicherweise so, dass der Messwert auf dem 2.5-Perzentil der oberen ($p_o$) bzw. unteregr ($p_u$) Intervallgrenze liegt, also  
+```math
+P_{p_o}\left<X \le x\right> = 2.5 \%
+```
+Die kumilative Dichtefunktion beträgt also $0.025$ bzw $1 - 0.025$ an der unteren bzw oberen Intervallgrenze 
+"""
+
+# ╔═╡ 5dc9be6a-54da-49b8-8cf5-87567bc6563c
+function grenzen(x)
+	# in Julia, p is defined as (1-p) compared to our eq. above ...
+	# seach for p, so that cdf crosses 2.5% 
+	r = optimize(p -> (cdf(Geometric(1-p), x) -  0.025).^2, 0, 1)
+	oben = r.minimizer
+	r = optimize(p -> (cdf(Geometric(1-p), x-1) -  (1- 0.025)).^2, 0, 1)
+	unten = r.minimizer
+
+	return unten, oben
+end;
+
+# ╔═╡ 09e27d74-c105-425c-b49f-9f2465fe663c
+grenzen(3)
+
+# ╔═╡ 30fd1867-c9aa-468e-b7cb-9531e9471831
+let
+	xm = 3
+	(plow, phigh) = grenzen(xm)  
+	wk_below = sum([pdf.(Geometric(1-plow) ,x) for x = (xm:20)])
+	wk_high =  sum([pdf.(Geometric(1-phigh),x)  for x = (0:xm)])	
+	wk_below, wk_high
+end
+
+# ╔═╡ c3e717bf-acaa-4ea7-8bff-01853fdf8a58
+let
+	xm = 3
+	(plow, phigh) = grenzen(xm)  
+	plikely = xm ./ (xm +1)
+
+	xr = 6;
+	xs = range(0, xr)
+ 
+	groupedbar( [pdf.(Geometric(1-p),x) for x in xs, p in [plow, plikely, phigh]] , xticks=(1:xr+1, string.(0:xr)), xlabel="x", label = ["low" "likely" "high"])	
+end
+
+# ╔═╡ e323af6a-2e7b-4fca-af22-a72989da9d4c
+let
+	xs = range(1,10)
+	plot([grenzen(x)[1] for x in xs], label="untere Grenze")
+	plot!([grenzen(x)[2] for x in xs], label="obere Grenze")
+	plot!([x / (x+1) for x in xs], label="wahrscheinlichste", xlabel="gemessenes x", ylabel="p",legend=:bottomright)
+end
+
+# ╔═╡ 3a9a738f-8e7f-437e-9410-067121f00c0e
+md"""
+## Normalverteilung
+
+Wenn man die Verteilungsfunktion kennt, kann man die Grenzen des Koinfidenzintervalls wie oben gezeigt berechnen. Oft ist die Verteilung eine Normalverteilung. Dies nimmt man notfalls auch an, wenn man es nicht besser weiss.
+
+Im ersten Kapitel hatten wir uns schon die Integrale über $[\mu - n \sigma, \mu + n \sigma]$ angeschaut
+"""
+
+# ╔═╡ d4b47ed9-4082-4732-97ef-39500584eaaa
+[cdf(Normal(0, 1), n) - cdf(Normal(0, 1), -n) for n in (1,2,3)]
+
+# ╔═╡ 3eed2b8a-c56f-45c6-b796-b7e0f8d69a1e
+md"""
+Ein $\pm\2\sigma$-Intervall beinhaltet also 95.45% der Fälle. Eigentloich suchen wir ja ein Intervall mit genau 95%. Das liegt aber in der Nähe, nähmlich bei $\pm 1.96 \sigma$, siehe den 'Minimizer' hier
+"""
+
+# ╔═╡ b1c45b8b-8818-4417-afa3-dc4f207b44a6
+optimize( n -> ( cdf(Normal(0, 1), n) - cdf(Normal(0, 1), -n) - 0.95).^2, 0,3)
+
+# ╔═╡ 4c426122-22bc-4ccf-ac1c-ffe3f1ee68fc
+md"""
+Ein Problem ist hier, dass die Standardabweichung $\sigma$ hier die **wahre** Standardwbweihung ist. Wir kennen aber typisxcehrwesie nur eine **geschätzte** Standardabwecihung, die wir auf grundlage unserer messwerte schätzen müssen. Diesen zusätzliochen faktor disktutieren wir im nchsten Kapitel.
+"""
+
+# ╔═╡ 7ec2b35d-b4b1-4cce-a67b-37964c6b8bc9
+md"""
+## Varianz bei der linearen Regression
+
+Wir hatten oben gesehen, dass die Methode der kleinsten Quadrate eine Konseqeznz der MAximum likelihood Methiode ist. Beim Anpassen eines linearen Modells der Form
+```math
+ y = a + b \, x_i
+```
+findet man (siehe auch Kap.1)
+```math
+\hat{b} = r_{xy} \frac{\sigma_y}{\sigma_x}  = \frac{\sum (y_i - \bar{y}) (x_i - \bar{x}) }{\sum (x_i - \bar{x})^2} \quad \text{und} \quad \hat{a} = \bar{y} - \hat{b} \bar{x}
+```
+wobei die $\sigma_{x,y}$ die Standard-Abweichungen der $x_i$ bzw $y_i$ sind und $r_{xy}$ die Kreuzkorrelation.
+"""
+
+# ╔═╡ 9616265c-d645-4409-9d79-fb8685af6bd6
+md"""
+Der Schätzer $\hat{\beta}$ ist erwartungstreu und normalverteilt (siehe Stahel, Kap 13.2). Um die Varianz von $\hat{\beta}$ zu berechnen, formen wir zuunächst $\hat{\beta}$ um, und verwenden 'normierte' $\tilde{x}_i$ mit
+```math
+\tilde{x}_i = \frac{x_i - \bar{x}}{\sum (x_i - \bar{x})^2} 
+```
+Insbesondere ist $\sum \tilde{x}_i  = 0$. Damit wird $\hat{\beta}$ 
+```math
+\hat{\beta} = \sum \tilde{x}_i  (y_i - \bar{y}) = \sum \tilde{x}_i  y_i -  \bar{y} \sum \tilde{x}_i   = \sum \tilde{x}_i  y_i
+```
+Die Varianz ist dann, mit $\text{var}\left<a + b X \right> = b^2 \, \text{var}\left< X \right>$
+```math
+\text{var}\left<\hat{\beta}\right>
+= \sum \tilde{x}_i^2 \text{var}\left< y_i \right> = \sigma_y^2 \sum \frac{(x_i - \bar{x})^2}{(\sum (x_i - \bar{x})^2)^2} = \frac{\sigma_y^2}{\sum (x_i - \bar{x})^2} 
+= \frac{\sigma_y^2}{(n-1) \,\sigma_x^2} 
+```
+"""
+
+# ╔═╡ b5409567-bef9-4a5c-946b-a4c4bd308885
+md"""
+# Bootstrapping
+"""
 
 # ╔═╡ 959d1081-f82d-4070-8fef-3aab85cfe440
 TableOfContents(title="Inhalt")
@@ -262,15 +496,19 @@ PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+Optim = "429524aa-4258-5aef-a3af-852621145aeb"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
+StatsPlots = "f3b207a7-027a-5e70-b257-86293d7955fd"
 
 [compat]
 Distributions = "~0.25.53"
+Optim = "~1.6.2"
 Plots = "~1.27.3"
 PlutoUI = "~0.7.37"
 StatsBase = "~0.33.16"
+StatsPlots = "~0.14.33"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -279,6 +517,12 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.7.2"
 manifest_format = "2.0"
+
+[[deps.AbstractFFTs]]
+deps = ["ChainRulesCore", "LinearAlgebra"]
+git-tree-sha1 = "6f1d9bc1c08f9f4a8fa92e3ea3cb50153a1b40d4"
+uuid = "621f4979-c628-5d54-868e-fcf4e3e8185c"
+version = "1.1.0"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
@@ -295,8 +539,32 @@ version = "3.3.3"
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
 
+[[deps.Arpack]]
+deps = ["Arpack_jll", "Libdl", "LinearAlgebra", "Logging"]
+git-tree-sha1 = "91ca22c4b8437da89b030f08d71db55a379ce958"
+uuid = "7d9fca2a-8960-54d3-9f78-7d1dccf2cb97"
+version = "0.5.3"
+
+[[deps.Arpack_jll]]
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "OpenBLAS_jll", "Pkg"]
+git-tree-sha1 = "5ba6c757e8feccf03a1554dfaf3e26b3cfc7fd5e"
+uuid = "68821587-b530-5797-8361-c406ea357684"
+version = "3.5.1+1"
+
+[[deps.ArrayInterface]]
+deps = ["Compat", "IfElse", "LinearAlgebra", "Requires", "SparseArrays", "Static"]
+git-tree-sha1 = "6e8fada11bb015ecf9263f64b156f98b546918c7"
+uuid = "4fba245c-0d91-5ea0-9b3e-6abc04ee57a9"
+version = "5.0.5"
+
 [[deps.Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
+
+[[deps.AxisAlgorithms]]
+deps = ["LinearAlgebra", "Random", "SparseArrays", "WoodburyMatrices"]
+git-tree-sha1 = "66771c8d21c8ff5e3a93379480a2307ac36863f7"
+uuid = "13072b0f-2c55-5437-9ae7-d433b7a33950"
+version = "1.0.1"
 
 [[deps.Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
@@ -331,6 +599,12 @@ git-tree-sha1 = "bf98fa45a0a4cee295de98d4c1462be26345b9a1"
 uuid = "9e997f8a-9a97-42d5-a9f1-ce6bfc15e2c0"
 version = "0.1.2"
 
+[[deps.Clustering]]
+deps = ["Distances", "LinearAlgebra", "NearestNeighbors", "Printf", "SparseArrays", "Statistics", "StatsBase"]
+git-tree-sha1 = "75479b7df4167267d75294d14b58244695beb2ac"
+uuid = "aaaa29a8-35af-508c-8bc3-b662a17a0fe5"
+version = "0.14.2"
+
 [[deps.ColorSchemes]]
 deps = ["ColorTypes", "Colors", "FixedPointNumbers", "Random"]
 git-tree-sha1 = "12fc73e5e0af68ad3137b886e3f7c1eacfca2640"
@@ -348,6 +622,12 @@ deps = ["ColorTypes", "FixedPointNumbers", "Reexport"]
 git-tree-sha1 = "417b0ed7b8b838aa6ca0a87aadf1bb9eb111ce40"
 uuid = "5ae59095-9a9b-59fe-a467-6f913c188581"
 version = "0.12.8"
+
+[[deps.CommonSubexpressions]]
+deps = ["MacroTools", "Test"]
+git-tree-sha1 = "7b8a93dba8af7e3b42fecabf646260105ac373f7"
+uuid = "bbf7d656-a473-5ed7-a52c-81e309532950"
+version = "0.3.0"
 
 [[deps.Compat]]
 deps = ["Base64", "Dates", "DelimitedFiles", "Distributed", "InteractiveUtils", "LibGit2", "Libdl", "LinearAlgebra", "Markdown", "Mmap", "Pkg", "Printf", "REPL", "Random", "SHA", "Serialization", "SharedArrays", "Sockets", "SparseArrays", "Statistics", "Test", "UUIDs", "Unicode"]
@@ -381,6 +661,12 @@ git-tree-sha1 = "bfc1187b79289637fa0ef6d4436ebdfe6905cbd6"
 uuid = "e2d170a0-9d28-54be-80f0-106bbe20a464"
 version = "1.0.0"
 
+[[deps.DataValues]]
+deps = ["DataValueInterfaces", "Dates"]
+git-tree-sha1 = "d88a19299eba280a6d062e135a43f00323ae70bf"
+uuid = "e7dc6d0d-1eca-5fa6-8ad6-5aecde8b7ea5"
+version = "0.4.13"
+
 [[deps.Dates]]
 deps = ["Printf"]
 uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
@@ -394,6 +680,24 @@ deps = ["InverseFunctions", "Test"]
 git-tree-sha1 = "80c3e8639e3353e5d2912fb3a1916b8455e2494b"
 uuid = "b429d917-457f-4dbc-8f4c-0cc954292b1d"
 version = "0.4.0"
+
+[[deps.DiffResults]]
+deps = ["StaticArrays"]
+git-tree-sha1 = "c18e98cba888c6c25d1c3b048e4b3380ca956805"
+uuid = "163ba53b-c6d8-5494-b064-1a9d43ac40c5"
+version = "1.0.3"
+
+[[deps.DiffRules]]
+deps = ["IrrationalConstants", "LogExpFunctions", "NaNMath", "Random", "SpecialFunctions"]
+git-tree-sha1 = "dd933c4ef7b4c270aacd4eb88fa64c147492acf0"
+uuid = "b552c78f-8df3-52c6-915a-8e097449b14b"
+version = "1.10.0"
+
+[[deps.Distances]]
+deps = ["LinearAlgebra", "SparseArrays", "Statistics", "StatsAPI"]
+git-tree-sha1 = "3258d0659f812acde79e8a74b11f17ac06d0ca04"
+uuid = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
+version = "0.10.7"
 
 [[deps.Distributed]]
 deps = ["Random", "Serialization", "Sockets"]
@@ -429,9 +733,9 @@ version = "2.2.3+0"
 
 [[deps.Expat_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "ae13fcbc7ab8f16b0856729b050ef0c446aa3492"
+git-tree-sha1 = "bad72f730e9e91c08d9427d5e8db95478a3c323d"
 uuid = "2e619515-83b5-522b-bb60-26c02a35a201"
-version = "2.4.4+0"
+version = "2.4.8+0"
 
 [[deps.FFMPEG]]
 deps = ["FFMPEG_jll"]
@@ -445,11 +749,29 @@ git-tree-sha1 = "d8a578692e3077ac998b50c0217dfd67f21d1e5f"
 uuid = "b22a6f82-2f65-5046-a5b2-351ab43fb4e5"
 version = "4.4.0+0"
 
+[[deps.FFTW]]
+deps = ["AbstractFFTs", "FFTW_jll", "LinearAlgebra", "MKL_jll", "Preferences", "Reexport"]
+git-tree-sha1 = "505876577b5481e50d089c1c68899dfb6faebc62"
+uuid = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
+version = "1.4.6"
+
+[[deps.FFTW_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "c6033cc3892d0ef5bb9cd29b7f2f0331ea5184ea"
+uuid = "f5851436-0d7a-5f13-b9de-f02708fd171a"
+version = "3.3.10+0"
+
 [[deps.FillArrays]]
 deps = ["LinearAlgebra", "Random", "SparseArrays", "Statistics"]
 git-tree-sha1 = "246621d23d1f43e3b9c368bf3b72b2331a27c286"
 uuid = "1a297f60-69ca-5386-bcde-b61e274b549b"
 version = "0.13.2"
+
+[[deps.FiniteDiff]]
+deps = ["ArrayInterface", "LinearAlgebra", "Requires", "SparseArrays", "StaticArrays"]
+git-tree-sha1 = "56956d1e4c1221000b7781104c58c34019792951"
+uuid = "6a86dc24-6348-571c-b903-95158fe2bd41"
+version = "2.11.0"
 
 [[deps.FixedPointNumbers]]
 deps = ["Statistics"]
@@ -468,6 +790,12 @@ deps = ["Printf"]
 git-tree-sha1 = "8339d61043228fdd3eb658d86c926cb282ae72a8"
 uuid = "59287772-0a20-5a39-b81b-1366585eb4c0"
 version = "0.4.2"
+
+[[deps.ForwardDiff]]
+deps = ["CommonSubexpressions", "DiffResults", "DiffRules", "LinearAlgebra", "LogExpFunctions", "NaNMath", "Preferences", "Printf", "Random", "SpecialFunctions", "StaticArrays"]
+git-tree-sha1 = "1bd6fc0c344fc0cbee1f42f8d2e7ec8253dda2d2"
+uuid = "f6369f11-7733-5829-9624-2563aa707210"
+version = "0.10.25"
 
 [[deps.FreeType2_jll]]
 deps = ["Artifacts", "Bzip2_jll", "JLLWrappers", "Libdl", "Pkg", "Zlib_jll"]
@@ -563,14 +891,31 @@ git-tree-sha1 = "f7be53659ab06ddc986428d3a9dcc95f6fa6705a"
 uuid = "b5f81e59-6552-4d32-b1f0-c071b021bf89"
 version = "0.2.2"
 
+[[deps.IfElse]]
+git-tree-sha1 = "debdd00ffef04665ccbb3e150747a77560e8fad1"
+uuid = "615f187c-cbe4-4ef1-ba3b-2fcf58d6d173"
+version = "0.1.1"
+
 [[deps.IniFile]]
 git-tree-sha1 = "f550e6e32074c939295eb5ea6de31849ac2c9625"
 uuid = "83e8ac13-25f8-5344-8a64-a9f2b223428f"
 version = "0.5.1"
 
+[[deps.IntelOpenMP_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "d979e54b71da82f3a65b62553da4fc3d18c9004c"
+uuid = "1d5cc7b8-4909-519e-a0f8-d0f5ad9712d0"
+version = "2018.0.3+2"
+
 [[deps.InteractiveUtils]]
 deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
+
+[[deps.Interpolations]]
+deps = ["AxisAlgorithms", "ChainRulesCore", "LinearAlgebra", "OffsetArrays", "Random", "Ratios", "Requires", "SharedArrays", "SparseArrays", "StaticArrays", "WoodburyMatrices"]
+git-tree-sha1 = "b15fc0a95c564ca2e0a7ae12c1f095ca848ceb31"
+uuid = "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59"
+version = "0.13.5"
 
 [[deps.InverseFunctions]]
 deps = ["Test"]
@@ -611,6 +956,12 @@ git-tree-sha1 = "b53380851c6e6664204efb2e62cd24fa5c47e4ba"
 uuid = "aacddb02-875f-59d6-b918-886e6ef4fbf8"
 version = "2.1.2+0"
 
+[[deps.KernelDensity]]
+deps = ["Distributions", "DocStringExtensions", "FFTW", "Interpolations", "StatsBase"]
+git-tree-sha1 = "591e8dc09ad18386189610acafb970032c519707"
+uuid = "5ab0869b-81aa-558d-bb23-cbf5423bbe9b"
+version = "0.6.3"
+
 [[deps.LAME_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "f6250b16881adf048549549fba48b1161acdac8c"
@@ -636,9 +987,13 @@ version = "1.3.0"
 
 [[deps.Latexify]]
 deps = ["Formatting", "InteractiveUtils", "LaTeXStrings", "MacroTools", "Markdown", "Printf", "Requires"]
-git-tree-sha1 = "4f00cc36fede3c04b8acf9b2e2763decfdcecfa6"
+git-tree-sha1 = "6f14549f7760d84b2db7a9b10b88cd3cc3025730"
 uuid = "23fbe1c1-3f47-55db-b15f-69d7ec21a316"
-version = "0.15.13"
+version = "0.15.14"
+
+[[deps.LazyArtifacts]]
+deps = ["Artifacts", "Pkg"]
+uuid = "4af54fe1-eca0-43a8-85a7-787d91b784e3"
 
 [[deps.LibCURL]]
 deps = ["LibCURL_jll", "MozillaCACerts_jll"]
@@ -707,6 +1062,12 @@ git-tree-sha1 = "7f3efec06033682db852f8b3bc3c1d2b0a0ab066"
 uuid = "38a345b3-de98-5d2b-a5d3-14cd9215e700"
 version = "2.36.0+0"
 
+[[deps.LineSearches]]
+deps = ["LinearAlgebra", "NLSolversBase", "NaNMath", "Parameters", "Printf"]
+git-tree-sha1 = "f27132e551e959b3667d8c93eae90973225032dd"
+uuid = "d3d80556-e9d4-5f37-9878-2ab0fcc64255"
+version = "7.1.1"
+
 [[deps.LinearAlgebra]]
 deps = ["Libdl", "libblastrampoline_jll"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
@@ -719,6 +1080,12 @@ version = "0.3.10"
 
 [[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
+
+[[deps.MKL_jll]]
+deps = ["Artifacts", "IntelOpenMP_jll", "JLLWrappers", "LazyArtifacts", "Libdl", "Pkg"]
+git-tree-sha1 = "e595b205efd49508358f7dc670a940c790204629"
+uuid = "856f044c-d86e-5d09-b602-aeab76dc8ba7"
+version = "2022.0.0+0"
 
 [[deps.MacroTools]]
 deps = ["Markdown", "Random"]
@@ -757,13 +1124,42 @@ uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
 
+[[deps.MultivariateStats]]
+deps = ["Arpack", "LinearAlgebra", "SparseArrays", "Statistics", "StatsAPI", "StatsBase"]
+git-tree-sha1 = "7008a3412d823e29d370ddc77411d593bd8a3d03"
+uuid = "6f286f6a-111f-5878-ab1e-185364afe411"
+version = "0.9.1"
+
+[[deps.NLSolversBase]]
+deps = ["DiffResults", "Distributed", "FiniteDiff", "ForwardDiff"]
+git-tree-sha1 = "50310f934e55e5ca3912fb941dec199b49ca9b68"
+uuid = "d41bc354-129a-5804-8e4c-c37616107c6c"
+version = "7.8.2"
+
 [[deps.NaNMath]]
-git-tree-sha1 = "737a5957f387b17e74d4ad2f440eb330b39a62c5"
+git-tree-sha1 = "b086b7ea07f8e38cf122f5016af580881ac914fe"
 uuid = "77ba4419-2d1f-58cd-9bb1-8ffee604a2e3"
-version = "1.0.0"
+version = "0.3.7"
+
+[[deps.NearestNeighbors]]
+deps = ["Distances", "StaticArrays"]
+git-tree-sha1 = "ded92de95031d4a8c61dfb6ba9adb6f1d8016ddd"
+uuid = "b8a86587-4115-5ab1-83bc-aa920d37bbce"
+version = "0.4.10"
 
 [[deps.NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
+
+[[deps.Observables]]
+git-tree-sha1 = "fe29afdef3d0c4a8286128d4e45cc50621b1e43d"
+uuid = "510215fc-4207-5dde-b226-833fc4488ee2"
+version = "0.4.0"
+
+[[deps.OffsetArrays]]
+deps = ["Adapt"]
+git-tree-sha1 = "043017e0bdeff61cfbb7afeb558ab29536bbb5ed"
+uuid = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
+version = "1.10.8"
 
 [[deps.Ogg_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -791,6 +1187,12 @@ git-tree-sha1 = "13652491f6856acfd2db29360e1bbcd4565d04f1"
 uuid = "efe28fd5-8261-553b-a9e1-b2916fc3738e"
 version = "0.5.5+0"
 
+[[deps.Optim]]
+deps = ["Compat", "FillArrays", "ForwardDiff", "LineSearches", "LinearAlgebra", "NLSolversBase", "NaNMath", "Parameters", "PositiveFactorizations", "Printf", "SparseArrays", "StatsBase"]
+git-tree-sha1 = "bc0a748740e8bc5eeb9ea6031e6f050de1fc0ba2"
+uuid = "429524aa-4258-5aef-a3af-852621145aeb"
+version = "1.6.2"
+
 [[deps.Opus_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "51a08fb14ec28da2ec7a927c4337e4332c2a4720"
@@ -813,6 +1215,12 @@ deps = ["LinearAlgebra", "SparseArrays", "SuiteSparse"]
 git-tree-sha1 = "e8185b83b9fc56eb6456200e873ce598ebc7f262"
 uuid = "90014a1f-27ba-587c-ab20-58faa44d9150"
 version = "0.11.7"
+
+[[deps.Parameters]]
+deps = ["OrderedCollections", "UnPack"]
+git-tree-sha1 = "34c0e9ad262e5f7fc75b10a9952ca7692cfc5fbe"
+uuid = "d96e819e-fc66-5662-9728-84c9c7592b0a"
+version = "0.12.3"
 
 [[deps.Parsers]]
 deps = ["Dates"]
@@ -854,6 +1262,12 @@ git-tree-sha1 = "bf0a1121af131d9974241ba53f601211e9303a9e"
 uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 version = "0.7.37"
 
+[[deps.PositiveFactorizations]]
+deps = ["LinearAlgebra"]
+git-tree-sha1 = "17275485f373e6673f7e7f97051f703ed5b15b20"
+uuid = "85a6dd25-e78a-55b7-8502-1745935b8125"
+version = "0.2.4"
+
 [[deps.Preferences]]
 deps = ["TOML"]
 git-tree-sha1 = "d3538e7f8a790dc8903519090857ef8e1283eecd"
@@ -883,6 +1297,12 @@ uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 [[deps.Random]]
 deps = ["SHA", "Serialization"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+
+[[deps.Ratios]]
+deps = ["Requires"]
+git-tree-sha1 = "dc84268fe0e3335a62e315a3a7cf2afa7178a734"
+uuid = "c84ed2f1-dad5-54f0-aa8e-dbefe2724439"
+version = "0.4.3"
 
 [[deps.RecipesBase]]
 git-tree-sha1 = "6bf3f380ff52ce0832ddd3a2a7b9538ed1bcca7d"
@@ -933,6 +1353,12 @@ git-tree-sha1 = "0b4b7f1393cff97c33891da2a0bf69c6ed241fda"
 uuid = "6c6a2e73-6563-6170-7368-637461726353"
 version = "1.1.0"
 
+[[deps.SentinelArrays]]
+deps = ["Dates", "Random"]
+git-tree-sha1 = "6a2f7d70512d205ca8c7ee31bfa9f142fe74310c"
+uuid = "91c51154-3ec4-41a3-a24f-3f23e20d615c"
+version = "1.3.12"
+
 [[deps.Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 
@@ -965,6 +1391,12 @@ git-tree-sha1 = "5ba658aeecaaf96923dce0da9e703bd1fe7666f9"
 uuid = "276daf66-3868-5448-9aa4-cd146d93841b"
 version = "2.1.4"
 
+[[deps.Static]]
+deps = ["IfElse"]
+git-tree-sha1 = "87e9954dfa33fd145694e42337bdd3d5b07021a6"
+uuid = "aedffcd0-7271-4cad-89d0-dc628f76c6d3"
+version = "0.6.0"
+
 [[deps.StaticArrays]]
 deps = ["LinearAlgebra", "Random", "Statistics"]
 git-tree-sha1 = "4f6ec5d99a28e1a749559ef7dd518663c5eca3d5"
@@ -993,6 +1425,12 @@ git-tree-sha1 = "25405d7016a47cf2bd6cd91e66f4de437fd54a07"
 uuid = "4c63d2b9-4356-54db-8cca-17b64c39e42c"
 version = "0.9.16"
 
+[[deps.StatsPlots]]
+deps = ["AbstractFFTs", "Clustering", "DataStructures", "DataValues", "Distributions", "Interpolations", "KernelDensity", "LinearAlgebra", "MultivariateStats", "Observables", "Plots", "RecipesBase", "RecipesPipeline", "Reexport", "StatsBase", "TableOperations", "Tables", "Widgets"]
+git-tree-sha1 = "4d9c69d65f1b270ad092de0abe13e859b8c55cad"
+uuid = "f3b207a7-027a-5e70-b257-86293d7955fd"
+version = "0.14.33"
+
 [[deps.StructArrays]]
 deps = ["Adapt", "DataAPI", "StaticArrays", "Tables"]
 git-tree-sha1 = "57617b34fa34f91d536eb265df67c2d4519b8b98"
@@ -1006,6 +1444,12 @@ uuid = "4607b0f0-06f3-5cda-b6b1-a6196a1729e9"
 [[deps.TOML]]
 deps = ["Dates"]
 uuid = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
+
+[[deps.TableOperations]]
+deps = ["SentinelArrays", "Tables", "Test"]
+git-tree-sha1 = "e383c87cf2a1dc41fa30c093b2a19877c83e1bc1"
+uuid = "ab02a1b2-a7df-11e8-156e-fb1833f50b87"
+version = "1.2.0"
 
 [[deps.TableTraits]]
 deps = ["IteratorInterfaceExtensions"]
@@ -1036,6 +1480,11 @@ version = "1.3.0"
 deps = ["Random", "SHA"]
 uuid = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
 
+[[deps.UnPack]]
+git-tree-sha1 = "387c1f73762231e86e0c9c5443ce3b4a0a9a0c2b"
+uuid = "3a884ed6-31ef-47d7-9d2a-63182c4928ed"
+version = "1.0.2"
+
 [[deps.Unicode]]
 uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
@@ -1061,6 +1510,18 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "4528479aa01ee1b3b4cd0e6faef0e04cf16466da"
 uuid = "2381bf8a-dfd0-557d-9999-79630e7b1b91"
 version = "1.25.0+0"
+
+[[deps.Widgets]]
+deps = ["Colors", "Dates", "Observables", "OrderedCollections"]
+git-tree-sha1 = "505c31f585405fc375d99d02588f6ceaba791241"
+uuid = "cc8bc4a8-27d6-5769-a93b-9d913e69aa62"
+version = "0.6.5"
+
+[[deps.WoodburyMatrices]]
+deps = ["LinearAlgebra", "SparseArrays"]
+git-tree-sha1 = "de67fa59e33ad156a590055375a30b23c40299d3"
+uuid = "efce3f68-66dc-5838-9240-27a6d6f5f9b6"
+version = "0.5.5"
 
 [[deps.XML2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libiconv_jll", "Pkg", "Zlib_jll"]
@@ -1281,7 +1742,7 @@ version = "0.9.1+5"
 # ╟─2414e501-b353-4ae5-8898-440e8b1bd6ec
 # ╟─fc6bbfe2-aa23-4df9-8506-48e956068b8d
 # ╟─e5af4b30-e6a5-4f40-94c3-6e5cb878a9c4
-# ╠═3264f3db-450b-4000-ac29-2637c7354f9a
+# ╟─3264f3db-450b-4000-ac29-2637c7354f9a
 # ╟─655f1aa1-7397-45c5-973e-6a690f9807ff
 # ╟─af361979-28e4-467c-aa46-be1891c7b6b8
 # ╠═6d96d826-b9ed-4ac3-a81b-37b0930932ee
@@ -1290,8 +1751,35 @@ version = "0.9.1+5"
 # ╠═bcef0d0b-45eb-4866-84eb-4b0444afdd2b
 # ╟─abf2f5d6-7ea8-4752-8a80-9ad66670e458
 # ╠═2249131d-b137-486d-a9d3-503a1bd6876e
+# ╟─c001f17b-7a94-433c-8fee-d4e4975e5e0c
+# ╟─6860ac98-2744-4889-a477-f9f9137c2221
+# ╟─9b612cf5-0c99-4e70-b070-f7c0e7f7f151
+# ╟─5f5e0319-a22b-41f9-bc29-058645411b1d
+# ╟─f7d16791-425b-42c3-bffb-45518dc88d79
+# ╠═1868b86a-c26e-4f76-b6d2-9c1143159bd9
+# ╠═3dc0acfb-c45a-4f4c-a91e-b4be3aa07bf9
+# ╠═6a7e4c76-82ab-45d1-96ba-aac67308d289
+# ╟─09c25e45-55c5-458e-a867-d901eb9b64a8
+# ╟─f52a564f-af2c-4be1-81e8-7124c2339bea
+# ╟─c5b024ed-11c4-4f01-a7f3-00ee90069cef
+# ╟─af005e08-1af7-4742-8b90-174ba1f91a40
+# ╠═5dc9be6a-54da-49b8-8cf5-87567bc6563c
+# ╠═09e27d74-c105-425c-b49f-9f2465fe663c
+# ╠═30fd1867-c9aa-468e-b7cb-9531e9471831
+# ╠═c3e717bf-acaa-4ea7-8bff-01853fdf8a58
+# ╠═e323af6a-2e7b-4fca-af22-a72989da9d4c
+# ╟─3a9a738f-8e7f-437e-9410-067121f00c0e
+# ╠═d4b47ed9-4082-4732-97ef-39500584eaaa
+# ╟─3eed2b8a-c56f-45c6-b796-b7e0f8d69a1e
+# ╠═b1c45b8b-8818-4417-afa3-dc4f207b44a6
+# ╟─4c426122-22bc-4ccf-ac1c-ffe3f1ee68fc
+# ╟─7ec2b35d-b4b1-4cce-a67b-37964c6b8bc9
+# ╟─9616265c-d645-4409-9d79-fb8685af6bd6
+# ╠═b5409567-bef9-4a5c-946b-a4c4bd308885
 # ╠═b3511771-d307-4e33-8406-e561bfe72958
 # ╠═ea9b0a84-3b02-433a-b5df-d1b76b16ceaf
+# ╠═b1c02d6f-d50d-43cb-a01b-08ae7f4fb30d
+# ╠═764a07f5-e3ab-4db3-a5be-5728aab422bb
 # ╠═959d1081-f82d-4070-8fef-3aab85cfe440
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
