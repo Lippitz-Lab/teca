@@ -181,7 +181,7 @@ Im nächsten Kapitel werden wir das aus dem Gesichtspunkt der Freiheitsgrade noc
 md"""
 # Maximum Likelihood Methode
 
-Schätzer liefern als einen Schätzwert für den Parameter einer Wahrscheinlichkeitsverteilung auf Basis von gegebenen Messwerten. Aber wie kommt man an einen Schätzer, wenn es nicht gerade der Mittelwert ist? Dieses Problem löst die Maximum Likelihood Methode (ungefähr 'Methode der größten Plausibilität'). Wie wir weiter unten sehen werden ist sie die Basis für die Bestimmung von Modell-Parameter über Regression, aber vielfältiger bzw. mit weniger Voraussetzungen einsetzbar.
+Schätzer liefern als einen Schätzwert für den Parameter einer Wahrscheinlichkeitsverteilung auf Basis von gegebenen Messwerten. Aber wie kommt man an einen Schätzer, wenn es nicht gerade der Mittelwert ist? Dieses Problem löst die Maximum Likelihood Methode (ungefähr 'Methode der größten Plausibilität'). Wie wir weiter unten sehen werden ist sie die Basis für die Bestimmung von Modell-Parameter über 'kleinste Quadrate', aber vielfältiger bzw. mit weniger Voraussetzungen einsetzbar.
 """
 
 # ╔═╡ 655f1aa1-7397-45c5-973e-6a690f9807ff
@@ -321,7 +321,7 @@ begin
 	f(t, τ, c_fl, c_bg) = c_fl * exp(- t / τ) + c_bg
 	f(p::Vector) = f.(t, p[1], p[2], p[3])
 	
-	p_model = [2, 5, 2]
+	p_model = [2, 10, 2]
 	data_p = rand.(Poisson.(f(p_model)))
 
 	lower = zeros(size(p_model))
@@ -331,7 +331,7 @@ begin
 	L(p::Vector) = -1 .* sum(log.(pdf.(Poisson.(f(p)),data_p)))
 	res_MLE = optimize(L,  lower, upper, initial, Fminbox(NelderMead()))
 	
-	chisq(p::Vector) = sum((data_p .- f(p)).^2)
+	chisq(p::Vector) = sum((data_p .- f(p)).^2 )
 	res_quadrate = optimize(chisq,  lower, upper, initial, Fminbox(NelderMead()))
 	
 	plot(t, f(p_model), yaxis=:log10, label="ideal model")
@@ -364,21 +364,30 @@ md"""
 ## Bsp. geometrische Verteilung
 """
 
-# ╔═╡ af005e08-1af7-4742-8b90-174ba1f91a40
+# ╔═╡ 0a9bdba3-ee54-48fb-9c2b-2efc9f305385
 md"""
-Betrachten wir noch einmal als Beipiel die gemoetrische verteilung von oben. Mit der Wahtrscheinliochkeit $p$ gelingt ein Versuch, nach $x$ Versuchen tritt zum ersten mal ein Misserfolg auf. Die Wahrscheinlichkeit für einen Misserfolgt nach $x$ versuchen ist also 
+Betrachten wir noch einmal als Beipiel die geometrische Verteilung von oben. Mit der Wahtrscheinliochkeit $p$ gelingt ein Versuch, nach $x$ Versuchen tritt zum ersten mal ein Misserfolg auf. Die Wahrscheinlichkeit für einen Misserfolgt nach $x$ versuchen ist also 
 ```math
 P\left<X=x\right> = (1-p)\, p^x
 ```
-Wir messen einen Misserfolg nach $x=3$ versuchen. Wie oben gesehn ist der plasuibelste Parameter 
+Wir messen einen Misserfolg nach $x=3$ versuchen. Wie oben gesehn ist der plausibelste Parameter 
 ```math
 \hat{p} = \frac{x}{x+1} = \frac{3}{4}
 ```
-Die Grenzen des Intervalls wählt man typsicherweise so, dass der Messwert auf dem 2.5-Perzentil der oberen ($p_o$) bzw. unteregr ($p_u$) Intervallgrenze liegt, also  
+Wir suchen eine untere ($p_u$) und obere ($p_o$) Intervallgrenze, die jeweils eine Funktion des gemessenen Wertes $x$ ist, so dass der wahre Parameter $p$ mit 95% Wahrscheibloichkeit in diesem Intervall liegt, also 
+```math
+\mathcal{P}\left< p_u(x) < p < p_o(x) \right> = 0.95
+```
+unabhängig vom wahren $p$ und ggf. auch anderen Paramtern der Verteilung. Das Gleichheitszeichen wird manchmal als 'gleich oder etwas größer' interpertiert. Inbesodnere bei disktreten Verteilungen ist ein Gleichheit nicht zu erreichen.
+"""
+
+# ╔═╡ 86619b3f-3284-4f76-acbf-a196bb072433
+md"""
+Man kann die Intervallgrenzen auf verschiedenem Weg bekommen, siehe bspw. [wikipedia](https://en.wikipedia.org/wiki/Confidence_interval). Hier folgen wir wiederum Stahel und benutuzen ein Erfgebnis aus dem Test von Hypothesen. Ohne das hier näher zu begründen drehen wir wieder Variable und Paramter um. Wir wählen die obere Grentze des Intervalls so, dass unser Messert $x$ auf der *unteren* 2.5%-Perzentil liegt, also  
 ```math
 P_{p_o}\left<X \le x\right> = 2.5 \%
 ```
-Die kumilative Dichtefunktion beträgt also $0.025$ bzw $1 - 0.025$ an der unteren bzw oberen Intervallgrenze 
+Die kumulative Dichtefunktion beträgt also $0.025$ bzw $1 - 0.025$ an der unteren bzw oberen Intervallgrenze. In Julia finden wir diese Grenz-Paramter über eine Nullstellensuche:
 """
 
 # ╔═╡ 5dc9be6a-54da-49b8-8cf5-87567bc6563c
@@ -387,14 +396,22 @@ function grenzen(x)
 	# seach for p, so that cdf crosses 2.5% 
 	r = optimize(p -> (cdf(Geometric(1-p), x) -  0.025).^2, 0, 1)
 	oben = r.minimizer
-	r = optimize(p -> (cdf(Geometric(1-p), x-1) -  (1- 0.025)).^2, 0, 1)
-	unten = r.minimizer
-
+	if (x >= 1)
+		r = optimize(p -> (cdf(Geometric(1-p), x-1) -  (1- 0.025)).^2, 0, 1)
+		unten = r.minimizer
+	else
+		unten = 0
+	end
 	return unten, oben
 end;
 
 # ╔═╡ 09e27d74-c105-425c-b49f-9f2465fe663c
 grenzen(3)
+
+# ╔═╡ 8ab6a87e-5666-472f-8030-273ced222459
+md"""
+Testweise summieren wir die Wahrscheinlichkeiten für die Fälle $0-3$ bzw. $3-\infty$ erfolgrecihe Versuche bei dem gegebenen $p_u$ und $p_o$, um sicherzugehen, dass jeweils 2.5% außerhalb liegen.
+"""
 
 # ╔═╡ 30fd1867-c9aa-468e-b7cb-9531e9471831
 let
@@ -404,6 +421,11 @@ let
 	wk_high =  sum([pdf.(Geometric(1-phigh),x)  for x = (0:xm)])	
 	wk_below, wk_high
 end
+
+# ╔═╡ d598adfa-2b05-4a53-bf6d-f1e58ea271cd
+md"""
+Dies sind die drei charakteristiashcnr Verteilungen, wenn wir $x=3$ gemessen haben. Die Plausibelste ist die mit $p=3/4$, die anderen beiden sind die Grenzfälle.
+"""
 
 # ╔═╡ c3e717bf-acaa-4ea7-8bff-01853fdf8a58
 let
@@ -417,6 +439,11 @@ let
 	groupedbar( [pdf.(Geometric(1-p),x) for x in xs, p in [plow, plikely, phigh]] , xticks=(1:xr+1, string.(0:xr)), xlabel="x", label = ["low" "likely" "high"])	
 end
 
+# ╔═╡ d38d7b54-bec0-48b5-a897-2393a365c1c7
+md"""
+Als Funktion des gemessenen $x$ sieht das Intervall so aus
+"""
+
 # ╔═╡ e323af6a-2e7b-4fca-af22-a72989da9d4c
 let
 	xs = range(1,10)
@@ -424,6 +451,31 @@ let
 	plot!([grenzen(x)[2] for x in xs], label="obere Grenze")
 	plot!([x / (x+1) for x in xs], label="wahrscheinlichste", xlabel="gemessenes x", ylabel="p",legend=:bottomright)
 end
+
+# ╔═╡ e8907f01-43c0-4742-a3d0-f0b87aa1c323
+md"""
+## Test der Intervallgrenzen
+"""
+
+# ╔═╡ 320ae62b-f132-4898-a2ab-3bd20a7de7f3
+md"""
+Lassen sie uns das noch einmal andersrum betrachten. Wir geben uns eine geometrische Verteilung mit bekanntem $p$ vor, ziehen daraus eine Zufallszahl $x$ und schätzen aufgrund dieser Zahl die Grenzen des Konfidenzintervalls. In 95% der Fälle müsste unser vorgegebens $p$ in diesem Intervall liegen, in 5% der Fälle nicht.
+"""
+
+# ╔═╡ 7b74afe2-eafd-4db0-8f1f-a8e123c40d6f
+let
+	p_true = 0.75
+	n = 10000
+	data = rand(Geometric(1-p_true), n)
+	grenz = [grenzen(x) for x in data]
+	n_innerhalb= count(g -> (g[1] < p_true < g[2]), grenz) 
+	p_ausserhalb = 1 - n_innerhalb/n
+end
+
+# ╔═╡ 616fc902-e302-45b9-b184-e9035d7e780c
+md"""
+Unsere Intervakllkgrenzen sind etwas zu groß. Zu selten liegt der wahre Wert außerhalb der Grenzen. Dies ist ein Problem bei diskreten Verteiulungebn. Hier sind die Messwerte diskret,und danit notgeruden auch die berechneten Grenzen des Konfidenzintervalls. Dadurch kann man die Wharscheiblichkjeit niciht exakt auf den gewpünschten Wert einstellen.
+"""
 
 # ╔═╡ 3a9a738f-8e7f-437e-9410-067121f00c0e
 md"""
@@ -450,43 +502,78 @@ md"""
 Ein Problem ist hier, dass die Standardabweichung $\sigma$ hier die **wahre** Standardwbweihung ist. Wir kennen aber typisxcehrwesie nur eine **geschätzte** Standardabwecihung, die wir auf grundlage unserer messwerte schätzen müssen. Diesen zusätzliochen faktor disktutieren wir im nchsten Kapitel.
 """
 
-# ╔═╡ 7ec2b35d-b4b1-4cce-a67b-37964c6b8bc9
+# ╔═╡ 046e3c23-ba68-431c-abf0-222e7baa1696
 md"""
-## Varianz bei der linearen Regression
+## Bsp. Gauß'sche Fehlerrechung
 
-Wir hatten oben gesehen, dass die Methode der kleinsten Quadrate eine Konseqeznz der MAximum likelihood Methiode ist. Beim Anpassen eines linearen Modells der Form
+Die Gauß'sche fehlerrechnung kann als Methide der Intervallschätzung gesehen werden. Wir haben mehrere Messwerte $x_i$, die wir durch ein Modell $f(x; p_j)$ mit den Parametern $p_j$ beschreiben wollen. Wir finden die $p_j$, indem wir die quadratische Abweichung minimieren, also nach den $p_j$ ableiten und Null setzen, also
 ```math
- y = a + b \, x_i
+\frac{\partial}{\partial p_k} \sum_i (x_i - f(x_i; p_j))^2 = 0
 ```
-findet man (siehe auch Kap.1)
-```math
-\hat{b} = r_{xy} \frac{\sigma_y}{\sigma_x}  = \frac{\sum (y_i - \bar{y}) (x_i - \bar{x}) }{\sum (x_i - \bar{x})^2} \quad \text{und} \quad \hat{a} = \bar{y} - \hat{b} \bar{x}
-```
-wobei die $\sigma_{x,y}$ die Standard-Abweichungen der $x_i$ bzw $y_i$ sind und $r_{xy}$ die Kreuzkorrelation.
+So erhalten wir ein Gleichunsgystem zur Bestimmung der $p_j$, das wir lösen.
+
+Das Konfideznzintervall um diese ootimalen $p_j$ erhlaten wir durch Gauß'sxche Fehlerforttplanuzung durch dieses Gleichungsystem. Dazu nehmen wir zum einen eine Normalverteilung bei den Messwerten $x_i$ an, zum naderen linearisieren wir die Bestimmungsgleichen in der Nähe der optimalen $p_j$. (Wenn man beides nicht machen will: siehe nächstes Kapitel)
 """
 
-# ╔═╡ 9616265c-d645-4409-9d79-fb8685af6bd6
+# ╔═╡ 050f5698-8419-422a-b0ff-5cca01881e64
 md"""
-Der Schätzer $\hat{\beta}$ ist erwartungstreu und normalverteilt (siehe Stahel, Kap 13.2). Um die Varianz von $\hat{\beta}$ zu berechnen, formen wir zuunächst $\hat{\beta}$ um, und verwenden 'normierte' $\tilde{x}_i$ mit
+Sei unser Modell eine Gerade
 ```math
-\tilde{x}_i = \frac{x_i - \bar{x}}{\sum (x_i - \bar{x})^2} 
+y = a + b x
 ```
-Insbesondere ist $\sum \tilde{x}_i  = 0$. Damit wird $\hat{\beta}$ 
+
+Die Koeffizienten werden bestimmt über
 ```math
-\hat{\beta} = \sum \tilde{x}_i  (y_i - \bar{y}) = \sum \tilde{x}_i  y_i -  \bar{y} \sum \tilde{x}_i   = \sum \tilde{x}_i  y_i
+\hat{b} = cor_{xy} \,  \frac{\sigma_y}{\sigma_x}  \quad \text{und} \quad
+	\hat{a} = \bar{y} - \hat{b} \bar{x} 
 ```
-Die Varianz ist dann, mit $\text{var}\left<a + b X \right> = b^2 \, \text{var}\left< X \right>$
+
+Unter der Annahme von dientsichen Unsicherheiten in allen Messwerten ist ein guter Schätzer der Unsicherheit des einzelnen Messpunkts die mittlere quadratiusche Abweichung zum Modell, also
 ```math
-\text{var}\left<\hat{\beta}\right>
-= \sum \tilde{x}_i^2 \text{var}\left< y_i \right> = \sigma_y^2 \sum \frac{(x_i - \bar{x})^2}{(\sum (x_i - \bar{x})^2)^2} = \frac{\sigma_y^2}{\sum (x_i - \bar{x})^2} 
-= \frac{\sigma_y^2}{(n-1) \,\sigma_x^2} 
+\hat{\sigma} = \frac{1}{N-2} \sum_i \left( y_i - (\hat{a} + \hat{b} x_i) \right)^2
 ```
+Die 2 in $N-2$ stammt von den zwei durch $\hat{a}$ udn $\hat{b}$ verbrauchten Freiheitsgarden der Messung, analog zur Schätzung der Standardabwechingung oben.
+
+Damit bekommt man duerch Fehglerfortplöfanzung (siehe Bevoington Kap 6.4 udn Stahel Kap. 13.2)
+```math
+\hat{\sigma_a} = \hat{\sigma} \, \sqrt{\frac{\sum x_i^2}{\Delta}}
+\quad \text{und} \quad
+\hat{\sigma_b} = \hat{\sigma} \,  \sqrt{\frac{N}{\Delta}} =  \frac{\hat{\sigma}}{\sigma_x} \,  \frac{1}{\sqrt{ N-1}} 
+```
+mit $\Delta = \sigma_x^2 \,  N (N-1)$.
+
+In Julia ist das
 """
 
-# ╔═╡ b5409567-bef9-4a5c-946b-a4c4bd308885
-md"""
-# Bootstrapping
-"""
+# ╔═╡ ed9157d6-ca3c-4440-9b68-e6954999e231
+let
+	a_true = 1
+	b_true = 2
+	σ_true = 1
+	x = range(1, 20)
+	N = length(x)
+	y_true = a_true .+ b_true .* x
+	y = rand(Normal(0, σ_true), N) .+ y_true
+
+	# estimate (a,b) from data
+	b = cor(x,y) * std(y)  / std(x)
+	a = mean(y) - b * mean(x)
+	y_fit = a .+ b .* x
+
+	# estimate σ, Bevington eq. 6.15
+	σ = sqrt(sum( (y .- (a .+ b.* x)).^2)  / (N + 2))
+
+	# estimate σ_a, σ_b, Bevington eq. 6.23
+	d = std(x)^2 * N * (N-1)
+	σ_a = σ * sqrt(sum(x.^2) / d)
+	σ_b = σ * sqrt( N / d )
+
+	#plot everything
+	scatter(x,y)
+	plot!(x, y_fit, legend=false)
+	annotate!(10,10, "a: $(a_true) vs. $(round(a, digits=2)) +- $(round(σ_a, digits=2))")
+	annotate!(10,7, "b: $(b_true) vs. $(round(b, digits=2)) +- $(round(σ_b, digits=2))")
+end
 
 # ╔═╡ 959d1081-f82d-4070-8fef-3aab85cfe440
 TableOfContents(title="Inhalt")
@@ -1746,7 +1833,7 @@ version = "0.9.1+5"
 # ╟─655f1aa1-7397-45c5-973e-6a690f9807ff
 # ╟─af361979-28e4-467c-aa46-be1891c7b6b8
 # ╠═6d96d826-b9ed-4ac3-a81b-37b0930932ee
-# ╠═fa903c76-bdb8-4cab-9933-485998b5279f
+# ╟─fa903c76-bdb8-4cab-9933-485998b5279f
 # ╟─55ba0ba0-96d0-4248-82fb-f9b8509fa0b8
 # ╠═bcef0d0b-45eb-4866-84eb-4b0444afdd2b
 # ╟─abf2f5d6-7ea8-4752-8a80-9ad66670e458
@@ -1762,20 +1849,28 @@ version = "0.9.1+5"
 # ╟─09c25e45-55c5-458e-a867-d901eb9b64a8
 # ╟─f52a564f-af2c-4be1-81e8-7124c2339bea
 # ╟─c5b024ed-11c4-4f01-a7f3-00ee90069cef
-# ╟─af005e08-1af7-4742-8b90-174ba1f91a40
+# ╟─0a9bdba3-ee54-48fb-9c2b-2efc9f305385
+# ╟─86619b3f-3284-4f76-acbf-a196bb072433
 # ╠═5dc9be6a-54da-49b8-8cf5-87567bc6563c
 # ╠═09e27d74-c105-425c-b49f-9f2465fe663c
+# ╟─8ab6a87e-5666-472f-8030-273ced222459
 # ╠═30fd1867-c9aa-468e-b7cb-9531e9471831
+# ╟─d598adfa-2b05-4a53-bf6d-f1e58ea271cd
 # ╠═c3e717bf-acaa-4ea7-8bff-01853fdf8a58
+# ╟─d38d7b54-bec0-48b5-a897-2393a365c1c7
 # ╠═e323af6a-2e7b-4fca-af22-a72989da9d4c
+# ╟─e8907f01-43c0-4742-a3d0-f0b87aa1c323
+# ╟─320ae62b-f132-4898-a2ab-3bd20a7de7f3
+# ╠═7b74afe2-eafd-4db0-8f1f-a8e123c40d6f
+# ╟─616fc902-e302-45b9-b184-e9035d7e780c
 # ╟─3a9a738f-8e7f-437e-9410-067121f00c0e
 # ╠═d4b47ed9-4082-4732-97ef-39500584eaaa
 # ╟─3eed2b8a-c56f-45c6-b796-b7e0f8d69a1e
 # ╠═b1c45b8b-8818-4417-afa3-dc4f207b44a6
 # ╟─4c426122-22bc-4ccf-ac1c-ffe3f1ee68fc
-# ╟─7ec2b35d-b4b1-4cce-a67b-37964c6b8bc9
-# ╟─9616265c-d645-4409-9d79-fb8685af6bd6
-# ╠═b5409567-bef9-4a5c-946b-a4c4bd308885
+# ╟─046e3c23-ba68-431c-abf0-222e7baa1696
+# ╟─050f5698-8419-422a-b0ff-5cca01881e64
+# ╠═ed9157d6-ca3c-4440-9b68-e6954999e231
 # ╠═b3511771-d307-4e33-8406-e561bfe72958
 # ╠═ea9b0a84-3b02-433a-b5df-d1b76b16ceaf
 # ╠═b1c02d6f-d50d-43cb-a01b-08ae7f4fb30d

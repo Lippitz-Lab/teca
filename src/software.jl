@@ -4,6 +4,9 @@
 using Markdown
 using InteractiveUtils
 
+# ╔═╡ 4869c4e2-99ab-48a1-95fe-3ef1218286fb
+using PlutoUI
+
 # ╔═╡ f5450eab-0f9f-4b7f-9b80-992d3c553ba9
 # DO NOT MODIFY, will be updated by update_navbar.jl
 HTML("    <nav >\n    Vorbereitungen:\n\n<a class=\"sidebar-nav-item {{ispage /index}}active{{end}}\" href=\"index\"><em>Intro</em></a> / \n<a class=\"sidebar-nav-item {{ispage /software}}active{{end}}\" href=\"software\"><em>Software</em></a> / \n<a class=\"sidebar-nav-item {{ispage /01-basic_syntax}}active{{end}}\" href=\"01-basic_syntax\"><em>Julia Basics</em></a> / \n\n<br>\nStatistik:\n\n<a class=\"sidebar-nav-item {{ispage /02-beschreibende-statistik}}active{{end}}\" href=\"02-beschreibende-statistik\"><em>Beschreibende Statistik</em></a> / \n<a class=\"sidebar-nav-item {{ispage /03-wahrscheinlichkeit}}active{{end}}\" href=\"03-wahrscheinlichkeit\"><em>Wahrscheinlichkeit</em></a> / \n<a class=\"sidebar-nav-item {{ispage /04-schaetzung}}active{{end}}\" href=\"04-schaetzung\"><em>Schätzung</em></a> / \n<a class=\"sidebar-nav-item {{ispage /05-messunsicherheit}}active{{end}}\" href=\"05-messunsicherheit\"><em>Messunsicherheit</em></a> / \n\n<br>\nFourier-Transformation:\n\n<a class=\"sidebar-nav-item {{ispage /06-Fourier-Transformation}}active{{end}}\" href=\"06-Fourier-Transformation\"><em>Fourier-Transformation</em></a> / \n<a class=\"sidebar-nav-item {{ispage /07-Frequenzraum}}active{{end}}\" href=\"07-Frequenzraum\"><em>Frequenzraum</em></a> / \n<a class=\"sidebar-nav-item {{ispage /08-Filter}}active{{end}}\" href=\"08-Filter\"><em>Filter</em></a> / \n\n<br>\nMesstechnik:\n\n<a class=\"sidebar-nav-item {{ispage /09-Rauschen}}active{{end}}\" href=\"09-Rauschen\"><em>Rauschen</em></a> / \n<a class=\"sidebar-nav-item {{ispage /10-Detektoren}}active{{end}}\" href=\"10-Detektoren\"><em>Detektoren</em></a> / \n<a class=\"sidebar-nav-item {{ispage /11-Lock-In}}active{{end}}\" href=\"11-Lock-In\"><em>Lock-In-Verstärker</em></a> / \n<a class=\"sidebar-nav-item {{ispage /12-heterodyn}}active{{end}}\" href=\"12-heterodyn\"><em>Heterodyn-Detektion</em></a> / \n\n<br>\n\n\n    </nav>\n\t")
@@ -223,9 +226,6 @@ md"""
 Nachdem Sie an Ihrem Notebook gearbeitet haben (Ihr Code wird automatisch gespeichert, wenn Sie ihn ausführen), finden Sie Ihre Notebook in dem Ordner, den wir in Schritt 3 erstellt haben. Diese Datei können Sie mit anderen teilen oder als Aufgabe im elearning-system einreichen.
 
 """
-
-# ╔═╡ 4869c4e2-99ab-48a1-95fe-3ef1218286fb
-using PlutoUI
 
 # ╔═╡ 53363b87-fd19-43d4-acc0-36ad6242217c
 TableOfContents(title="Inhalt")
@@ -451,7 +451,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─6ed88b23-3297-49b6-a485-efef79ab5d67
 # ╟─bf0af2de-193d-4327-9bd3-91347934cac1
 # ╟─bc92a414-7d91-43ed-9152-6a6ef24e3991
-# ╟─0221cdc7-6433-4b53-a7bf-723dde46e778
+# ╠═0221cdc7-6433-4b53-a7bf-723dde46e778
 # ╟─67298b17-feeb-43e4-a2fe-5d881f08480f
 # ╟─f11b1419-7c7a-4b17-ba58-f5bc48a79371
 # ╟─4f9511fd-8c6f-4f1f-9c48-6fee0c5bbf81
