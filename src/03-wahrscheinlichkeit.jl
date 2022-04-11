@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.18.0
+# v0.19.0
 
 using Markdown
 using InteractiveUtils
@@ -14,21 +14,9 @@ macro bind(def, element)
     end
 end
 
-# ╔═╡ bc02dd02-f593-4c9d-a4e2-955546bb0a2a
-using Random
-
-# ╔═╡ 48be7ee0-179a-4bdf-8f15-660f31c17111
-using Plots, StatsBase
-
-# ╔═╡ 20aaac5b-3b6d-4448-89c1-00485bc4a129
-using Distributions
-
-# ╔═╡ 415d2c7d-b4a3-4565-99ed-9b04e6569b73
-using PlutoUI,  LinearAlgebra
-
 # ╔═╡ f5450eab-0f9f-4b7f-9b80-992d3c553ba9
 # DO NOT MODIFY, will be updated by update_navbar.jl
-HTML("    <nav >\n    Vorbereitungen:\n\n<a class=\"sidebar-nav-item {{ispage /index}}active{{end}}\" href=\"index\"><em>Intro</em></a> / \n<a class=\"sidebar-nav-item {{ispage /software}}active{{end}}\" href=\"software\"><em>Software</em></a> / \n<a class=\"sidebar-nav-item {{ispage /01-basic_syntax}}active{{end}}\" href=\"01-basic_syntax\"><em>Julia Basics</em></a> / \n\n<br>\nStatistik:\n\n<a class=\"sidebar-nav-item {{ispage /02-beschreibende-statistik}}active{{end}}\" href=\"02-beschreibende-statistik\"><em>Beschreibende Statistik</em></a> / \n<a class=\"sidebar-nav-item {{ispage /03-wahrscheinlichkeit}}active{{end}}\" href=\"03-wahrscheinlichkeit\"><em>Wahrscheinlichkeit</em></a> / \n<a class=\"sidebar-nav-item {{ispage /04-schaetzung}}active{{end}}\" href=\"04-schaetzung\"><em>Schätzung</em></a> / \n<a class=\"sidebar-nav-item {{ispage /05-messunsicherheit}}active{{end}}\" href=\"05-messunsicherheit\"><em>Messunsicherheit</em></a> / \n\n<br>\nFourier-Transformation:\n\n<a class=\"sidebar-nav-item {{ispage /06-Fourier-Transformation}}active{{end}}\" href=\"06-Fourier-Transformation\"><em>Fourier-Transformation</em></a> / \n<a class=\"sidebar-nav-item {{ispage /07-Frequenzraum}}active{{end}}\" href=\"07-Frequenzraum\"><em>Frequenzraum</em></a> / \n<a class=\"sidebar-nav-item {{ispage /08-Filter}}active{{end}}\" href=\"08-Filter\"><em>Filter</em></a> / \n\n<br>\nMesstechnik:\n\n<a class=\"sidebar-nav-item {{ispage /09-Rauschen}}active{{end}}\" href=\"09-Rauschen\"><em>Rauschen</em></a> / \n<a class=\"sidebar-nav-item {{ispage /10-Detektoren}}active{{end}}\" href=\"10-Detektoren\"><em>Detektoren</em></a> / \n<a class=\"sidebar-nav-item {{ispage /11-Lock-In}}active{{end}}\" href=\"11-Lock-In\"><em>Lock-In-Verstärker</em></a> / \n<a class=\"sidebar-nav-item {{ispage /12-heterodyn}}active{{end}}\" href=\"12-heterodyn\"><em>Heterodyn-Detektion</em></a> / \n\n<br>\n\n\n    </nav>\n\t")
+HTML("    <nav >\n    Vorbereitungen:\n\n<a class=\"sidebar-nav-item\" href=\"index.html\"><em>Intro</em></a> / \n<a class=\"sidebar-nav-item\" href=\"software.html\"><em>Software</em></a> / \n<a class=\"sidebar-nav-item\" href=\"01-basic_syntax.html\"><em>Julia Basics</em></a> / \n\n<br>\nStatistik:\n\n<a class=\"sidebar-nav-item\" href=\"02-beschreibende-statistik.html\"><em>Beschreibende Statistik</em></a> / \n<a class=\"sidebar-nav-item\" href=\"03-wahrscheinlichkeit.html\"><em>Wahrscheinlichkeit</em></a> / \n<a class=\"sidebar-nav-item\" href=\"04-schaetzung.html\"><em>Schätzung</em></a> / \n<a class=\"sidebar-nav-item\" href=\"05-messunsicherheit.html\"><em>Messunsicherheit</em></a> / \n\n<br>\nFourier-Transformation:\n\n<a class=\"sidebar-nav-item\" href=\"06-Fourier-Transformation.html\"><em>Fourier-Transformation</em></a> / \n<a class=\"sidebar-nav-item\" href=\"07-Frequenzraum.html\"><em>Frequenzraum</em></a> / \n<a class=\"sidebar-nav-item\" href=\"08-Filter.html\"><em>Filter</em></a> / \n\n<br>\nMesstechnik:\n\n<a class=\"sidebar-nav-item\" href=\"09-Rauschen.html\"><em>Rauschen</em></a> / \n<a class=\"sidebar-nav-item\" href=\"10-Detektoren.html\"><em>Detektoren</em></a> / \n<a class=\"sidebar-nav-item\" href=\"11-Lock-In.html\"><em>Lock-In-Verstärker</em></a> / \n<a class=\"sidebar-nav-item\" href=\"12-heterodyn.html\"><em>Heterodyn-Detektion</em></a> / \n\n<br>\n\n\n    </nav>\n\t")
 
 # ╔═╡ e19a8fb0-1814-4b09-bb64-2fa1df689659
 html"""<div>
@@ -164,6 +152,9 @@ md"""
 In Julia geht das mit
 """
 
+# ╔═╡ bc02dd02-f593-4c9d-a4e2-955546bb0a2a
+using Random
+
 # ╔═╡ f30c68af-2e3f-45dc-a2d5-86edae8ffed1
 md"""
 Danach bekommt man bei jedem Aufruf eine neue, quasi-zufällige Zahl, beispielsweise im Intervall $(0,1)$
@@ -192,6 +183,9 @@ md"""
 
 # ╔═╡ 0ac9fb54-fac4-4af8-95d4-2301ec0f5be6
 hundert= rand( (1,2,3,4,5,6) , 100)
+
+# ╔═╡ 48be7ee0-179a-4bdf-8f15-660f31c17111
+using Plots, StatsBase
 
 # ╔═╡ ec2dbc61-97a0-4ab1-ba98-b67e54afff08
 plot(StatsBase.fit(Histogram, hundert, range(0,7; step=0.1)),leg=false)
@@ -386,6 +380,9 @@ Der Erwartungswert der Binomialverteilung ist $np$. Die Varianz $n p (1-p)$. Die
 md"""
 In Julia können wir beispielsweise auf das Distributions-Paket zurückgreifen. Zur graphischen Darstellung zeigen wir die probability density function (pdf).
 """
+
+# ╔═╡ 20aaac5b-3b6d-4448-89c1-00485bc4a129
+using Distributions
 
 # ╔═╡ 470ff3e3-b54a-4583-8f11-7168839466ee
 Distributions.pdf(Distributions.Binomial(10, 0.4))
@@ -675,6 +672,9 @@ md"""
 - Erzeugung von willk. verteilen Zufallszahlen
 
 """
+
+# ╔═╡ 415d2c7d-b4a3-4565-99ed-9b04e6569b73
+using PlutoUI,  LinearAlgebra
 
 # ╔═╡ e7f7f02a-b6cc-4f77-adbb-515a5bb45a45
 TableOfContents(title="Inhalt")

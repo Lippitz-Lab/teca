@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.18.0
+# v0.19.0
 
 using Markdown
 using InteractiveUtils
@@ -14,31 +14,9 @@ macro bind(def, element)
     end
 end
 
-# ╔═╡ 049ea5c2-b2e9-4524-965e-0db726134f1d
-using DataFrames, CSV
-
-# ╔═╡ ed832ad1-62f1-4ef6-a5d3-12e6bd2b60cd
-using Plots
-
-# ╔═╡ 22592e54-a24b-446d-bde0-93ec4c802b9b
-using StatsBase
-# Man muss im Folgenden das "StatsBase." nicht mit schreiben. Ich tue es hier, um deutlich zu machen, wo die Funktion her kommt
-
-# ╔═╡ bedcae55-ad81-485a-872e-6cafb82bde86
-using StatsPlots
-
-# ╔═╡ f03912ab-9f15-46fb-87f9-b7f38d7c61e1
-using Polynomials
-
-# ╔═╡ 69726543-b247-44ce-b5e3-1672e9b5b3a1
-using LsqFit
-
-# ╔═╡ 2ee624de-2124-4f5e-82e6-46fd1c7dc62b
-using PlutoUI,  LinearAlgebra
-
 # ╔═╡ f5450eab-0f9f-4b7f-9b80-992d3c553ba9
 # DO NOT MODIFY, will be updated by update_navbar.jl
-HTML("    <nav >\n    Vorbereitungen:\n\n<a class=\"sidebar-nav-item {{ispage /index}}active{{end}}\" href=\"index\"><em>Intro</em></a> / \n<a class=\"sidebar-nav-item {{ispage /software}}active{{end}}\" href=\"software\"><em>Software</em></a> / \n<a class=\"sidebar-nav-item {{ispage /01-basic_syntax}}active{{end}}\" href=\"01-basic_syntax\"><em>Julia Basics</em></a> / \n\n<br>\nStatistik:\n\n<a class=\"sidebar-nav-item {{ispage /02-beschreibende-statistik}}active{{end}}\" href=\"02-beschreibende-statistik\"><em>Beschreibende Statistik</em></a> / \n<a class=\"sidebar-nav-item {{ispage /03-wahrscheinlichkeit}}active{{end}}\" href=\"03-wahrscheinlichkeit\"><em>Wahrscheinlichkeit</em></a> / \n<a class=\"sidebar-nav-item {{ispage /04-schaetzung}}active{{end}}\" href=\"04-schaetzung\"><em>Schätzung</em></a> / \n<a class=\"sidebar-nav-item {{ispage /05-messunsicherheit}}active{{end}}\" href=\"05-messunsicherheit\"><em>Messunsicherheit</em></a> / \n\n<br>\nFourier-Transformation:\n\n<a class=\"sidebar-nav-item {{ispage /06-Fourier-Transformation}}active{{end}}\" href=\"06-Fourier-Transformation\"><em>Fourier-Transformation</em></a> / \n<a class=\"sidebar-nav-item {{ispage /07-Frequenzraum}}active{{end}}\" href=\"07-Frequenzraum\"><em>Frequenzraum</em></a> / \n<a class=\"sidebar-nav-item {{ispage /08-Filter}}active{{end}}\" href=\"08-Filter\"><em>Filter</em></a> / \n\n<br>\nMesstechnik:\n\n<a class=\"sidebar-nav-item {{ispage /09-Rauschen}}active{{end}}\" href=\"09-Rauschen\"><em>Rauschen</em></a> / \n<a class=\"sidebar-nav-item {{ispage /10-Detektoren}}active{{end}}\" href=\"10-Detektoren\"><em>Detektoren</em></a> / \n<a class=\"sidebar-nav-item {{ispage /11-Lock-In}}active{{end}}\" href=\"11-Lock-In\"><em>Lock-In-Verstärker</em></a> / \n<a class=\"sidebar-nav-item {{ispage /12-heterodyn}}active{{end}}\" href=\"12-heterodyn\"><em>Heterodyn-Detektion</em></a> / \n\n<br>\n\n\n    </nav>\n\t")
+HTML("    <nav >\n    Vorbereitungen:\n\n<a class=\"sidebar-nav-item\" href=\"index.html\"><em>Intro</em></a> / \n<a class=\"sidebar-nav-item\" href=\"software.html\"><em>Software</em></a> / \n<a class=\"sidebar-nav-item\" href=\"01-basic_syntax.html\"><em>Julia Basics</em></a> / \n\n<br>\nStatistik:\n\n<a class=\"sidebar-nav-item\" href=\"02-beschreibende-statistik.html\"><em>Beschreibende Statistik</em></a> / \n<a class=\"sidebar-nav-item\" href=\"03-wahrscheinlichkeit.html\"><em>Wahrscheinlichkeit</em></a> / \n<a class=\"sidebar-nav-item\" href=\"04-schaetzung.html\"><em>Schätzung</em></a> / \n<a class=\"sidebar-nav-item\" href=\"05-messunsicherheit.html\"><em>Messunsicherheit</em></a> / \n\n<br>\nFourier-Transformation:\n\n<a class=\"sidebar-nav-item\" href=\"06-Fourier-Transformation.html\"><em>Fourier-Transformation</em></a> / \n<a class=\"sidebar-nav-item\" href=\"07-Frequenzraum.html\"><em>Frequenzraum</em></a> / \n<a class=\"sidebar-nav-item\" href=\"08-Filter.html\"><em>Filter</em></a> / \n\n<br>\nMesstechnik:\n\n<a class=\"sidebar-nav-item\" href=\"09-Rauschen.html\"><em>Rauschen</em></a> / \n<a class=\"sidebar-nav-item\" href=\"10-Detektoren.html\"><em>Detektoren</em></a> / \n<a class=\"sidebar-nav-item\" href=\"11-Lock-In.html\"><em>Lock-In-Verstärker</em></a> / \n<a class=\"sidebar-nav-item\" href=\"12-heterodyn.html\"><em>Heterodyn-Detektion</em></a> / \n\n<br>\n\n\n    </nav>\n\t")
 
 # ╔═╡ c58f76d9-45e8-4d72-9bce-f69321ee64d4
 html"""<div>
@@ -83,6 +61,9 @@ md"""
 Zunächst laden wir den Datensatz. Hilfreich sind dabei die Pakete DataFrames und CSV.
 """
 
+# ╔═╡ 049ea5c2-b2e9-4524-965e-0db726134f1d
+using DataFrames, CSV
+
 # ╔═╡ 52f64c20-a045-4ee6-a307-f50af60eae49
 md"""
 Dann laden wir die Datei in die Variable 'datensatz'. Die Spalten sind durch ein Tab ('\t') getrennt und die ersten 4 Zeilen beinhalten einen Datumsstempel, der uns hier nicht interessiert.
@@ -110,6 +91,9 @@ Typischerweise ist es nicht sehr sinnvoll, alle Werte der Stichprobe in der Reih
 md"""
 Wir benutzen hier die Plots-Bibliothek und das interaktive plotly-backend
 """
+
+# ╔═╡ ed832ad1-62f1-4ef6-a5d3-12e6bd2b60cd
+using Plots
 
 # ╔═╡ db816800-beb8-417b-a1dd-eab6b6939eb8
 plotly();
@@ -143,6 +127,10 @@ Wichtig ist bei Histogrammen, dass das Integral über die x-Achse die Gesamtzahl
 
 Das ist allerdings für die Histogramm-Funktion aus 'Plots' zu kompliziert. Wir benutzten 'StatsBase'.
 """
+
+# ╔═╡ 22592e54-a24b-446d-bde0-93ec4c802b9b
+using StatsBase
+# Man muss im Folgenden das "StatsBase." nicht mit schreiben. Ich tue es hier, um deutlich zu machen, wo die Funktion her kommt
 
 # ╔═╡ 51626ee2-e509-4cae-9f0e-1cf448b5b5e0
 @bind left_bin_width  Slider( 0.005: 0.005 : 0.1; default= 0.02, show_value = true)
@@ -483,6 +471,9 @@ md"""
 Wenn man verschiedene Stichproben auf einen Blick vergleichen will, dann ist der 'boxplot' hilfreich. Er zeichnet eine Kiste vom  oberen zum unteren Quartil mit einem Strich beim Median. Die 'Fehlerbalken' haben typischerweise die Länge von 1.5 mal der Kistenhöhe, werden aber zum nächstgelegenen Wert nach 'innen' gerundet. Alle weiter außen liegenden Werte werden eingezeichnet.
 """
 
+# ╔═╡ bedcae55-ad81-485a-872e-6cafb82bde86
+using StatsPlots
+
 # ╔═╡ 816438b7-4fc0-4581-a7a0-b375ec4e88be
  StatsPlots.boxplot(datensatz.Tist, ylabel = "Temperatur (deg. C)", legend=false, xaxis=false)
 
@@ -730,6 +721,9 @@ md"""
 In Julia geht das beispielsweise über das Anpassen eines Polynoms 1. Grades
 """
 
+# ╔═╡ f03912ab-9f15-46fb-87f9-b7f38d7c61e1
+using Polynomials
+
 # ╔═╡ 5283eb9f-c65e-4aaa-aa2a-3e4624cce6f9
 Polynomials.fit(datensätze[3].Zuluft, datensätze[4].Zuluft, 1)
 
@@ -756,6 +750,9 @@ md"""
 Oder ganz allgemein über einen 'least square fit' (kleinste Quadrate [der Residuen])
 """
 
+# ╔═╡ 69726543-b247-44ce-b5e3-1672e9b5b3a1
+using LsqFit
+
 # ╔═╡ 1749f0c5-ae4b-47e7-8733-e719d1386933
 let
 	x = datensätze[3].Zuluft
@@ -765,6 +762,9 @@ let
 	fit = LsqFit.curve_fit(model, x, y, p0)
 	fit.param
 end
+
+# ╔═╡ 2ee624de-2124-4f5e-82e6-46fd1c7dc62b
+using PlutoUI,  LinearAlgebra
 
 # ╔═╡ d326a92d-23b2-43d4-b984-c51b9dd6a905
 TableOfContents(title="Inhalt")

@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.18.1
+# v0.19.0
 
 using Markdown
 using InteractiveUtils
@@ -90,7 +90,7 @@ function navbar(book_model)
 			notebook_id = (without_pluto_file_extension(section.notebook_path))
 			
 		    @htl("""
-		    <a class="sidebar-nav-item {{ispage /$notebook_name}}active{{end}}" href="$notebook_id"><em>$(section.name)</em></a> / 
+		    <a class="sidebar-nav-item" href="$(notebook_id).html"><em>$(section.name)</em></a> / 
 		    """)
 		end )
 		<br>
