@@ -4,6 +4,12 @@
 using Markdown
 using InteractiveUtils
 
+# ╔═╡ 49b9386e-2eb0-41e5-97a9-1da882abd4f6
+using Distributions, Plots
+
+# ╔═╡ 2b794068-00e4-47b3-b082-7fba3c3adb9e
+using PlutoUI
+
 # ╔═╡ f5450eab-0f9f-4b7f-9b80-992d3c553ba9
 # DO NOT MODIFY, will be updated by update_navbar.jl
 HTML("    <nav >\n    Vorbereitungen:\n\n<a class=\"sidebar-nav-item\" href=\"index.html\"><em>Intro</em></a> / \n<a class=\"sidebar-nav-item\" href=\"software.html\"><em>Software</em></a> / \n<a class=\"sidebar-nav-item\" href=\"01-basic_syntax.html\"><em>Julia Basics</em></a> / \n\n<br>\nStatistik:\n\n<a class=\"sidebar-nav-item\" href=\"02-beschreibende-statistik.html\"><em>Beschreibende Statistik</em></a> / \n<a class=\"sidebar-nav-item\" href=\"03-wahrscheinlichkeit.html\"><em>Wahrscheinlichkeit</em></a> / \n<a class=\"sidebar-nav-item\" href=\"04-schaetzung.html\"><em>Schätzung</em></a> / \n<a class=\"sidebar-nav-item\" href=\"05-messunsicherheit.html\"><em>Messunsicherheit</em></a> / \n\n<br>\nFourier-Transformation:\n\n<a class=\"sidebar-nav-item\" href=\"06-Fourier-Transformation.html\"><em>Fourier-Transformation</em></a> / \n<a class=\"sidebar-nav-item\" href=\"07-Frequenzraum.html\"><em>Frequenzraum</em></a> / \n<a class=\"sidebar-nav-item\" href=\"08-Filter.html\"><em>Filter</em></a> / \n\n<br>\nMesstechnik:\n\n<a class=\"sidebar-nav-item\" href=\"09-Rauschen.html\"><em>Rauschen</em></a> / \n<a class=\"sidebar-nav-item\" href=\"10-Detektoren.html\"><em>Detektoren</em></a> / \n<a class=\"sidebar-nav-item\" href=\"11-Lock-In.html\"><em>Lock-In-Verstärker</em></a> / \n<a class=\"sidebar-nav-item\" href=\"12-heterodyn.html\"><em>Heterodyn-Detektion</em></a> / \n\n<br>\n\n\n    </nav>\n\t")
@@ -12,7 +18,7 @@ HTML("    <nav >\n    Vorbereitungen:\n\n<a class=\"sidebar-nav-item\" href=\"in
 html"""<div>
 <font size="7"><b>Messunsicherheit</b></font> </div>
 
-<div><font size="5"> Markus Lippitz </font> </div>
+<div><font size="5"> Markus Lippitz</font> </div>
 <div><font size="5"> 25. März 2022 </font> </div>
 """
 
@@ -136,7 +142,7 @@ Folgende Quellen beschreiben GUM
     Metrology mit dem Titel 'Evaluation of measurement data -- An
     introduction to the \"Guide to the expression of uncertainty in
     measurement\" and related documents'. Von diesem Text gibt es auch
-    eine deutsche Übersetzung. Diese EInführung ist etwas besser zu
+    eine deutsche Übersetzung. Diese Einführung ist etwas besser zu
     lesen als \[JCGM 100:2008\], aber immer noch sehr formal
     geschrieben.
 
@@ -436,7 +442,7 @@ genannt.
 # ╔═╡ 73eec275-6610-4ff3-89c1-eb0a84f9bcf3
 md"""
 ![image](https://raw.githubusercontent.com/MarkusLippitz/teca/67323e313d260b13ba48fa11a0d3a032ffac1db0/res/04-Messunsicherheit/workflow_ausf.png)
-*Schema zur Bestimmung des Überdeckungsintervalls  nach GUM, aus JCGM104:2009, dt. Der linke obere Bereich wurde schon im vorangegangenen Abschnitt besproechen*
+*Schema zur Bestimmung des Überdeckungsintervalls  nach GUM, aus JCGM104:2009, dt. Der linke obere Bereich wurde schon im vorangegangenen Abschnitt besprochen*
 """
 
 # ╔═╡ 276be9a6-95d8-48b6-94bc-d035767d62b5
@@ -486,9 +492,6 @@ let
 	plot!(x,pdf.(TDist(100),x), xlabel="x", ylabel="WK Dichte", label="n=100", title="Student'sche t-Verteilung")
 	scatter!(x,pdf.(Normal(),x),  label="normal", markersize=2)
 end
-
-# ╔═╡ 49b9386e-2eb0-41e5-97a9-1da882abd4f6
-using Distributions, Plots
 
 # ╔═╡ c5daeba2-6d0a-46af-a238-970fe54eb9b3
 md"""
@@ -644,9 +647,6 @@ md"""
 comming soon \...
 see [MonteCarloMeasurements.jl](https://baggepinnen.github.io/MonteCarloMeasurements.jl/stable/)
 """
-
-# ╔═╡ 2b794068-00e4-47b3-b082-7fba3c3adb9e
-using PlutoUI
 
 # ╔═╡ 8de57df0-5d80-4fa3-be75-ccf03db5a21d
 TableOfContents(title="Inhalt")

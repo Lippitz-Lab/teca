@@ -14,6 +14,18 @@ macro bind(def, element)
     end
 end
 
+# ╔═╡ bc02dd02-f593-4c9d-a4e2-955546bb0a2a
+using Random
+
+# ╔═╡ 48be7ee0-179a-4bdf-8f15-660f31c17111
+using Plots, StatsBase
+
+# ╔═╡ 20aaac5b-3b6d-4448-89c1-00485bc4a129
+using Distributions
+
+# ╔═╡ 415d2c7d-b4a3-4565-99ed-9b04e6569b73
+using PlutoUI,  LinearAlgebra
+
 # ╔═╡ f5450eab-0f9f-4b7f-9b80-992d3c553ba9
 # DO NOT MODIFY, will be updated by update_navbar.jl
 HTML("    <nav >\n    Vorbereitungen:\n\n<a class=\"sidebar-nav-item\" href=\"index.html\"><em>Intro</em></a> / \n<a class=\"sidebar-nav-item\" href=\"software.html\"><em>Software</em></a> / \n<a class=\"sidebar-nav-item\" href=\"01-basic_syntax.html\"><em>Julia Basics</em></a> / \n\n<br>\nStatistik:\n\n<a class=\"sidebar-nav-item\" href=\"02-beschreibende-statistik.html\"><em>Beschreibende Statistik</em></a> / \n<a class=\"sidebar-nav-item\" href=\"03-wahrscheinlichkeit.html\"><em>Wahrscheinlichkeit</em></a> / \n<a class=\"sidebar-nav-item\" href=\"04-schaetzung.html\"><em>Schätzung</em></a> / \n<a class=\"sidebar-nav-item\" href=\"05-messunsicherheit.html\"><em>Messunsicherheit</em></a> / \n\n<br>\nFourier-Transformation:\n\n<a class=\"sidebar-nav-item\" href=\"06-Fourier-Transformation.html\"><em>Fourier-Transformation</em></a> / \n<a class=\"sidebar-nav-item\" href=\"07-Frequenzraum.html\"><em>Frequenzraum</em></a> / \n<a class=\"sidebar-nav-item\" href=\"08-Filter.html\"><em>Filter</em></a> / \n\n<br>\nMesstechnik:\n\n<a class=\"sidebar-nav-item\" href=\"09-Rauschen.html\"><em>Rauschen</em></a> / \n<a class=\"sidebar-nav-item\" href=\"10-Detektoren.html\"><em>Detektoren</em></a> / \n<a class=\"sidebar-nav-item\" href=\"11-Lock-In.html\"><em>Lock-In-Verstärker</em></a> / \n<a class=\"sidebar-nav-item\" href=\"12-heterodyn.html\"><em>Heterodyn-Detektion</em></a> / \n\n<br>\n\n\n    </nav>\n\t")
@@ -58,7 +70,7 @@ md"""
 md"""
 # Überblick
 
-Im letzten Kapitel haben wir die Stichprobe beschrieben. In diesem Kapitel geht es im die Verteilung, aus der die Stcihprobe gezogen wurde. Das letzte Kapitel beschreibt also die messwrte, dieses die Wirklichkeit. Im nächsten geht es dann daraum, wie man von den Messwerten auf die Wikrlichkeit kommt ('schätzt'). Die Kennzahlen sind sehr ähnlich. Im follgenden wird ein Hut über die Kennzahlen gesetzt, wenn es um die Stichprobe geht.
+Im letzten Kapitel haben wir die Stichprobe beschrieben. In diesem Kapitel geht es im die Verteilung, aus der die Stichprobe gezogen wurde. Das letzte Kapitel beschreibt also die Messwerte, dieses die Wirklichkeit. Im nächsten geht es dann darum, wie man von den Messwerten auf die Wirklichkeit kommt ('schätzt'). Die Kennzahlen sind sehr ähnlich. Im folgenden wird ein Hut über die Kennzahlen gesetzt, wenn es um die Stichprobe geht.
 
 | Sichprobe                  | Verteilung (diskret)|  Verteilung (kont.)|
 |:----------                 | :--------- | :--------- |
@@ -68,7 +80,7 @@ Im letzten Kapitel haben wir die Stichprobe beschrieben. In diesem Kapitel geht 
 | Standardabweichung $\hat{\sigma} = \sqrt{\hat{\text{var}}}$ | Standardabweichung $\sigma = \sigma_X = \sqrt{\text{var}}$| Standardabweichung $\sigma = \sigma_X = \sqrt{\text{var}}$|
 *gekürzt aus Stahel, Tabelle 5.3.b*
 
-Zwei Punkte sind hierbei relevant: beim Übergang von diskreten zu kontinuoirielcihen Wahrscheiblochkeitsverteilunghen muss man zu einer Wahrscheiblochkeits**dichte** übergehen. Und der (bislang) etwas merküwrdige Faktor $\frac{n}{n-1}$ tritt nur bei der Beschreibung der Stichprobe auf, nicht aber bei der von Verteilungen. Das wird sich im nächsten Kapitel klären.
+Zwei Punkte sind hierbei relevant: beim Übergang von diskreten zu kontinuierlichen Wahrscheinlichkeitsverteilungen muss man zu einer Wahrscheinlichkeits**dichte** übergehen. Und der (bislang) etwas merkwürdige Faktor $\frac{n}{n-1}$ tritt nur bei der Beschreibung der Stichprobe auf, nicht aber bei der von Verteilungen. Das wird sich im nächsten Kapitel klären.
 
 """
 
@@ -152,9 +164,6 @@ md"""
 In Julia geht das mit
 """
 
-# ╔═╡ bc02dd02-f593-4c9d-a4e2-955546bb0a2a
-using Random
-
 # ╔═╡ f30c68af-2e3f-45dc-a2d5-86edae8ffed1
 md"""
 Danach bekommt man bei jedem Aufruf eine neue, quasi-zufällige Zahl, beispielsweise im Intervall $(0,1)$
@@ -183,9 +192,6 @@ md"""
 
 # ╔═╡ 0ac9fb54-fac4-4af8-95d4-2301ec0f5be6
 hundert= rand( (1,2,3,4,5,6) , 100)
-
-# ╔═╡ 48be7ee0-179a-4bdf-8f15-660f31c17111
-using Plots, StatsBase
 
 # ╔═╡ ec2dbc61-97a0-4ab1-ba98-b67e54afff08
 plot(StatsBase.fit(Histogram, hundert, range(0,7; step=0.1)),leg=false)
@@ -381,9 +387,6 @@ md"""
 In Julia können wir beispielsweise auf das Distributions-Paket zurückgreifen. Zur graphischen Darstellung zeigen wir die probability density function (pdf).
 """
 
-# ╔═╡ 20aaac5b-3b6d-4448-89c1-00485bc4a129
-using Distributions
-
 # ╔═╡ 470ff3e3-b54a-4583-8f11-7168839466ee
 Distributions.pdf(Distributions.Binomial(10, 0.4))
 
@@ -458,7 +461,7 @@ Damit können wir aber eine *Wahrscheinlichkeitsdichte* $f$ definieren mit
 ```math
 f(x) = F'(x)
 ```
-die an die Stelle der alten Wahrscheinlochkeit $P$ tritt.
+die an die Stelle der alten Wahrscheinlichkeit $P$ tritt.
 """
 
 # ╔═╡ 36e13b17-2a39-49b0-8f5e-71c6eb17679e
@@ -494,7 +497,7 @@ end
 md"""
 ## Normalverteilung
 
-Die Normalverteilung hat die Form einer Gauss-Funktion. Für die *Standard-Normalverteiliung* ist die Wahrscheinlichkeitsdichte um die Null zentriert mit der Varianz 1, also
+Die Normalverteilung hat die Form einer Gauss-Funktion. Für die *Standard-Normalverteilung* ist die Wahrscheinlichkeitsdichte um die Null zentriert mit der Varianz 1, also
 ```math
 f(x) = \frac{1}{\sqrt{2\pi}} \, e^{- x^2/2}
 ```
@@ -528,7 +531,7 @@ Die kumulative Verteilungsfunktion $F$ der Normalverteilung, also
 ```math
 F(x) = \frac{1}{\sigma \, \sqrt{2\pi}} \int_{-\infty}^x \, e^{- \frac{1}{2} (\frac{y - \mu}{\sigma})^2} \, dy
 ```
-nennt sich *error function*. Das Integral lasst sich nicht anayltisch lösen. Wir brauchen es allerdings häufig, inbesondere um zu sagen, mit welcher Wahrscheibnlichkeit ein Messwert innerhalb eines gewissen Intervalls liegt.
+nennt sich *error function*. Das Integral lasst sich nicht analytisch lösen. Wir brauchen es allerdings häufig, insbesondere um zu sagen, mit welcher Wahrscheinlichkeit ein Messwert innerhalb eines gewissen Intervalls liegt.
 """
 
 # ╔═╡ e838eb36-9d4f-4d75-9ef6-a65276c60533
@@ -544,7 +547,7 @@ end
 
 # ╔═╡ cb1347f3-89b3-46ed-a0e5-d85b255c37cc
 md"""
-Summen von Normalverteilungen sind wieder eine Normalbverteiilung. Dabei addieren sich die Mittelwerte und die Varianzen (nicht die Standardabweichungen), also
+Summen von Normalverteilungen sind wieder eine Normalverteilung. Dabei addieren sich die Mittelwerte und die Varianzen (nicht die Standardabweichungen), also
 ```math
  \mu_{sum} = \mu_1 + \mu_2 + \cdots \quad \text{und} \quad
  \sigma_{sum}^2 = \sigma_1^2 + \sigma_2^2 + \cdots
@@ -555,7 +558,7 @@ Summen von Normalverteilungen sind wieder eine Normalbverteiilung. Dabei addiere
 md"""
 ### Beziehung zur Poisson-Verteilung
 
-Die Poisson-Verteilung bestitzt nur einen Parameter $\lambda$. Für große Werte von $\lambda$ geht sie in eine Normalverteilung mit dem Mittelwert $\mu = \lambda$ und der Standard-Abweichung $\sigma = \sqrt{\lambda}$ über.
+Die Poisson-Verteilung besitzt nur einen Parameter $\lambda$. Für große Werte von $\lambda$ geht sie in eine Normalverteilung mit dem Mittelwert $\mu = \lambda$ und der Standard-Abweichung $\sigma = \sqrt{\lambda}$ über.
 """
 
 # ╔═╡ dbebf6b3-54d6-4aeb-a6a0-7d0c9c4ab01e
@@ -586,7 +589,7 @@ end
 md"""
 # Funktionen von Zufallsvariablen 
 
-Nehmen wir an, dass wir wissen, eine Zufallsvariable $X$ entsrpungt einer derr obigen Verteilungen. Welchen Aussagen können wir dann über die verteilung der Werte von $g(X)$ machen? Wir wenden also die Funktion $g$ auf jede gezogenen Wert an und bilden daraus eine neue Verteilung. Die Log-Normalverteilung oben ist ein Beispiel: wir ziehen Zahlen aus einer Normalverteilung und wenden die Exponentialfunktion an.
+Nehmen wir an, dass wir wissen, eine Zufallsvariable $X$ entspringe einer der obigen Verteilungen. Welchen Aussagen können wir dann über die Verteilung der Werte von $g(X)$ machen? Wir wenden also die Funktion $g$ auf jede gezogenen Wert an und bilden daraus eine neue Verteilung. Die Log-Normalverteilung oben ist ein Beispiel: wir ziehen Zahlen aus einer Normalverteilung und wenden die Exponentialfunktion an.
 
 
 """
@@ -617,16 +620,16 @@ Für Funktionen mehrere *unabhängiger* Variablen gilt
 ```math
 \sigma_{g(X, Y)} \approx \sqrt{ \left(\frac{\partial g}{\partial X} \sigma_X \right)^2 +\left(\frac{\partial g}{\partial Y} \sigma_Y \right)^2 }
 ```
-Im nächsten Kapitel werden wir dauaf genauer eingehen.
+Im nächsten Kapitel werden wir darauf genauer eingehen.
 """
 
 # ╔═╡ e31df594-146d-48d8-a8e0-8485fb1488d5
 md"""
 # Zentraler Grenzwertsatz
 
-Warum ist die Normalverteilung 'normal'? Die Normalverrteilung ist dadurch ausgezeichnet, dass sie im Grenzwert der Summe von vielen Zufallsvariablen entspricht, egal welcher Verteilung diese Zufallsvariablen entstammen.
+Warum ist die Normalverteilung 'normal'? Die Normalverteilung ist dadurch ausgezeichnet, dass sie im Grenzwert der Summe von vielen Zufallsvariablen entspricht, egal welcher Verteilung diese Zufallsvariablen entstammen.
 
-Seien $X_1, X_2, X_i, \dots$ Zufallsvariablen aus der gleichen Verteilung mit dem Erwartungswert $\mu$ und der Standardabweichung $\sigma$. Diese Verteilung kann quasi belibige Form haben. Wir betrachten als neue Zufallsvariable den Mittelwert über die ersten $n$ $X_i$ und nennen diese $\bar{X}$. Aus der Gauss'schen Fehlerfortpfalunzung kennen wir derren Erwtrungswert $\mathcal{E}(\bar{X})$ und Standardabweichung $\sigma_\bar{X}$, nämlich
+Seien $X_1, X_2, X_i, \dots$ Zufallsvariablen aus der gleichen Verteilung mit dem Erwartungswert $\mu$ und der Standardabweichung $\sigma$. Diese Verteilung kann quasi beliebige Form haben. Wir betrachten als neue Zufallsvariable den Mittelwert über die ersten $n$ $X_i$ und nennen diese $\bar{X}$. Aus der Gauss'schen Fehlerfortpflanzung kennen wir Erwartungswert $\mathcal{E}(\bar{X})$ und Standardabweichung $\sigma_\bar{X}$, nämlich
 ```math
 \mathcal{E}(\bar{X}) = \mu \quad \text{und} \quad \sigma_\bar{X} = \sigma_X / \sqrt{n}
 ```
@@ -634,7 +637,7 @@ Seien $X_1, X_2, X_i, \dots$ Zufallsvariablen aus der gleichen Verteilung mit de
 
 # ╔═╡ 67ace1ef-ff1c-4bf4-98bf-4a76cac54429
 md"""
-Jetzt interessiert uns die Form der Verteilung unserer neuen Zufallsvariable $\bar{X}$. Dazu standardisieren wir diese, skalieren also so zu einer dritten Zufallsvariabeln $Z$, dass Erwartungswert Null und Standardabweichung Eins werden 
+Jetzt interessiert uns die Form der Verteilung unserer neuen Zufallsvariable $\bar{X}$. Dazu standardisieren wir diese, skalieren also so zu einer dritten Zufallsvariablen $Z$, dass Erwartungswert Null und Standardabweichung Eins werden 
 ```math
 Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}}
 ```
@@ -642,7 +645,7 @@ Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}}
 
 # ╔═╡ 6279a1d0-a496-4805-979b-a75e3774a089
 md"""
-Der Zentrale Grenzwertsatz besagt, dass sich die Verteilung von $Z$ mit steigender Mittelungszahl $n$ immer weiter einer Standard-Normalverteilung annhähert.
+Der Zentrale Grenzwertsatz besagt, dass sich die Verteilung von $Z$ mit steigender Mittelungszahl $n$ immer weiter einer Standard-Normalverteilung annähert.
 """
 
 # ╔═╡ 44e80799-7380-4ff1-b0bc-f20b9f4e099f
@@ -672,9 +675,6 @@ md"""
 - Erzeugung von willk. verteilen Zufallszahlen
 
 """
-
-# ╔═╡ 415d2c7d-b4a3-4565-99ed-9b04e6569b73
-using PlutoUI,  LinearAlgebra
 
 # ╔═╡ e7f7f02a-b6cc-4f77-adbb-515a5bb45a45
 TableOfContents(title="Inhalt")

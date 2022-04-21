@@ -14,6 +14,18 @@ macro bind(def, element)
     end
 end
 
+# ╔═╡ b3511771-d307-4e33-8406-e561bfe72958
+using Distributions, StatsBase, LinearAlgebra, Plots
+
+# ╔═╡ ea9b0a84-3b02-433a-b5df-d1b76b16ceaf
+using PlutoUI
+
+# ╔═╡ b1c02d6f-d50d-43cb-a01b-08ae7f4fb30d
+using StatsPlots
+
+# ╔═╡ 764a07f5-e3ab-4db3-a5be-5728aab422bb
+using Optim
+
 # ╔═╡ f5450eab-0f9f-4b7f-9b80-992d3c553ba9
 # DO NOT MODIFY, will be updated by update_navbar.jl
 HTML("    <nav >\n    Vorbereitungen:\n\n<a class=\"sidebar-nav-item\" href=\"index.html\"><em>Intro</em></a> / \n<a class=\"sidebar-nav-item\" href=\"software.html\"><em>Software</em></a> / \n<a class=\"sidebar-nav-item\" href=\"01-basic_syntax.html\"><em>Julia Basics</em></a> / \n\n<br>\nStatistik:\n\n<a class=\"sidebar-nav-item\" href=\"02-beschreibende-statistik.html\"><em>Beschreibende Statistik</em></a> / \n<a class=\"sidebar-nav-item\" href=\"03-wahrscheinlichkeit.html\"><em>Wahrscheinlichkeit</em></a> / \n<a class=\"sidebar-nav-item\" href=\"04-schaetzung.html\"><em>Schätzung</em></a> / \n<a class=\"sidebar-nav-item\" href=\"05-messunsicherheit.html\"><em>Messunsicherheit</em></a> / \n\n<br>\nFourier-Transformation:\n\n<a class=\"sidebar-nav-item\" href=\"06-Fourier-Transformation.html\"><em>Fourier-Transformation</em></a> / \n<a class=\"sidebar-nav-item\" href=\"07-Frequenzraum.html\"><em>Frequenzraum</em></a> / \n<a class=\"sidebar-nav-item\" href=\"08-Filter.html\"><em>Filter</em></a> / \n\n<br>\nMesstechnik:\n\n<a class=\"sidebar-nav-item\" href=\"09-Rauschen.html\"><em>Rauschen</em></a> / \n<a class=\"sidebar-nav-item\" href=\"10-Detektoren.html\"><em>Detektoren</em></a> / \n<a class=\"sidebar-nav-item\" href=\"11-Lock-In.html\"><em>Lock-In-Verstärker</em></a> / \n<a class=\"sidebar-nav-item\" href=\"12-heterodyn.html\"><em>Heterodyn-Detektion</em></a> / \n\n<br>\n\n\n    </nav>\n\t")
@@ -252,7 +264,7 @@ mean(data), res.minimizer
 md"""
 # Methode der kleinsten Quadrate
 
-Wir hatten schon im Kapitel zur beschriebenden statistik die Methode der kleinsten Quadrate erwähnt. Man kann ein Modell an Daten anpassen, indem man die Parameter des Modells so variiert, dass die Summe der qwuadratsichen Abweichung zwsichzen Modell und Daten minimal wird. Bei gegebenen $x_i$ und gemessenen $y_i$ sucht man also Parameter $\theta$ eines Modells $y = f(x_i; \theta)$ so dass
+Wir hatten schon im Kapitel zur beschreibenden Statistik die Methode der kleinsten Quadrate erwähnt. Man kann ein Modell an Daten anpassen, indem man die Parameter des Modells so variiert, dass die Summe der quadratischen Abweichung zwischen Modell und Daten minimal wird. Bei gegebenen $x_i$ und gemessenen $y_i$ sucht man also Parameter $\theta$ eines Modells $y = f(x_i; \theta)$ so dass
 ```math
 \text{Summe der Residuen} = \sum_i \left( y_i - f(x_i; \theta) \right)^2
 ```
@@ -261,21 +273,21 @@ minimal wird.
 
 # ╔═╡ 6860ac98-2744-4889-a477-f9f9137c2221
 md"""
-Warum funktioniert das? Die Begründung liefer die Maximum Likelihood Methode. Aus dieser Sichtweise beschreibt das Modell $f(x_i; \theta)$ den Erwartungswert einer Normalverteilung mit der Standardabweching $\sigma$, die für alle Messpunkte identisch ist. Die Wahrscheinnloichkeit, einen Wert $y_i$ zu messen, obwogl das Modell dioch $f(x_i; \theta)$ vorhersagt, ist also
+Warum funktioniert das? Die Begründung liefer die Maximum Likelihood Methode. Aus dieser Sichtweise beschreibt das Modell $f(x_i; \theta)$ den Erwartungswert einer Normalverteilung mit der Standardabweichung $\sigma$, die für alle Messpunkte identisch ist. Die Wahrscheinlichkeit, einen Wert $y_i$ zu messen, obwohl das Modell doch $f(x_i; \theta)$ vorhersagt, ist also
 ```math
 p_\theta(x_i) = c \, e^{- \frac{(y_i - f(x_i; \theta))^2}{\sigma^2}}
 ```
-Der Vorfaktor $c$ normioert die Verteilung, ist abver für alle $i$ identisch, so dass wir ihn bei der Optimierung vernachlössigen können. Die Log-Likelihood Funktion ist dann
+Der Vorfaktor $c$ normiert die Verteilung, ist aber für alle $i$ identisch, so dass wir ihn bei der Optimierung vernachlässigen können. Die Log-Likelihood Funktion ist dann
 ```math
 L\left<x_1, x_2 \dots x_n ; \theta \right> = \sum \ln p_\theta\left<x_i\right>
 =  - \frac{c}{\sigma^2} \, \sum_i (y_i - f(x_i; \theta))^2 
 ```
-Wir maxmimieren $L$, minimieren also die Summe der Resiuden. Die Methode der kleinsten Quadrate ist also die Maximum Likelihood Methode unter der Annahme einer Nornmalverteilung der (konstanten) Messunsicherheit.
+Wir maximieren $L$, minimieren also die Summe der Residuen. Die Methode der kleinsten Quadrate ist also die Maximum Likelihood Methode unter der Annahme einer Normalverteilung der (konstanten) Messunsicherheit.
 """
 
 # ╔═╡ 9b612cf5-0c99-4e70-b070-f7c0e7f7f151
 md"""
-Die erste Konseqeunz ist, dass wir eine variable Messunsicherheit $\sigma_i$ berücksichtigen können, in dem wir 
+Die erste Konsequenz ist, dass wir eine variable Messunsicherheit $\sigma_i$ berücksichtigen können, in dem wir 
 ```math
 \text{Summe der gewichteten Residuen} = \chi^2 = \sum_i \frac{\left( y_i - f(x_i; \theta) \right)^2}{\sigma_i^2}
 ```
@@ -284,22 +296,22 @@ minimieren.
 
 # ╔═╡ 5f5e0319-a22b-41f9-bc29-058645411b1d
 md"""
-Die zweite Konsequenz ist, dass wir die Verteilung der Messunsicherheit im Auge behakten müssen. Sollte es begründete Zweifel an deren Normalverteilung geben, dann sollte man von der Methide der kleinsten Quadrate Abstand nehmen und direkt die Maximum Likelihood Methode anwenden. Dies ist beispielsweeise der Fall, wenn ein Modell an Photonenzahlen angepasst werden soll, und die typischen Photonenzahlen unterhabl un ungefähr 10 liegen. Deren Fehler ist dann gerade Poisson-verteilt.
+Die zweite Konsequenz ist, dass wir die Verteilung der Messunsicherheit im Auge behalten müssen. Sollte es begründete Zweifel an deren Normalverteilung geben, dann sollte man von der Methode der kleinsten Quadrate Abstand nehmen und direkt die Maximum Likelihood Methode anwenden. Dies ist beispielsweise der Fall, wenn ein Modell an Photonenzahlen angepasst werden soll, und die typischen Photonenzahlen unterhalb von ungefähr 10 liegen. Deren Fehler ist dann gerade Poisson-verteilt.
 """
 
 # ╔═╡ f7d16791-425b-42c3-bffb-45518dc88d79
 md"""
 ## Bsp. Modell an Photonen-Zahlen anpassen
 
-Beim [zeitkorelierten Einzelphotonenzählen](https://de.wikipedia.org/wiki/Zeitkorrelierte_Einzelphotonenz%C3%A4hlung) bestimmt man die Anzahl an deketeirten Fluoreszenz-Photonen eines Molelküls als Funktion des zeitlichen Abstands zum anregenden Laserpuls. Typische Abständei liegen im bereich von einer Nanosekunde und sind durch die Lebenbszeit des anregergten Zustands im Molekül bestimmt. Die Idee ist, diesen dadurch zu bestimmen. Man findet einen exponenztiellen Abfall der Zählereignisse mit dem zeitlichen Abdstand zur Anregung. Die Zerfallskonstante ist gearde die Lebebnszeit des Zustands.
+Beim [zeitkorrelierten Einzelphotonenzählen](https://de.wikipedia.org/wiki/Zeitkorrelierte_Einzelphotonenz%C3%A4hlung) bestimmt man die Anzahl an detektierten Fluoreszenz-Photonen eines Moleküls als Funktion des zeitlichen Abstands zum anregenden Laserpuls. Typische Abstände liegen im Bereich von einer Nanosekunde und sind durch die Lebenszeit des angeregten Zustands im Molekül bestimmt. Die Idee ist, diesen dadurch zu bestimmen. Man findet einen exponentiellen Abfall der Zählereignisse mit dem zeitlichen Abstand zur Anregung. Die Zerfallskonstante ist gerade die Lebenszeit des Zustands.
 
 Das Modell ist also
 ```math
 f(t; \tau, c_{fl}, c_{bg}) = c_{fl} \, e^{- t / \tau} + c_{bg}
 ```
-wobei $t$ die Zeit zwsichen Laserpuls und Detektion des Photons ist und $\tau$ die Lebenszeit des angregetne Zustanbds besxchreibt. Die beiden $c_i$ bestimmen den Helligkeit des Moleküls und die des Untergrunds, beuspilsweise aufgrund von Raumlicht oder der Dunekzählrate des Detektors.
+wobei $t$ die Zeit zwischen Laserpuls und Detektion des Photons ist und $\tau$ die Lebenszeit des angeregten Zustands beschreibt. Die beiden $c_i$ bestimmen den Helligkeit des Moleküls und die des Untergrunds, beispielsweise aufgrund von Raumlicht oder der Dunkelzählrate des Detektors.
 
-Die gemessene Photonezahl in einem Intveall $[t, t+dt]$ ist also Poisson-Verteilt um einen Mittelwert, der druch $f$ gegeben ist.
+Die gemessene Photonenzahl in einem Intervall $[t, t+dt]$ ist also Poisson-Verteilt um einen Mittelwert, der durch $f$ gegeben ist.
 """
 
 # ╔═╡ 1868b86a-c26e-4f76-b6d2-9c1143159bd9
@@ -337,14 +349,14 @@ res_MLE.minimizer
 
 # ╔═╡ 09c25e45-55c5-458e-a867-d901eb9b64a8
 md"""
-Da hatte ich den Unterschied dramasticher in Erinnerung
+Da hatte ich den Unterschied dramatischer in Erinnerung
 """
 
 # ╔═╡ f52a564f-af2c-4be1-81e8-7124c2339bea
 md"""
 # Intervallschätzung
 
-Mit der Punktschätzung haben wir den plasusibelsten Wert des Parameters gefunden, der die Verteilung beschreibt, aus der unsere Messdaten gezogen wurden. Nun geht es um die Frage, welche anderen Werte dieser Parameter auch noch annehmen könnte. Wir sind also auf der Suche nach einem Intervall, in dem der wirkliche Parameter dann mit einer gewissen Wahrschienlichkeit liegen wird. Dieses Intervall nennt man **Konfidenzintervall**
+Mit der Punktschätzung haben wir den plausibelsten Wert des Parameters gefunden, der die Verteilung beschreibt, aus der unsere Messdaten gezogen wurden. Nun geht es um die Frage, welche anderen Werte dieser Parameter auch noch annehmen könnte. Wir sind also auf der Suche nach einem Intervall, in dem der wirkliche Parameter dann mit einer gewissen Wahrscheinlichkeit liegen wird. Dieses Intervall nennt man **Konfidenzintervall**.
 """
 
 # ╔═╡ c5b024ed-11c4-4f01-a7f3-00ee90069cef
@@ -354,28 +366,28 @@ md"""
 
 # ╔═╡ 0a9bdba3-ee54-48fb-9c2b-2efc9f305385
 md"""
-Betrachten wir noch einmal als Beipiel die geometrische Verteilung von oben. Mit der Wahtrscheinliochkeit $p$ gelingt ein Versuch, nach $x$ Versuchen tritt zum ersten mal ein Misserfolg auf. Die Wahrscheinlichkeit für einen Misserfolgt nach $x$ versuchen ist also 
+Betrachten wir noch einmal als Beispiel die geometrische Verteilung von oben. Mit der Wahrscheinlichkeit $p$ gelingt ein Versuch, nach $x$ Versuchen tritt zum ersten mal ein Misserfolg auf. Die Wahrscheinlichkeit für einen Misserfolg nach $x$ Versuchen ist also 
 ```math
 P\left<X=x\right> = (1-p)\, p^x
 ```
-Wir messen einen Misserfolg nach $x=3$ versuchen. Wie oben gesehn ist der plausibelste Parameter 
+Wir messen einen Misserfolg nach $x=3$ versuchen. Wie oben gesehen ist der plausibelste Parameter 
 ```math
 \hat{p} = \frac{x}{x+1} = \frac{3}{4}
 ```
-Wir suchen eine untere ($p_u$) und obere ($p_o$) Intervallgrenze, die jeweils eine Funktion des gemessenen Wertes $x$ ist, so dass der wahre Parameter $p$ mit 95% Wahrscheibloichkeit in diesem Intervall liegt, also 
+Wir suchen eine untere ($p_u$) und obere ($p_o$) Intervallgrenze, die jeweils eine Funktion des gemessenen Wertes $x$ ist, so dass der wahre Parameter $p$ mit 95% Wahrscheinlichkeit in diesem Intervall liegt, also 
 ```math
 \mathcal{P}\left< p_u(x) < p < p_o(x) \right> = 0.95
 ```
-unabhängig vom wahren $p$ und ggf. auch anderen Paramtern der Verteilung. Das Gleichheitszeichen wird manchmal als 'gleich oder etwas größer' interpertiert. Inbesodnere bei disktreten Verteilungen ist ein Gleichheit nicht zu erreichen.
+unabhängig vom wahren $p$ und ggf. auch anderen Parametern der Verteilung. Das Gleichheitszeichen wird manchmal als 'gleich oder etwas größer' interpretiert. Insbesondere bei diskreten Verteilungen ist ein Gleichheit nicht zu erreichen.
 """
 
 # ╔═╡ 86619b3f-3284-4f76-acbf-a196bb072433
 md"""
-Man kann die Intervallgrenzen auf verschiedenem Weg bekommen, siehe bspw. [wikipedia](https://en.wikipedia.org/wiki/Confidence_interval). Hier folgen wir wiederum Stahel und benutuzen ein Erfgebnis aus dem Test von Hypothesen. Ohne das hier näher zu begründen drehen wir wieder Variable und Paramter um. Wir wählen die obere Grentze des Intervalls so, dass unser Messert $x$ auf der *unteren* 2.5%-Perzentil liegt, also  
+Man kann die Intervallgrenze auf verschiedenem Weg bekommen, siehe bspw. [wikipedia](https://en.wikipedia.org/wiki/Confidence_interval). Hier folgen wir wiederum Stahel und benutzen ein Ergebnis aus dem Test von Hypothesen. Ohne das hier näher zu begründen drehen wir wieder Variable und Parameter um. Wir wählen die obere Grenze des Intervalls so, dass unser Messwert $x$ auf der *unteren* 2.5%-Perzentil liegt, also  
 ```math
 P_{p_o}\left<X \le x\right> = 2.5 \%
 ```
-Die kumulative Dichtefunktion beträgt also $0.025$ bzw $1 - 0.025$ an der unteren bzw oberen Intervallgrenze. In Julia finden wir diese Grenz-Paramter über eine Nullstellensuche:
+Die kumulative Dichtefunktion beträgt also $0.025$ bzw $1 - 0.025$ an der unteren bzw oberen Intervallgrenze. In Julia finden wir diese Grenz-Parameter über eine Nullstellensuche:
 """
 
 # ╔═╡ 5dc9be6a-54da-49b8-8cf5-87567bc6563c
@@ -398,7 +410,7 @@ grenzen(3)
 
 # ╔═╡ 8ab6a87e-5666-472f-8030-273ced222459
 md"""
-Testweise summieren wir die Wahrscheinlichkeiten für die Fälle $0-3$ bzw. $3-\infty$ erfolgrecihe Versuche bei dem gegebenen $p_u$ und $p_o$, um sicherzugehen, dass jeweils 2.5% außerhalb liegen.
+Testweise summieren wir die Wahrscheinlichkeiten für die Fälle $0-3$ bzw. $3-\infty$ erfolgreiche Versuche bei dem gegebenen $p_u$ und $p_o$, um sicherzugehen, dass jeweils 2.5% außerhalb liegen.
 """
 
 # ╔═╡ 30fd1867-c9aa-468e-b7cb-9531e9471831
@@ -412,7 +424,7 @@ end
 
 # ╔═╡ d598adfa-2b05-4a53-bf6d-f1e58ea271cd
 md"""
-Dies sind die drei charakteristiashcnr Verteilungen, wenn wir $x=3$ gemessen haben. Die Plausibelste ist die mit $p=3/4$, die anderen beiden sind die Grenzfälle.
+Dies sind die drei charakteristischen Verteilungen, wenn wir $x=3$ gemessen haben. Die Plausibelste ist die mit $p=3/4$, die anderen beiden sind die Grenzfälle.
 """
 
 # ╔═╡ c3e717bf-acaa-4ea7-8bff-01853fdf8a58
@@ -447,7 +459,7 @@ md"""
 
 # ╔═╡ 320ae62b-f132-4898-a2ab-3bd20a7de7f3
 md"""
-Lassen sie uns das noch einmal andersrum betrachten. Wir geben uns eine geometrische Verteilung mit bekanntem $p$ vor, ziehen daraus eine Zufallszahl $x$ und schätzen aufgrund dieser Zahl die Grenzen des Konfidenzintervalls. In 95% der Fälle müsste unser vorgegebens $p$ in diesem Intervall liegen, in 5% der Fälle nicht.
+Lassen sie uns das noch einmal andersrum betrachten. Wir geben uns eine geometrische Verteilung mit bekanntem $p$ vor, ziehen daraus eine Zufallszahl $x$ und schätzen aufgrund dieser Zahl die Grenzen des Konfidenzintervalls. In 95% der Fälle müsste unser vorgegebenes $p$ in diesem Intervall liegen, in 5% der Fälle nicht.
 """
 
 # ╔═╡ 7b74afe2-eafd-4db0-8f1f-a8e123c40d6f
@@ -462,14 +474,14 @@ end
 
 # ╔═╡ 616fc902-e302-45b9-b184-e9035d7e780c
 md"""
-Unsere Intervakllkgrenzen sind etwas zu groß. Zu selten liegt der wahre Wert außerhalb der Grenzen. Dies ist ein Problem bei diskreten Verteiulungebn. Hier sind die Messwerte diskret,und danit notgeruden auch die berechneten Grenzen des Konfidenzintervalls. Dadurch kann man die Wharscheiblichkjeit niciht exakt auf den gewpünschten Wert einstellen.
+Unsere Intervallgrenzen sind etwas zu groß. Zu selten liegt der wahre Wert außerhalb der Grenzen. Dies ist ein Problem bei diskreten Verteilungen. Hier sind die Messwerte diskret,und damit notgedrungen  auch die berechneten Grenzen des Konfidenzintervalls. Dadurch kann man die Wahrscheinlichkeit nicht exakt auf den gewünschten Wert einstellen.
 """
 
 # ╔═╡ 3a9a738f-8e7f-437e-9410-067121f00c0e
 md"""
 ## Normalverteilung
 
-Wenn man die Verteilungsfunktion kennt, kann man die Grenzen des Koinfidenzintervalls wie oben gezeigt berechnen. Oft ist die Verteilung eine Normalverteilung. Dies nimmt man notfalls auch an, wenn man es nicht besser weiss.
+Wenn man die Verteilungsfunktion kennt, kann man die Grenzen des Konfidenzintervalls wie oben gezeigt berechnen. Oft ist die Verteilung eine Normalverteilung. Dies nimmt man notfalls auch an, wenn man es nicht besser weiss.
 
 Im ersten Kapitel hatten wir uns schon die Integrale über $[\mu - n \sigma, \mu + n \sigma]$ angeschaut
 """
@@ -479,7 +491,7 @@ Im ersten Kapitel hatten wir uns schon die Integrale über $[\mu - n \sigma, \mu
 
 # ╔═╡ 3eed2b8a-c56f-45c6-b796-b7e0f8d69a1e
 md"""
-Ein $\pm\2\sigma$-Intervall beinhaltet also 95.45% der Fälle. Eigentloich suchen wir ja ein Intervall mit genau 95%. Das liegt aber in der Nähe, nähmlich bei $\pm 1.96 \sigma$, siehe den 'Minimizer' hier
+Ein $\pm\2\sigma$-Intervall beinhaltet also 95.45% der Fälle. Eigentlich suchen wir ja ein Intervall mit genau 95%. Das liegt aber in der Nähe, nämlich bei $\pm 1.96 \sigma$, siehe den 'Minimizer' hier
 """
 
 # ╔═╡ b1c45b8b-8818-4417-afa3-dc4f207b44a6
@@ -487,20 +499,20 @@ optimize( n -> ( cdf(Normal(0, 1), n) - cdf(Normal(0, 1), -n) - 0.95).^2, 0,3)
 
 # ╔═╡ 4c426122-22bc-4ccf-ac1c-ffe3f1ee68fc
 md"""
-Ein Problem ist hier, dass die Standardabweichung $\sigma$ hier die **wahre** Standardwbweihung ist. Wir kennen aber typisxcehrwesie nur eine **geschätzte** Standardabwecihung, die wir auf grundlage unserer messwerte schätzen müssen. Diesen zusätzliochen faktor disktutieren wir im nchsten Kapitel.
+Ein Problem ist hier, dass die Standardabweichung $\sigma$ hier die **wahre** Standardabweichung ist. Wir kennen aber typischerweise nur eine **geschätzte** Standardabweichung, die wir auf Grundlage unserer Messwerte schätzen müssen. Diesen zusätzlichen Faktor diskutieren wir im nächsten Kapitel.
 """
 
 # ╔═╡ 046e3c23-ba68-431c-abf0-222e7baa1696
 md"""
-## Bsp. Gauß'sche Fehlerrechung
+## Bsp. Gauß'sche Fehlerrechnung
 
-Die Gauß'sche fehlerrechnung kann als Methide der Intervallschätzung gesehen werden. Wir haben mehrere Messwerte $x_i$, die wir durch ein Modell $f(x; p_j)$ mit den Parametern $p_j$ beschreiben wollen. Wir finden die $p_j$, indem wir die quadratische Abweichung minimieren, also nach den $p_j$ ableiten und Null setzen, also
+Die Gauß'sche Fehlerrechnung kann als Methode der Intervallschätzung gesehen werden. Wir haben mehrere Messwerte $x_i$, die wir durch ein Modell $f(x; p_j)$ mit den Parametern $p_j$ beschreiben wollen. Wir finden die $p_j$, indem wir die quadratische Abweichung minimieren, also nach den $p_j$ ableiten und Null setzen, also
 ```math
 \frac{\partial}{\partial p_k} \sum_i (x_i - f(x_i; p_j))^2 = 0
 ```
-So erhalten wir ein Gleichunsgystem zur Bestimmung der $p_j$, das wir lösen.
+So erhalten wir ein Gleichungssystem zur Bestimmung der $p_j$, das wir lösen.
 
-Das Konfideznzintervall um diese ootimalen $p_j$ erhlaten wir durch Gauß'sxche Fehlerforttplanuzung durch dieses Gleichungsystem. Dazu nehmen wir zum einen eine Normalverteilung bei den Messwerten $x_i$ an, zum naderen linearisieren wir die Bestimmungsgleichen in der Nähe der optimalen $p_j$. (Wenn man beides nicht machen will: siehe nächstes Kapitel)
+Das Konfidenzintervall um diese optimalen $p_j$ erhalten wir durch Gauß'sche Fehlerfortpflanzung durch dieses Gleichungssystem. Dazu nehmen wir zum einen eine Normalverteilung bei den Messwerten $x_i$ an, zum anderen linearisieren wir die Bestimmungsgleichen in der Nähe der optimalen $p_j$. (Wenn man beides nicht machen will: siehe nächstes Kapitel)
 """
 
 # ╔═╡ 050f5698-8419-422a-b0ff-5cca01881e64
@@ -516,13 +528,13 @@ Die Koeffizienten werden bestimmt über
 	\hat{a} = \bar{y} - \hat{b} \bar{x} 
 ```
 
-Unter der Annahme von dientsichen Unsicherheiten in allen Messwerten ist ein guter Schätzer der Unsicherheit des einzelnen Messpunkts die mittlere quadratiusche Abweichung zum Modell, also
+Unter der Annahme von identischen Unsicherheiten in allen Messwerten ist ein guter Schätzer der Unsicherheit des einzelnen Messpunkts die mittlere quadratische Abweichung zum Modell, also
 ```math
 \hat{\sigma} = \frac{1}{N-2} \sum_i \left( y_i - (\hat{a} + \hat{b} x_i) \right)^2
 ```
-Die 2 in $N-2$ stammt von den zwei durch $\hat{a}$ udn $\hat{b}$ verbrauchten Freiheitsgarden der Messung, analog zur Schätzung der Standardabwechingung oben.
+Die 2 in $N-2$ stammt von den zwei durch $\hat{a}$ udn $\hat{b}$ verbrauchten Freiheitsgarden der Messung, analog zur Schätzung der Standardabweichung oben.
 
-Damit bekommt man duerch Fehglerfortplöfanzung (siehe Bevoington Kap 6.4 udn Stahel Kap. 13.2)
+Damit bekommt man durch Fehlerfortpflanzung (siehe Bevoington Kap 6.4 und Stahel Kap. 13.2)
 ```math
 \hat{\sigma_a} = \hat{\sigma} \, \sqrt{\frac{\sum x_i^2}{\Delta}}
 \quad \text{und} \quad
@@ -562,18 +574,6 @@ let
 	annotate!(10,10, "a: $(a_true) vs. $(round(a, digits=2)) +- $(round(σ_a, digits=2))")
 	annotate!(10,7, "b: $(b_true) vs. $(round(b, digits=2)) +- $(round(σ_b, digits=2))")
 end
-
-# ╔═╡ b3511771-d307-4e33-8406-e561bfe72958
-using Distributions, StatsBase, LinearAlgebra, Plots
-
-# ╔═╡ ea9b0a84-3b02-433a-b5df-d1b76b16ceaf
-using PlutoUI
-
-# ╔═╡ b1c02d6f-d50d-43cb-a01b-08ae7f4fb30d
-using StatsPlots
-
-# ╔═╡ 764a07f5-e3ab-4db3-a5be-5728aab422bb
-using Optim
 
 # ╔═╡ 959d1081-f82d-4070-8fef-3aab85cfe440
 TableOfContents(title="Inhalt")
