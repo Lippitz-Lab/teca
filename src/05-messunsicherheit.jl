@@ -4,6 +4,12 @@
 using Markdown
 using InteractiveUtils
 
+# ╔═╡ 49b9386e-2eb0-41e5-97a9-1da882abd4f6
+using Distributions, Plots
+
+# ╔═╡ 2b794068-00e4-47b3-b082-7fba3c3adb9e
+using PlutoUI
+
 # ╔═╡ f5450eab-0f9f-4b7f-9b80-992d3c553ba9
 # DO NOT MODIFY, will be updated by update_navbar.jl
 HTML("    <nav >\n    Vorbereitungen:\n\n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/index.html\"><em>Intro</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/software.html\"><em>Software</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/01-basic_syntax.html\"><em>Julia Basics</em></a> / \n\n<br>\nStatistik:\n\n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/02-beschreibende-statistik.html\"><em>Beschreibende Statistik</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/03-wahrscheinlichkeit.html\"><em>Wahrscheinlichkeit</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/04-schaetzung.html\"><em>Schätzung</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/05-messunsicherheit.html\"><em>Messunsicherheit</em></a> / \n\n<br>\nFourier-Transformation:\n\n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/06-Fourier-Transformation.html\"><em>Fourier-Transformation</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/07-Frequenzraum.html\"><em>Frequenzraum</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/08-Filter.html\"><em>Filter</em></a> / \n\n<br>\nMesstechnik:\n\n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/09-Rauschen.html\"><em>Rauschen</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/10-Detektoren.html\"><em>Detektoren</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/11-Lock-In.html\"><em>Lock-In-Verstärker</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/12-heterodyn.html\"><em>Heterodyn-Detektion</em></a> / \n\n<br>\n\n\n    </nav>\n\t")
@@ -487,9 +493,6 @@ let
 	scatter!(x,pdf.(Normal(),x),  label="normal", markersize=2)
 end
 
-# ╔═╡ 49b9386e-2eb0-41e5-97a9-1da882abd4f6
-using Distributions, Plots
-
 # ╔═╡ c5daeba2-6d0a-46af-a238-970fe54eb9b3
 md"""
 
@@ -644,9 +647,6 @@ md"""
 comming soon \...
 see [MonteCarloMeasurements.jl](https://baggepinnen.github.io/MonteCarloMeasurements.jl/stable/)
 """
-
-# ╔═╡ 2b794068-00e4-47b3-b082-7fba3c3adb9e
-using PlutoUI
 
 # ╔═╡ 8de57df0-5d80-4fa3-be75-ccf03db5a21d
 TableOfContents(title="Inhalt")
@@ -1257,9 +1257,9 @@ uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 
 [[deps.Qt5Base_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Fontconfig_jll", "Glib_jll", "JLLWrappers", "Libdl", "Libglvnd_jll", "OpenSSL_jll", "Pkg", "Xorg_libXext_jll", "Xorg_libxcb_jll", "Xorg_xcb_util_image_jll", "Xorg_xcb_util_keysyms_jll", "Xorg_xcb_util_renderutil_jll", "Xorg_xcb_util_wm_jll", "Zlib_jll", "xkbcommon_jll"]
-git-tree-sha1 = "ad368663a5e20dbb8d6dc2fddeefe4dae0781ae8"
+git-tree-sha1 = "c6c0f690d0cc7caddb74cef7aa847b824a16b256"
 uuid = "ea2cea3b-5b76-57ae-a6ef-0a8af62496e1"
-version = "5.15.3+0"
+version = "5.15.3+1"
 
 [[deps.QuadGK]]
 deps = ["DataStructures", "LinearAlgebra"]
@@ -1669,7 +1669,7 @@ version = "0.9.1+5"
 # ╟─db28dc51-f417-459e-a0eb-b93dced3cc25
 # ╟─13858297-cad0-42a6-aa3e-1b25f4811434
 # ╟─55150760-9de7-449f-96b3-ee5275c30378
-# ╟─20e4a6cc-42d5-46bc-83e8-87b2a8b8b786
+# ╠═20e4a6cc-42d5-46bc-83e8-87b2a8b8b786
 # ╟─4d08ccd2-0ce3-4466-a0d2-8806d2469de3
 # ╟─f32c0f08-4425-4ae3-ae39-77950a42d9ba
 # ╟─90d83d12-3ba7-4158-9ebb-53db69477c30
