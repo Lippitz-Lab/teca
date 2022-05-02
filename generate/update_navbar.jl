@@ -38,7 +38,7 @@ using JSON3
 
 # ╔═╡ 74ff5f30-f087-4ad3-a42a-2a875d7d9b2f
 begin
-	PREPATH = "teca"
+	PREPATH = "https://pluto.ep3.uni-bayreuth.de/teca/"
 	#@skip_as_script PREPATH = ""
 end
 
@@ -90,7 +90,7 @@ function navbar(book_model)
 			notebook_id = (without_pluto_file_extension(section.notebook_path))
 			
 		    @htl("""
-		    <a class="sidebar-nav-item" href="$(notebook_id).html"><em>$(section.name)</em></a> / 
+		    <a class="sidebar-nav-item" href="$(PREPATH)$(notebook_id).html"><em>$(section.name)</em></a> / 
 		    """)
 		end )
 		<br>

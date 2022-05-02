@@ -28,14 +28,14 @@ using Optim
 
 # ╔═╡ f5450eab-0f9f-4b7f-9b80-992d3c553ba9
 # DO NOT MODIFY, will be updated by update_navbar.jl
-HTML("    <nav >\n    Vorbereitungen:\n\n<a class=\"sidebar-nav-item\" href=\"index.html\"><em>Intro</em></a> / \n<a class=\"sidebar-nav-item\" href=\"software.html\"><em>Software</em></a> / \n<a class=\"sidebar-nav-item\" href=\"01-basic_syntax.html\"><em>Julia Basics</em></a> / \n\n<br>\nStatistik:\n\n<a class=\"sidebar-nav-item\" href=\"02-beschreibende-statistik.html\"><em>Beschreibende Statistik</em></a> / \n<a class=\"sidebar-nav-item\" href=\"03-wahrscheinlichkeit.html\"><em>Wahrscheinlichkeit</em></a> / \n<a class=\"sidebar-nav-item\" href=\"04-schaetzung.html\"><em>Schätzung</em></a> / \n<a class=\"sidebar-nav-item\" href=\"05-messunsicherheit.html\"><em>Messunsicherheit</em></a> / \n\n<br>\nFourier-Transformation:\n\n<a class=\"sidebar-nav-item\" href=\"06-Fourier-Transformation.html\"><em>Fourier-Transformation</em></a> / \n<a class=\"sidebar-nav-item\" href=\"07-Frequenzraum.html\"><em>Frequenzraum</em></a> / \n<a class=\"sidebar-nav-item\" href=\"08-Filter.html\"><em>Filter</em></a> / \n\n<br>\nMesstechnik:\n\n<a class=\"sidebar-nav-item\" href=\"09-Rauschen.html\"><em>Rauschen</em></a> / \n<a class=\"sidebar-nav-item\" href=\"10-Detektoren.html\"><em>Detektoren</em></a> / \n<a class=\"sidebar-nav-item\" href=\"11-Lock-In.html\"><em>Lock-In-Verstärker</em></a> / \n<a class=\"sidebar-nav-item\" href=\"12-heterodyn.html\"><em>Heterodyn-Detektion</em></a> / \n\n<br>\n\n\n    </nav>\n\t")
+HTML("    <nav >\n    Vorbereitungen:\n\n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/index.html\"><em>Intro</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/software.html\"><em>Software</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/01-basic_syntax.html\"><em>Julia Basics</em></a> / \n\n<br>\nStatistik:\n\n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/02-beschreibende-statistik.html\"><em>Beschreibende Statistik</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/03-wahrscheinlichkeit.html\"><em>Wahrscheinlichkeit</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/04-schaetzung.html\"><em>Schätzung</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/05-messunsicherheit.html\"><em>Messunsicherheit</em></a> / \n\n<br>\nFourier-Transformation:\n\n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/06-Fourier-Transformation.html\"><em>Fourier-Transformation</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/07-Frequenzraum.html\"><em>Frequenzraum</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/08-Filter.html\"><em>Filter</em></a> / \n\n<br>\nMesstechnik:\n\n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/09-Rauschen.html\"><em>Rauschen</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/10-Detektoren.html\"><em>Detektoren</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/11-Lock-In.html\"><em>Lock-In-Verstärker</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/12-heterodyn.html\"><em>Heterodyn-Detektion</em></a> / \n\n<br>\n\n\n    </nav>\n\t")
 
 # ╔═╡ 8f76e7fd-7481-40ff-8e54-e31aab7eff1f
 html"""<div>
-<font size="7"><b>Schätzung</b></font> </div>
+<font size="7"><b>4 Schätzung</b></font> </div>
 
 <div><font size="5"> Markus Lippitz </font> </div>
-<div><font size="5"> 25. März 2022 </font> </div>
+<div><font size="5"> 2. Mai 2022 </font> </div>
 """
 
 # ╔═╡ 73429f7a-96f1-11ec-2061-8f45c81fe4bc
@@ -574,6 +574,117 @@ let
 	annotate!(10,10, "a: $(a_true) vs. $(round(a, digits=2)) +- $(round(σ_a, digits=2))")
 	annotate!(10,7, "b: $(b_true) vs. $(round(b, digits=2)) +- $(round(σ_b, digits=2))")
 end
+
+# ╔═╡ cbe3ed45-0450-45b5-8aff-4aa3d9b58b00
+md"""
+# Reste
+"""
+
+# ╔═╡ b2fd7618-ab1f-4599-9805-d0fc2305595b
+md"""
+# Maximum-Likelihood Methode
+
+Die Maximum-Likelihood Methode ist eine, man könnte sagen \emph{die} Methode, um die wahrscheinlichsten Parameter eines beliebigen Modells zu schätzen, das einen Satz von Messwerten beschreibt. Das Problem liegt manchmal allerdings in nur nuimerisch zu lösenden Gleichungen.
+
+Die Messwerte $y_i$ sind als Funktion einer Variablen $x_i$ gemessen, wobei $x_i$ als wohl bekannt und fehlerfrei angenommen sein. Verallgemeinerungen auf Unsicherheiten in den $x_i$ sind möglich. Die Messwerte sollen durch ein Modell $y_0(x; a, b)$ beschrieben werden, wobei das Modell die Parameter $a$, $b$, ... besitzt.
+
+Weiterhin benötigt man eine Wahrscheinlichkeitsdichte $P_i$ die angibt, wie wahrscheinlich es ist, dass man $y_i$ an der Stelle $x_i$ gemessen hat, wo doch der 'wahre' Wert $y_0(x_i; a,b)$ beträgt. Die Wahrscheinlichkeit, genau diesen Satz Messwert $y_i$ zu messen, beträgt also
+```math
+L(a, b) =  A \prod P_i  \quad .
+```
+Das Symbol $L$ wird verwendet, weil diese Betrachtung zurückliegender, bereits geschehener Ereignisse 'likelihood' genannt wird. Die Konstante $A$ dient der Normierung. Der besten Schätzwert für die 'wahren' Parameter $a_0$, $b_0$, ... sind diejenigen Parameter $a$, $b$, ... die $L(a,b)$ maximieren. Dieses Optimum kann man in machen Fällen analytisch finden, in anderen nur numerisch. 
+"""
+
+# ╔═╡ d81588e3-6591-4329-9f21-cfa541eb76aa
+md"""
+### Beispiel 1: lineare Regression bei konstanten, normal-verteilten Unsicherheiten
+
+Unser Modell sei $y_0 = a + b \, x$. Die Unsicherheit in den Messwerten, eigentlich: die 'wahre' Breite der Verteilung der Messwerte, sei $\sigma_0$ und hier der Einfachheit halber unabhängig von $x_i$. Damit ist
+```math
+ P_i = \frac{1}{\sigma_0 \sqrt{2 \pi}} \exp \left( - \frac{ (y_i - (a + b x_i))^2}{2 \, \sigma_0^2}  \     \right)
+```
+und
+```math
+L(a, b) = A \prod P_i  \propto \prod \exp \left( - \frac{ (y_i - (a + b x_i))^2}{2 \, \sigma_0^2}  \     \right) \quad .
+```
+An Stelle von $L(a,b)$ kann man auch die log-Likelihood-Funktion $\mathcal{L}= \log L(a,b)$ maximieren, also 
+```math
+\mathcal{L}(a, b) = - \frac{1}{2 \sigma_0^2} \, \sum  (y_i - (a + b x_i))^2  + \text{const.} \quad .
+```
+Das Maximum findet man, in dem man partiell je nach $a$ und $b$ ableitet und gemeinsame Nullstellen sucht. Diese sind (Bevington, Kap. 6.3)
+```math
+  a_0 = \frac{1}{\Delta'} \left( \sum x_i^2 \, \sum y_i -  \sum x_i \, \sum x_i y_i  \right) 
+```
+```math
+  b_0 = \frac{1}{\Delta'} \left(N  \sum x_i  y_i -  \sum x_i \, \sum  y_i  \right) 
+```
+mit
+```math 
+\Delta ' =  N  \sum x_i^2  -  \left( \sum x_i   \right)^2 
+```
+Die Unsicherheiten findet man in diesem Fall über Fehlerfortpflanzung
+```math
+\begin{aligned}
+\sigma_a^2 &=& \frac{\sigma^2}{\Delta'} \sum x_i^2 \\
+\sigma_b^2 &=& N \frac{\sigma^2}{\Delta'}  \\
+\text{mit} \quad \sigma^2 & = & \frac{1}{N -2} \sum \left( y_i - ( a + b x_i ) \right)^2 
+\end{aligned}
+```
+Man beachte die Ähnlichkeit von $\mathcal{L}(a,b) $ und $\sigma^2$.
+"""
+
+# ╔═╡ d3c4d384-f5e4-438c-896b-22de3cd0496e
+md"""
+
+### Beispiel 2: Poisson-Verteilung
+
+Eine Stärke der Maximum-Likelihood Methode ist, dass auch andere Verteilungen als die Normalverteilung verwendet werden können, beispielsweise die Poisson-Verteilung. Unser Modell sei weiterhin $y_0 = a + b \, x$, aber die Wahrscheinlichkeit, einen Wert $y_i$ zu finden folge einer Poisson-Verteilung mit $\lambda = y_0 = a + b \, x$, also
+```math
+ P_i = \frac{\lambda^{y_i}}{y_i !} \exp ( - \lambda) = \frac{(a + b x_i)^{y_i}}{y_i !} \exp ( - (a + b x_i)) \quad.
+```
+Damit wird 
+```math
+\mathcal{L}(a,b) = \sum \left(y_i \log (a + b x_i) \right) -
+ \sum \left(a + b x_i \right) + \text{const.}
+```
+Diese Funktion wird maximal, wenn 
+```math
+\begin{aligned}
+N  &=& \sum \frac{y_i}{a + b x_i} \\
+\sum x_i &=&  \frac{x_i \, y_i}{a + b x_i}
+\end{aligned}
+```
+gleichzeitig erfüllt sind. Eine Lösung für $a$, $b$ findet sich nur numerisch.
+
+"""
+
+# ╔═╡ 1b317494-d239-4bb8-ba45-67b2baba5067
+md"""
+## Numerische Bestimmung der Unsicherheit in den Parametern
+
+
+### Normalverteilung
+
+Wenn die erwartete Wahrscheinlichkeitsverteilung (nahezu) eine Normalverteilung ist und genügend Messwerte vorhanden sind, dass auch die Stichprobe normalverteilt ist, dann entspricht die experimentell bestimmte Standardabweichung $\sigma$ der 'wahren' Standardabweichung $\sigma_0$. Dies hat zur Folge, dass in der Taylor-Entwicklung von $\mathcal{L}$ um das Maximum herum schon $\sigma_0$ enthalten ist und der passende Taylor-Koeffizient die partielle Ableitung darstellt. Damit gilt
+```math
+ \sigma_\tau^2 = \left( \frac{\partial^2 \mathcal{L}(\tau)}{\partial \tau^2} \right)^{-1}
+```
+für die Unsicherheit im Parameter $\tau$. Dies ist in dieser Näherung äquivalent mit
+```math
+ \mathcal{L}(\tau_0 \pm \sigma_\tau) =  \mathcal{L}(\tau_0) - \frac{1}{2} 
+```
+wobei $\tau_0$ der Parameter ist, der $\mathcal{L}$ maximiert. Bei mehr als einem Parameter stellt die Kontur bei  $\mathcal{L}_{\text{max}} - 1/2$ auch die Kovarianz der Unsicherheit in den  Parametern dar.
+"""
+
+# ╔═╡ 783b2d7a-f937-4bf9-a15c-380078bb27cc
+md"""
+### Bootstrapping
+
+Wenn eine Normalverteilung der Unsicherheit nicht angenommen werden kann, beispielsweise bei Poisson-Verteilungen mit $\lambda < 10$, dann ist 'bootstrapping' die Lösung. Wikipedia schreibt 'selten auch Münchhausen-Methode genannt', aber genau das ist die Idee. Man zieht sich an den Haaren aus dem Sumpf!
+
+Wir haben einen Datensatz aus $N$ Messwerten, die wir in $n$ Intervalle eines Histogramms einsortieren und mit unserem Modell des Histogramms vergleichen wollen. Histogramm-Balken-Höhen sind gezählte Ereignisse, also Poisson-verteilt. Wir passen an unser Histogramm ein Modell mittels der Maximum-Likelihood Methode an und bestimmen so die Parameter. Um die Unsicherheit in den Parametern zu bestimmen, erzeugen wir einen neuen Datensatz aus dem alten, originalen ('an dem Haaren aus dem Sumpf!'). Dazu ziehen wir zufällig  $N$ Werte aus dem originalen Datensatz \emph{mit Zurücklegen}. Einzelne originale Messwerte können also mehrfach im neuen Datensatz vorkommen, aber der Gesamtumfang bleibt $N$. An diesen neuen Datensatz passen wir unser Modell wieder an und bestimmen wieder die Parameter. Dies wiederholen wir so oft, dass wir glauben, den zentralen Grenzwertsatz zu erfüllen, z.B. 100-mal. Die Unsicherheit der Parameter ergibt sich aus der Standardabweichung der Verteilung der so ermittelten 100 Varianten der Parameter. Details finden sich z.B. in Bevington \& Robinson: Data reduction and error analysis, oder in Press et al. Numerical Recipes.
+
+"""
 
 # ╔═╡ 959d1081-f82d-4070-8fef-3aab85cfe440
 TableOfContents(title="Inhalt")
@@ -1367,9 +1478,9 @@ uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 
 [[deps.Qt5Base_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Fontconfig_jll", "Glib_jll", "JLLWrappers", "Libdl", "Libglvnd_jll", "OpenSSL_jll", "Pkg", "Xorg_libXext_jll", "Xorg_libxcb_jll", "Xorg_xcb_util_image_jll", "Xorg_xcb_util_keysyms_jll", "Xorg_xcb_util_renderutil_jll", "Xorg_xcb_util_wm_jll", "Zlib_jll", "xkbcommon_jll"]
-git-tree-sha1 = "ad368663a5e20dbb8d6dc2fddeefe4dae0781ae8"
+git-tree-sha1 = "c6c0f690d0cc7caddb74cef7aa847b824a16b256"
 uuid = "ea2cea3b-5b76-57ae-a6ef-0a8af62496e1"
-version = "5.15.3+0"
+version = "5.15.3+1"
 
 [[deps.QuadGK]]
 deps = ["DataStructures", "LinearAlgebra"]
@@ -1871,6 +1982,12 @@ version = "0.9.1+5"
 # ╟─046e3c23-ba68-431c-abf0-222e7baa1696
 # ╟─050f5698-8419-422a-b0ff-5cca01881e64
 # ╠═ed9157d6-ca3c-4440-9b68-e6954999e231
+# ╟─cbe3ed45-0450-45b5-8aff-4aa3d9b58b00
+# ╟─b2fd7618-ab1f-4599-9805-d0fc2305595b
+# ╟─d81588e3-6591-4329-9f21-cfa541eb76aa
+# ╟─d3c4d384-f5e4-438c-896b-22de3cd0496e
+# ╟─1b317494-d239-4bb8-ba45-67b2baba5067
+# ╟─783b2d7a-f937-4bf9-a15c-380078bb27cc
 # ╠═b3511771-d307-4e33-8406-e561bfe72958
 # ╠═ea9b0a84-3b02-433a-b5df-d1b76b16ceaf
 # ╠═b1c02d6f-d50d-43cb-a01b-08ae7f4fb30d
