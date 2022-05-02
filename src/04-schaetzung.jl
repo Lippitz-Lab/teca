@@ -260,6 +260,31 @@ Natürlich ist in diesem Fall der Mittelwert auch ein guter Schätzer.
 # ╔═╡ 2249131d-b137-486d-a9d3-503a1bd6876e
 mean(data), res.minimizer
 
+# ╔═╡ 91a2d24f-b139-4f61-9609-1618d491b68e
+md"""
+
+### Lineare Regresssion bei Poisson-Verteilung
+
+Eine Stärke der Maximum-Likelihood Methode ist, dass auch andere Verteilungen als die Normalverteilung verwendet werden können, beispielsweise die Poisson-Verteilung. Unser Modell sei weiterhin $y_0 = a + b \, x$, aber die Wahrscheinlichkeit, einen Wert $y_i$ zu finden folge einer Poisson-Verteilung mit $\lambda = y_0 = a + b \, x$, also
+```math
+ P_i = \frac{\lambda^{y_i}}{y_i !} \exp ( - \lambda) = \frac{(a + b x_i)^{y_i}}{y_i !} \exp ( - (a + b x_i)) \quad.
+```
+Damit wird 
+```math
+\mathcal{L}(a,b) = \sum \left(y_i \log (a + b x_i) \right) -
+ \sum \left(a + b x_i \right) + \text{const.}
+```
+Diese Funktion wird maximal, wenn 
+```math
+\begin{aligned}
+N  &=& \sum \frac{y_i}{a + b x_i} \\
+\sum x_i &=&  \frac{x_i \, y_i}{a + b x_i}
+\end{aligned}
+```
+gleichzeitig erfüllt sind. Eine Lösung für $a$, $b$ findet sich nur numerisch.
+
+"""
+
 # ╔═╡ c001f17b-7a94-433c-8fee-d4e4975e5e0c
 md"""
 # Methode der kleinsten Quadrate
@@ -575,97 +600,11 @@ let
 	annotate!(10,7, "b: $(b_true) vs. $(round(b, digits=2)) +- $(round(σ_b, digits=2))")
 end
 
-# ╔═╡ cbe3ed45-0450-45b5-8aff-4aa3d9b58b00
+# ╔═╡ edc35660-7d0b-4a58-b158-5fb73e70a89f
 md"""
-# Reste
-"""
+## Zusammenhang mit Log-Likelihood
 
-# ╔═╡ b2fd7618-ab1f-4599-9805-d0fc2305595b
-md"""
-# Maximum-Likelihood Methode
-
-Die Maximum-Likelihood Methode ist eine, man könnte sagen \emph{die} Methode, um die wahrscheinlichsten Parameter eines beliebigen Modells zu schätzen, das einen Satz von Messwerten beschreibt. Das Problem liegt manchmal allerdings in nur nuimerisch zu lösenden Gleichungen.
-
-Die Messwerte $y_i$ sind als Funktion einer Variablen $x_i$ gemessen, wobei $x_i$ als wohl bekannt und fehlerfrei angenommen sein. Verallgemeinerungen auf Unsicherheiten in den $x_i$ sind möglich. Die Messwerte sollen durch ein Modell $y_0(x; a, b)$ beschrieben werden, wobei das Modell die Parameter $a$, $b$, ... besitzt.
-
-Weiterhin benötigt man eine Wahrscheinlichkeitsdichte $P_i$ die angibt, wie wahrscheinlich es ist, dass man $y_i$ an der Stelle $x_i$ gemessen hat, wo doch der 'wahre' Wert $y_0(x_i; a,b)$ beträgt. Die Wahrscheinlichkeit, genau diesen Satz Messwert $y_i$ zu messen, beträgt also
-```math
-L(a, b) =  A \prod P_i  \quad .
-```
-Das Symbol $L$ wird verwendet, weil diese Betrachtung zurückliegender, bereits geschehener Ereignisse 'likelihood' genannt wird. Die Konstante $A$ dient der Normierung. Der besten Schätzwert für die 'wahren' Parameter $a_0$, $b_0$, ... sind diejenigen Parameter $a$, $b$, ... die $L(a,b)$ maximieren. Dieses Optimum kann man in machen Fällen analytisch finden, in anderen nur numerisch. 
-"""
-
-# ╔═╡ d81588e3-6591-4329-9f21-cfa541eb76aa
-md"""
-### Beispiel 1: lineare Regression bei konstanten, normal-verteilten Unsicherheiten
-
-Unser Modell sei $y_0 = a + b \, x$. Die Unsicherheit in den Messwerten, eigentlich: die 'wahre' Breite der Verteilung der Messwerte, sei $\sigma_0$ und hier der Einfachheit halber unabhängig von $x_i$. Damit ist
-```math
- P_i = \frac{1}{\sigma_0 \sqrt{2 \pi}} \exp \left( - \frac{ (y_i - (a + b x_i))^2}{2 \, \sigma_0^2}  \     \right)
-```
-und
-```math
-L(a, b) = A \prod P_i  \propto \prod \exp \left( - \frac{ (y_i - (a + b x_i))^2}{2 \, \sigma_0^2}  \     \right) \quad .
-```
-An Stelle von $L(a,b)$ kann man auch die log-Likelihood-Funktion $\mathcal{L}= \log L(a,b)$ maximieren, also 
-```math
-\mathcal{L}(a, b) = - \frac{1}{2 \sigma_0^2} \, \sum  (y_i - (a + b x_i))^2  + \text{const.} \quad .
-```
-Das Maximum findet man, in dem man partiell je nach $a$ und $b$ ableitet und gemeinsame Nullstellen sucht. Diese sind (Bevington, Kap. 6.3)
-```math
-  a_0 = \frac{1}{\Delta'} \left( \sum x_i^2 \, \sum y_i -  \sum x_i \, \sum x_i y_i  \right) 
-```
-```math
-  b_0 = \frac{1}{\Delta'} \left(N  \sum x_i  y_i -  \sum x_i \, \sum  y_i  \right) 
-```
-mit
-```math 
-\Delta ' =  N  \sum x_i^2  -  \left( \sum x_i   \right)^2 
-```
-Die Unsicherheiten findet man in diesem Fall über Fehlerfortpflanzung
-```math
-\begin{aligned}
-\sigma_a^2 &=& \frac{\sigma^2}{\Delta'} \sum x_i^2 \\
-\sigma_b^2 &=& N \frac{\sigma^2}{\Delta'}  \\
-\text{mit} \quad \sigma^2 & = & \frac{1}{N -2} \sum \left( y_i - ( a + b x_i ) \right)^2 
-\end{aligned}
-```
-Man beachte die Ähnlichkeit von $\mathcal{L}(a,b) $ und $\sigma^2$.
-"""
-
-# ╔═╡ d3c4d384-f5e4-438c-896b-22de3cd0496e
-md"""
-
-### Beispiel 2: Poisson-Verteilung
-
-Eine Stärke der Maximum-Likelihood Methode ist, dass auch andere Verteilungen als die Normalverteilung verwendet werden können, beispielsweise die Poisson-Verteilung. Unser Modell sei weiterhin $y_0 = a + b \, x$, aber die Wahrscheinlichkeit, einen Wert $y_i$ zu finden folge einer Poisson-Verteilung mit $\lambda = y_0 = a + b \, x$, also
-```math
- P_i = \frac{\lambda^{y_i}}{y_i !} \exp ( - \lambda) = \frac{(a + b x_i)^{y_i}}{y_i !} \exp ( - (a + b x_i)) \quad.
-```
-Damit wird 
-```math
-\mathcal{L}(a,b) = \sum \left(y_i \log (a + b x_i) \right) -
- \sum \left(a + b x_i \right) + \text{const.}
-```
-Diese Funktion wird maximal, wenn 
-```math
-\begin{aligned}
-N  &=& \sum \frac{y_i}{a + b x_i} \\
-\sum x_i &=&  \frac{x_i \, y_i}{a + b x_i}
-\end{aligned}
-```
-gleichzeitig erfüllt sind. Eine Lösung für $a$, $b$ findet sich nur numerisch.
-
-"""
-
-# ╔═╡ 1b317494-d239-4bb8-ba45-67b2baba5067
-md"""
-## Numerische Bestimmung der Unsicherheit in den Parametern
-
-
-### Normalverteilung
-
-Wenn die erwartete Wahrscheinlichkeitsverteilung (nahezu) eine Normalverteilung ist und genügend Messwerte vorhanden sind, dass auch die Stichprobe normalverteilt ist, dann entspricht die experimentell bestimmte Standardabweichung $\sigma$ der 'wahren' Standardabweichung $\sigma_0$. Dies hat zur Folge, dass in der Taylor-Entwicklung von $\mathcal{L}$ um das Maximum herum schon $\sigma_0$ enthalten ist und der passende Taylor-Koeffizient die partielle Ableitung darstellt. Damit gilt
+Die Log-Likelihood-Funktion $\mathcal{L}$ hat ihr Maximum am wahrscheinlichsten Parameter $\tau_0$. Dies hat zur Folge, dass in der Taylor-Entwicklung von $\mathcal{L}$ um das Maximum herum schon $\sigma_0$ enthalten ist und der passende Taylor-Koeffizient die partielle Ableitung darstellt. Damit gilt
 ```math
  \sigma_\tau^2 = \left( \frac{\partial^2 \mathcal{L}(\tau)}{\partial \tau^2} \right)^{-1}
 ```
@@ -678,11 +617,11 @@ wobei $\tau_0$ der Parameter ist, der $\mathcal{L}$ maximiert. Bei mehr als eine
 
 # ╔═╡ 783b2d7a-f937-4bf9-a15c-380078bb27cc
 md"""
-### Bootstrapping
+## Bootstrapping
 
 Wenn eine Normalverteilung der Unsicherheit nicht angenommen werden kann, beispielsweise bei Poisson-Verteilungen mit $\lambda < 10$, dann ist 'bootstrapping' die Lösung. Wikipedia schreibt 'selten auch Münchhausen-Methode genannt', aber genau das ist die Idee. Man zieht sich an den Haaren aus dem Sumpf!
 
-Wir haben einen Datensatz aus $N$ Messwerten, die wir in $n$ Intervalle eines Histogramms einsortieren und mit unserem Modell des Histogramms vergleichen wollen. Histogramm-Balken-Höhen sind gezählte Ereignisse, also Poisson-verteilt. Wir passen an unser Histogramm ein Modell mittels der Maximum-Likelihood Methode an und bestimmen so die Parameter. Um die Unsicherheit in den Parametern zu bestimmen, erzeugen wir einen neuen Datensatz aus dem alten, originalen ('an dem Haaren aus dem Sumpf!'). Dazu ziehen wir zufällig  $N$ Werte aus dem originalen Datensatz \emph{mit Zurücklegen}. Einzelne originale Messwerte können also mehrfach im neuen Datensatz vorkommen, aber der Gesamtumfang bleibt $N$. An diesen neuen Datensatz passen wir unser Modell wieder an und bestimmen wieder die Parameter. Dies wiederholen wir so oft, dass wir glauben, den zentralen Grenzwertsatz zu erfüllen, z.B. 100-mal. Die Unsicherheit der Parameter ergibt sich aus der Standardabweichung der Verteilung der so ermittelten 100 Varianten der Parameter. Details finden sich z.B. in Bevington \& Robinson: Data reduction and error analysis, oder in Press et al. Numerical Recipes.
+Wir haben einen Datensatz aus $N$ Messwerten, die wir in $n$ Intervalle eines Histogramms einsortieren und mit unserem Modell des Histogramms vergleichen wollen. Histogramm-Balken-Höhen sind gezählte Ereignisse, also Poisson-verteilt. Wir passen an unser Histogramm ein Modell mittels der Maximum-Likelihood Methode an und bestimmen so die Parameter. Um die Unsicherheit in den Parametern zu bestimmen, erzeugen wir einen neuen Datensatz aus dem alten, originalen ('an dem Haaren aus dem Sumpf!'). Dazu ziehen wir zufällig  $N$ Werte aus dem originalen Datensatz *mit Zurücklegen*. Einzelne originale Messwerte können also mehrfach im neuen Datensatz vorkommen, aber der Gesamtumfang bleibt $N$. An diesen neuen Datensatz passen wir unser Modell wieder an und bestimmen wieder die Parameter. Dies wiederholen wir so oft, dass wir glauben, den zentralen Grenzwertsatz zu erfüllen, z.B. 100-mal. Die Unsicherheit der Parameter ergibt sich aus der Standardabweichung der Verteilung der so ermittelten 100 Varianten der Parameter. Details finden sich z.B. in Bevington & Robinson: Data reduction and error analysis, oder in Press et al. Numerical Recipes.
 
 """
 
@@ -1949,6 +1888,7 @@ version = "0.9.1+5"
 # ╠═bcef0d0b-45eb-4866-84eb-4b0444afdd2b
 # ╟─abf2f5d6-7ea8-4752-8a80-9ad66670e458
 # ╠═2249131d-b137-486d-a9d3-503a1bd6876e
+# ╟─91a2d24f-b139-4f61-9609-1618d491b68e
 # ╟─c001f17b-7a94-433c-8fee-d4e4975e5e0c
 # ╟─6860ac98-2744-4889-a477-f9f9137c2221
 # ╟─9b612cf5-0c99-4e70-b070-f7c0e7f7f151
@@ -1982,11 +1922,7 @@ version = "0.9.1+5"
 # ╟─046e3c23-ba68-431c-abf0-222e7baa1696
 # ╟─050f5698-8419-422a-b0ff-5cca01881e64
 # ╠═ed9157d6-ca3c-4440-9b68-e6954999e231
-# ╟─cbe3ed45-0450-45b5-8aff-4aa3d9b58b00
-# ╟─b2fd7618-ab1f-4599-9805-d0fc2305595b
-# ╟─d81588e3-6591-4329-9f21-cfa541eb76aa
-# ╟─d3c4d384-f5e4-438c-896b-22de3cd0496e
-# ╟─1b317494-d239-4bb8-ba45-67b2baba5067
+# ╟─edc35660-7d0b-4a58-b158-5fb73e70a89f
 # ╟─783b2d7a-f937-4bf9-a15c-380078bb27cc
 # ╠═b3511771-d307-4e33-8406-e561bfe72958
 # ╠═ea9b0a84-3b02-433a-b5df-d1b76b16ceaf

@@ -370,6 +370,22 @@ In der Poisson-Verteilung zählen wir auch Ereignisse, allerdings ohne dass die 
 
 """
 
+# ╔═╡ 6216d01f-ea57-4022-bd6f-7881385e8592
+md"""
+Nun gehen wir zu $n$ Kacheln über und lassen insgesamt genausoviele Tropfen auf die Kacheln fallen. Die Anzahl Treffer im markierten Bereich der ersten Kachel ist wie oben binomialverteilt, nämlich 
+```math
+\mathcal{B}(n, \lambda/n) = \binom{n}{x} \, \left(\frac{\lambda}{n} \right)^x \, \left(1-\frac{\lambda}{n} \right)^{n-x} 
+```
+Die Idee hinter '$n$ Tropfen auf $n$ Kacheln' ist, dass wir im Mittel immer gleich lang warten müssen, bis ein Tropfen den markierten Bereich triff.
+
+Die *Poisson-Verteilung* ist der Grenzwert davon für $n \rightarrow \infty$
+```math
+\mathcal{P}( \lambda)  = \lim_{n \rightarrow \infty} \mathcal{B}(n, \lambda/n) 
+= \frac{\lambda^x}{x!} \, e^{- \lambda}
+```
+Beispiele sind alle vom Typ 'viele ($n$ groß) seltene ($\lambda /n$ klein) Ereignisse', z.B. Anzahl der Staubpartikel in der Luft oder Anzahl der Photonen in einem Laserstrahl.
+"""
+
 # ╔═╡ 2561cbbf-ed9b-4431-b147-037e7f1ea059
 md"""
 Der Erwartungswert der Poissonverteilung und die Varianz sind beide $\lambda$. Die Summe von zwei Poissonverteilungen mit den Parametern $\lambda_1$ und $\lambda_2$ ist wieder einer Poissonverteilung mit dem Parameter $\lambda_1 + \lambda_2$.
@@ -622,17 +638,17 @@ aside(s) =  PlutoUI.ExperimentalLayout.aside(s);
 md"""
 # Unabhängige Ereignisse
 
-Zwei Messungen, Versuche oder Ereignisse nennt man unabhängig, $(aside(md"
-![image](https://github.com/MarkusLippitz/teca/raw/88491322ccf5b17f6513048528ed016f23411b45/res/03-Wahrscheinlichkeit/unabhaengig.png)
-*Schnittmenge zweier **unabhängiger** Ereignisse*"))
+Zwei Messungen, Versuche oder Ereignisse nennt man unabhängig, 
 wenn der Ausgang des einen keinen Einfluss auf den anderen hat. Wenn man mit zwei Würfeln würfelt, ist das Ergebnis des einen Würfels unabhängig vom anderen. Wenn man aber Kugeln aus einer Urne zieht, ohne diese wieder zurück zu legen, dann beeinflusst die erste Ziehung die Wahrscheinlichkeitsverteilung der zweiten Ziehung.
+$(aside([Resource("https://github.com/MarkusLippitz/teca/raw/88491322ccf5b17f6513048528ed016f23411b45/res/03-Wahrscheinlichkeit/unabhaengig.png", (:height => 150))  md"*Schnittmenge zweier **unabhängiger** Ereignisse*"]))  
+
 """
 
 # ╔═╡ c46261d0-9e3c-40a0-abd3-daa881810fb7
 md"""
 # Bedingte Wahrscheinlichkeit
 
-Wir betrachten zwei Ereignisse $A$ und $B$ aus dem gleichen Wahrscheinlichkeitsraum $\Omega$. $(aside(md"![image](https://github.com/MarkusLippitz/teca/raw/88491322ccf5b17f6513048528ed016f23411b45/res/03-Wahrscheinlichkeit/abhaengig.png)*Schnittmenge zweier **abhängiger** Ereignisse*")) 
+Wir betrachten zwei Ereignisse $A$ und $B$ aus dem gleichen Wahrscheinlichkeitsraum $\Omega$.   $(aside([Resource("https://github.com/MarkusLippitz/teca/raw/88491322ccf5b17f6513048528ed016f23411b45/res/03-Wahrscheinlichkeit/abhaengig.png", (:height => 150))  md"*Schnittmenge zweier **abhängiger** Ereignisse*"]))  
 
 Wir kennen die einzelnen 
 Wahrscheinlichkeiten $P(A)$ und $P(B)$. Wie ändert sich die Wahrscheinlichkeit für das Ereignis $B$, wenn wir wissen, dass Ereignis $A$ eingetreten ist? Dies beantwortet die bedingte Wahrscheinlichkeit $P(B | A)$ ('B unter der Voraussetzung A'). Aus geometrischen Überlegungen ergibt sich
@@ -648,8 +664,10 @@ md"""
 
 Bei einem medizinischen Test ([binärer Klassifikator](https://de.wikipedia.org/wiki/Beurteilung_eines_bin%C3%A4ren_Klassifikators)) beobachtet man ein Ereignis $B$ = 'Test positiv' und ist daran interessiert, ob jemand beispielsweise mit Corona infiziert ist (Ereignis $A$ = 'wirklich infiziert'). Im Labor gemessen hat man das jedoch andersrum: Man wendete den Test bei vielen Leuten an, von den man wusste, ob sie infiziert sind oder nicht. Man hat also $P(B|A)$ bestimmt.
 
+$(aside([Resource("https://github.com/MarkusLippitz/teca/raw/88491322ccf5b17f6513048528ed016f23411b45/res/03-Wahrscheinlichkeit/corona.png", (:height => 250))  md"*Baumdiagramm zum Corona-Test*"]) ) 
+
 Lassen sie uns als Beispiel den mir gerade vorliegenden Test betrachten. Im Beipackzettel findet sich das Ergebnis der Studie
- $(aside(md"![image](https://github.com/MarkusLippitz/teca/raw/88491322ccf5b17f6513048528ed016f23411b45/res/03-Wahrscheinlichkeit/corona.png)*Baumdiagramm zum Corona-Test*")) 
+
 
 |            | infiziert| gesund | Summe |
 |:---------- | :------- |:---------|:-----|
@@ -659,22 +677,9 @@ Lassen sie uns als Beispiel den mir gerade vorliegenden Test betrachten. Im Beip
 
 """
 
-# ╔═╡ f4118979-8e51-47b4-ab90-c49838be057e
+# ╔═╡ fb032133-bc1a-41d7-a4f7-549522ee0198
 md"""
-Wir folgen hier dem Regentropfen-Beispiel von Stahel und betrachten eine Kachel der Größe Eins. Auf dieser Kachel markieren wir einen Bereich der Fläche $\lambda < 1$. Der erste Regentropfen fällt auf diese Kachel. Die Wahrscheinlichkeit, dass er im markieren Bereich landet, beträgt $\lambda$. $(aside(md"![image](https://github.com/MarkusLippitz/teca/raw/88491322ccf5b17f6513048528ed016f23411b45/res/03-Wahrscheinlichkeit/poisson.png)*Kacheln und Regentropfen*")) 
-
-Nun gehen wir zu $n$ Kacheln über und lassen insgesamt genausoviele Tropfen auf die Kacheln fallen. Die Anzahl Treffer im markierten Bereich der ersten Kachel ist wie oben binomialverteilt, nämlich 
-```math
-\mathcal{B}(n, \lambda/n) = \binom{n}{x} \, \left(\frac{\lambda}{n} \right)^x \, \left(1-\frac{\lambda}{n} \right)^{n-x} 
-```
-Die Idee hinter '$n$ Tropfen auf $n$ Kacheln' ist, dass wir im Mittel immer gleich lang warten müssen, bis ein Tropfen den markierten Bereich triff.
-
-Die *Poisson-Verteilung* ist der Grenzwert davon für $n \rightarrow \infty$
-```math
-\mathcal{P}( \lambda)  = \lim_{n \rightarrow \infty} \mathcal{B}(n, \lambda/n) 
-= \frac{\lambda^x}{x!} \, e^{- \lambda}
-```
-Beispiele sind alle vom Typ 'viele ($n$ groß) seltene ($\lambda /n$ klein) Ereignisse', z.B. Anzahl der Staubpartikel in der Luft oder Anzahl der Photonen in einem Laserstrahl.
+Wir folgen hier dem Regentropfen-Beispiel von Stahel und betrachten eine Kachel der Größe Eins. Auf dieser Kachel markieren wir einen Bereich der Fläche $\lambda < 1$. Der erste Regentropfen fällt auf diese Kachel. Die Wahrscheinlichkeit, dass er im markieren Bereich landet, beträgt $\lambda$.  $(aside([Resource("https://github.com/MarkusLippitz/teca/raw/88491322ccf5b17f6513048528ed016f23411b45/res/03-Wahrscheinlichkeit/poisson.png", (:height => 100))  md"*Kacheln und Regentropfen*"]) ) 
 """
 
 # ╔═╡ e7f7f02a-b6cc-4f77-adbb-515a5bb45a45
@@ -1719,7 +1724,7 @@ version = "0.9.1+5"
 # ╟─eb16cc8a-37ef-46b4-aee4-59ce70cd5019
 # ╟─6df6dcf1-6e38-42ba-b748-568cf50dd22b
 # ╠═483f1c2e-f4ef-40dd-a70d-8ec000619167
-# ╠═c46261d0-9e3c-40a0-abd3-daa881810fb7
+# ╟─c46261d0-9e3c-40a0-abd3-daa881810fb7
 # ╟─ade0180c-b79d-4cd0-b832-d64ba65924d7
 # ╟─987fdd6a-a269-4f85-bcc4-e995df6ac9cd
 # ╟─bd5f753c-e2bc-4213-904a-1dd5b1299ef1
@@ -1743,7 +1748,8 @@ version = "0.9.1+5"
 # ╠═24a76770-6089-49d3-81da-b89a7e770693
 # ╠═655e3df7-65eb-41b1-ade4-0ea2c8f6dda3
 # ╟─b2c7d291-3020-4776-bc95-a65cbefe0228
-# ╟─f4118979-8e51-47b4-ab90-c49838be057e
+# ╟─fb032133-bc1a-41d7-a4f7-549522ee0198
+# ╟─6216d01f-ea57-4022-bd6f-7881385e8592
 # ╟─2561cbbf-ed9b-4431-b147-037e7f1ea059
 # ╟─23588033-586a-480b-87c1-9f5c1c73eeb8
 # ╠═d7a06eb0-3df4-48d8-b245-0b0af5aec685
