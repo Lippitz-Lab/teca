@@ -406,9 +406,9 @@ In der Poisson-Verteilung zählen wir auch Ereignisse, allerdings ohne dass die 
 
 # ╔═╡ f4118979-8e51-47b4-ab90-c49838be057e
 md"""
-Wir folgen hier dem Regentropfen-Beispiel von Stahel und betrachten eine Kachel der Größe Eins. Auf dieser Kachel markieren wir einen Bereich der Fläche $\lambda y 1$. Der erste Regentropfen fällt auf diese Kachel. Die Wahrscheinlichkeit, dass er im markieren Bereich landet, beträgt $\lambda$.
+Wir folgen hier dem Regentropfen-Beispiel von Stahel und betrachten eine Kachel der Größe Eins. Auf dieser Kachel markieren wir einen Bereich der Fläche $\lambda < 1$. Der erste Regentropfen fällt auf diese Kachel. Die Wahrscheinlichkeit, dass er im markieren Bereich landet, beträgt $\lambda$.
 
-Nun gehen wir zu $n$ Kacheln über und lassen insgesamt genausoviele Tropfen auf die Kacheln fallen. Die aAnzahl Treffer im markierten Bereich der ersten Kachel ist wie oben binomialverteilt, nämlich 
+Nun gehen wir zu $n$ Kacheln über und lassen insgesamt genausoviele Tropfen auf die Kacheln fallen. Die Anzahl Treffer im markierten Bereich der ersten Kachel ist wie oben binomialverteilt, nämlich 
 ```math
 \mathcal{B}(n, \lambda/n) = \binom{n}{x} \, \left(\frac{\lambda}{n} \right)^x \, \left(1-\frac{\lambda}{n} \right)^{n-x} 
 ```
@@ -666,15 +666,6 @@ let
 	
 	plot!(x, pdf.(Normal(),x), label="Standard-Normal")  # Normalverteilung zum Vgl
 end
-
-# ╔═╡ 1842a8aa-5819-4719-8d73-02206be09594
-md"""
-# Reste
-
-- Gesetz der großen Zahlen
-- Erzeugung von willk. verteilen Zufallszahlen
-
-"""
 
 # ╔═╡ e7f7f02a-b6cc-4f77-adbb-515a5bb45a45
 TableOfContents(title="Inhalt")
@@ -1774,7 +1765,6 @@ version = "0.9.1+5"
 # ╟─6279a1d0-a496-4805-979b-a75e3774a089
 # ╠═44e80799-7380-4ff1-b0bc-f20b9f4e099f
 # ╠═b01cca80-c3d5-4d4f-b737-893674d02af4
-# ╟─1842a8aa-5819-4719-8d73-02206be09594
 # ╠═415d2c7d-b4a3-4565-99ed-9b04e6569b73
 # ╠═e7f7f02a-b6cc-4f77-adbb-515a5bb45a45
 # ╟─00000000-0000-0000-0000-000000000001
