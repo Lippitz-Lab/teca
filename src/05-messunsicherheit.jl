@@ -158,9 +158,11 @@ md"""
 # Bestimmung der Messunsicherheit
 """
 
-# ╔═╡ 20e4a6cc-42d5-46bc-83e8-87b2a8b8b786
+# ╔═╡ f9182cc9-95f0-43b7-b302-bc508739bce7
+Resource("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/04-Messunsicherheit/workflow_std.png", (:width => 500))
+
+# ╔═╡ bd5bff60-209f-4fe1-adea-a1289dd3a952
 md"""
-![image](https://raw.githubusercontent.com/MarkusLippitz/teca/67323e313d260b13ba48fa11a0d3a032ffac1db0/res/04-Messunsicherheit/workflow_std.png)
 *Schema zur Bestimmung der Messunsicherheit nach GUM, aus JCGM104:2009, dt*
 """
 
@@ -439,9 +441,11 @@ Wahrscheinlichkeit liegt. Dieses Intervall wird Überdeckungsintervall oder Konf
 genannt.
 """
 
-# ╔═╡ 73eec275-6610-4ff3-89c1-eb0a84f9bcf3
+# ╔═╡ 0bdb7433-a309-4448-b7ce-5683ddb46a95
+Resource("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/04-Messunsicherheit/workflow_ausf.png", (:width => 500))
+
+# ╔═╡ 235f57fd-c0f9-4dda-a30f-98e3bb64a6ac
 md"""
-![image](https://raw.githubusercontent.com/MarkusLippitz/teca/67323e313d260b13ba48fa11a0d3a032ffac1db0/res/04-Messunsicherheit/workflow_ausf.png)
 *Schema zur Bestimmung des Überdeckungsintervalls  nach GUM, aus JCGM104:2009, dt. Der linke obere Bereich wurde schon im vorangegangenen Abschnitt besprochen*
 """
 
@@ -1669,7 +1673,8 @@ version = "0.9.1+5"
 # ╟─db28dc51-f417-459e-a0eb-b93dced3cc25
 # ╟─13858297-cad0-42a6-aa3e-1b25f4811434
 # ╟─55150760-9de7-449f-96b3-ee5275c30378
-# ╠═20e4a6cc-42d5-46bc-83e8-87b2a8b8b786
+# ╠═f9182cc9-95f0-43b7-b302-bc508739bce7
+# ╟─bd5bff60-209f-4fe1-adea-a1289dd3a952
 # ╟─4d08ccd2-0ce3-4466-a0d2-8806d2469de3
 # ╟─f32c0f08-4425-4ae3-ae39-77950a42d9ba
 # ╟─90d83d12-3ba7-4158-9ebb-53db69477c30
@@ -1689,7 +1694,8 @@ version = "0.9.1+5"
 # ╟─665bdacc-7330-4840-a200-c2ae44a9f371
 # ╟─7288c7a1-f7e1-4750-b233-ca520737316e
 # ╟─04bde4a4-242d-4640-b950-9e3fa5b1536e
-# ╟─73eec275-6610-4ff3-89c1-eb0a84f9bcf3
+# ╟─0bdb7433-a309-4448-b7ce-5683ddb46a95
+# ╟─235f57fd-c0f9-4dda-a30f-98e3bb64a6ac
 # ╟─276be9a6-95d8-48b6-94bc-d035767d62b5
 # ╟─68dca4d6-634e-4a6f-8e84-1d66d7df2775
 # ╠═df9d5a69-6e16-46af-8233-1e91461f321b

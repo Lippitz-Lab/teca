@@ -640,7 +640,7 @@ md"""
 
 Zwei Messungen, Versuche oder Ereignisse nennt man unabhängig, 
 wenn der Ausgang des einen keinen Einfluss auf den anderen hat. Wenn man mit zwei Würfeln würfelt, ist das Ergebnis des einen Würfels unabhängig vom anderen. Wenn man aber Kugeln aus einer Urne zieht, ohne diese wieder zurück zu legen, dann beeinflusst die erste Ziehung die Wahrscheinlichkeitsverteilung der zweiten Ziehung.
-$(aside([Resource("https://github.com/MarkusLippitz/teca/raw/88491322ccf5b17f6513048528ed016f23411b45/res/03-Wahrscheinlichkeit/unabhaengig.png", (:height => 150))  md"*Schnittmenge zweier **unabhängiger** Ereignisse*"]))  
+$(aside([Resource("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/03-Wahrscheinlichkeit/unabhaengig.png", (:height => 150))  md"*Schnittmenge zweier **unabhängiger** Ereignisse*"]))  
 
 """
 
@@ -648,7 +648,7 @@ $(aside([Resource("https://github.com/MarkusLippitz/teca/raw/88491322ccf5b17f651
 md"""
 # Bedingte Wahrscheinlichkeit
 
-Wir betrachten zwei Ereignisse $A$ und $B$ aus dem gleichen Wahrscheinlichkeitsraum $\Omega$.   $(aside([Resource("https://github.com/MarkusLippitz/teca/raw/88491322ccf5b17f6513048528ed016f23411b45/res/03-Wahrscheinlichkeit/abhaengig.png", (:height => 150))  md"*Schnittmenge zweier **abhängiger** Ereignisse*"]))  
+Wir betrachten zwei Ereignisse $A$ und $B$ aus dem gleichen Wahrscheinlichkeitsraum $\Omega$.   $(aside([Resource("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/03-Wahrscheinlichkeit/abhaengig.png", (:height => 150))  md"*Schnittmenge zweier **abhängiger** Ereignisse*"]))  
 
 Wir kennen die einzelnen 
 Wahrscheinlichkeiten $P(A)$ und $P(B)$. Wie ändert sich die Wahrscheinlichkeit für das Ereignis $B$, wenn wir wissen, dass Ereignis $A$ eingetreten ist? Dies beantwortet die bedingte Wahrscheinlichkeit $P(B | A)$ ('B unter der Voraussetzung A'). Aus geometrischen Überlegungen ergibt sich
@@ -664,7 +664,7 @@ md"""
 
 Bei einem medizinischen Test ([binärer Klassifikator](https://de.wikipedia.org/wiki/Beurteilung_eines_bin%C3%A4ren_Klassifikators)) beobachtet man ein Ereignis $B$ = 'Test positiv' und ist daran interessiert, ob jemand beispielsweise mit Corona infiziert ist (Ereignis $A$ = 'wirklich infiziert'). Im Labor gemessen hat man das jedoch andersrum: Man wendete den Test bei vielen Leuten an, von den man wusste, ob sie infiziert sind oder nicht. Man hat also $P(B|A)$ bestimmt.
 
-$(aside([Resource("https://github.com/MarkusLippitz/teca/raw/88491322ccf5b17f6513048528ed016f23411b45/res/03-Wahrscheinlichkeit/corona.png", (:height => 250))  md"*Baumdiagramm zum Corona-Test*"]) ) 
+$(aside([Resource("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/03-Wahrscheinlichkeit/corona.png", (:height => 250))  md"*Baumdiagramm zum Corona-Test*"]) ) 
 
 Lassen sie uns als Beispiel den mir gerade vorliegenden Test betrachten. Im Beipackzettel findet sich das Ergebnis der Studie
 
@@ -679,7 +679,7 @@ Lassen sie uns als Beispiel den mir gerade vorliegenden Test betrachten. Im Beip
 
 # ╔═╡ fb032133-bc1a-41d7-a4f7-549522ee0198
 md"""
-Wir folgen hier dem Regentropfen-Beispiel von Stahel und betrachten eine Kachel der Größe Eins. Auf dieser Kachel markieren wir einen Bereich der Fläche $\lambda < 1$. Der erste Regentropfen fällt auf diese Kachel. Die Wahrscheinlichkeit, dass er im markieren Bereich landet, beträgt $\lambda$.  $(aside([Resource("https://github.com/MarkusLippitz/teca/raw/88491322ccf5b17f6513048528ed016f23411b45/res/03-Wahrscheinlichkeit/poisson.png", (:height => 100))  md"*Kacheln und Regentropfen*"]) ) 
+Wir folgen hier dem Regentropfen-Beispiel von Stahel und betrachten eine Kachel der Größe Eins. Auf dieser Kachel markieren wir einen Bereich der Fläche $\lambda < 1$. Der erste Regentropfen fällt auf diese Kachel. Die Wahrscheinlichkeit, dass er im markieren Bereich landet, beträgt $\lambda$.  $(aside([Resource("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/03-Wahrscheinlichkeit/poisson.png", (:height => 100))  md"*Kacheln und Regentropfen*"]) ) 
 """
 
 # ╔═╡ e7f7f02a-b6cc-4f77-adbb-515a5bb45a45

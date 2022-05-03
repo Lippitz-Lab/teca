@@ -89,7 +89,7 @@ Dann laden wir die Datei in die Variable 'datensatz'. Die Spalten sind durch ein
 """
 
 # ╔═╡ 1868cca5-3cfb-4376-8468-d13831366cc9
-datensatz = CSV.read(download("https://raw.githubusercontent.com/MarkusLippitz/teca/simple/res/02-beschreibende-statistik/Temperatur_1_0_05_1_Tag_210801.dat"), DataFrame; delim='\t', header=5)
+datensatz = CSV.read(download("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/02-beschreibende-statistik/Temperatur_1_0_05_1_Tag_210801.dat"), DataFrame; delim='\t', header=5)
 
 # ╔═╡ 436b8f12-d833-42ec-b85c-31eb96ad862a
 md"""
@@ -514,7 +514,7 @@ Wir laden vier Dateien in eine gemeinsame Variable
 # ╔═╡ 11affb9f-2d9a-47a4-9cb1-2e6ead3de727
 begin 
 	räume = ["1_0_05_1","1_0_05_3","2_0_08","3_0_07"]
-	files = ["https://raw.githubusercontent.com/MarkusLippitz/teca/simple/res/02-beschreibende-statistik/Temperatur_$(r)_Tag_210801.dat" for r in räume]
+	files = ["https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/02-beschreibende-statistik/Temperatur_$(r)_Tag_210801.dat" for r in räume]
 	datensätze = CSV.read.(download.(files), DataFrame; delim='\t', header=5)
 	# man beachte den Punkt in "read.(download" und den in "download.(files" !
 	# -> Wende alles auf alle Eintröge in "räume" an
