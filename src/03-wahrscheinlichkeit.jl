@@ -47,6 +47,8 @@ md"""
 
 -   stetige Verteilungen: Normal, Log-Normal
 
+-  Satz von Bayes
+
 -   zentraler Grenzwertsatz
 """
 
