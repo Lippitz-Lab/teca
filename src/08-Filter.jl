@@ -164,8 +164,6 @@ Wir betrachten auf verschiedene Weisen einen unbelasteten
 RC-Tiefpass-Filter. Es wird also nur eine Spannung $U_{out}$ gemessen
 und kein Strom $I_{out}$ fließt.
 
-![Schaltbild des RC-Tiefpass-Filters](RC.png){width="50%"}
-
 """
 
 # ╔═╡ 3eac92be-4058-4534-ae17-97833937e58a
@@ -264,6 +262,12 @@ zu negativen Indizes. Mit $k = \Delta t / (R C)$ also
      out = filter( [1, 1-k], [0, k], in ) 
 
 """
+
+# ╔═╡ d7132d3c-0b4f-4eee-93e3-53cff88d8864
+aside(x) = PlutoUI.ExperimentalLayout.aside(x);
+
+# ╔═╡ 048f044d-6ef0-44ba-bb8d-a6a5f4eb2674
+aside([Resource("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/08-Filter/RC.png", (:width => 500)) md"*Schaltbild eines RC Filters*"])
 
 # ╔═╡ 19032436-b4e1-4c7b-9d05-2c4e94725973
 TableOfContents(title="Inhalt")
@@ -493,13 +497,15 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─8787ecd7-ed54-469c-a748-19605c2dd665
 # ╟─64410607-6541-4aae-95b1-e4d3fde884ce
 # ╟─063afec8-4ec1-4ec7-87f0-890a86662875
-# ╠═f432282b-c46f-48c1-9f7b-d5cb35c31dbc
+# ╟─f432282b-c46f-48c1-9f7b-d5cb35c31dbc
+# ╟─048f044d-6ef0-44ba-bb8d-a6a5f4eb2674
 # ╟─3eac92be-4058-4534-ae17-97833937e58a
 # ╟─5b287990-d893-416a-92d9-b44372f1651f
 # ╟─feda6789-451a-4c43-9c45-213a34bff474
 # ╟─e8084197-163f-4221-90d8-a2ae614d2e73
 # ╟─a8cf52a2-1f52-4a20-9917-841253af3dbb
 # ╠═abdfdbc2-5bb5-4a0e-8a1f-5cb733e16f42
+# ╠═d7132d3c-0b4f-4eee-93e3-53cff88d8864
 # ╠═19032436-b4e1-4c7b-9d05-2c4e94725973
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
