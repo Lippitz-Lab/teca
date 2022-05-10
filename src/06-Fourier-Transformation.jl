@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.0
+# v0.19.4
 
 using Markdown
 using InteractiveUtils
@@ -45,9 +45,7 @@ md"""
 
 # Überblick
 
-Der reziproke Raum in der Festkörperphysik ist die
-Fourier-Transformierte des Realraums. Es ist daher sinnvoll und
-hilfreich, einen intuitiven Zugang zur Fourier-Transformation zu haben.
+An vielen Stellen in der Phyisk ist es sinnvoll und hilfreich, einen intuitiven Zugang zur Fourier-Transformation zu haben.
 Im Endeffekt muss man in der Experimentalphysik nur selten eine
 Fourier-Transformation wirklich ausrechnen. Sehr oft reicht es, ein paar
 oft vorkommende Fourier-Paare zu kennen und diese mit einfachen Regeln
@@ -105,67 +103,6 @@ aber notwendig, wenn man weiterhin $F(\omega = 0)$ als Mittelwert
 behalten will. Alternativ könnte man das alles mit $\nu$ statt $\omega$
 formulieren, hätte dann aber an viel mehr Stellen ein $2 \pi$, wenn auch
 nicht vor dem Integral.
-
-Mit dieser Form werden wir gleich weiterarbeiten.
-"""
-
-# ╔═╡ 57172dec-aadd-4d76-8d02-cbfb34105094
-md"""
-# Diskrete FT: eine periodische Zahlenfolge und deren Fourier-Transformierte Zahlenfolge
-
-Zunächst noch eine Nebenbemerkung zur diskreten Fourier-Transformation.
-Insbesondere wenn man mit einem Computer Messwerte erfasst und
-auswertet, dann kennt man die gemessene Funktion $f(t)$ weder auf einer
-kontinuierlichen Achse $t$, sondern nur zu diskreten Zeiten
-$t_k = k \, \Delta t$, noch kennt man die Funktion von $t = - \infty$
-bis $t = + \infty$. Als Ausgangspunkt hat man also nur eine Zahlenfolge
-$f_k$ endlicher Länge.
-
-Weil wir die Zahlenfolge außerhalb des gemessenen Intervalls nicht
-kennen machen wir die Annahme, dass sie periodisch ist. Bei $N$
-gemessenen Werte ist die Periodendauer also $T = N \Delta t$. Der
-Einfachheit halber definieren wir auch $f_k = f_{k + N}$ und somit
-$f_{-k} = f_{N - k}$ mit $k= 0, 1, \dots, N-1$. Damit wird die
-Fourier-Transformation 
-```math
-\begin{aligned}
- F_j = & \frac{1}{N} \, \sum_{k=0}^{N-1} \, f_k \, e^{- k \, j \, 2 \pi i / N } \\
-  f_k = &  \sum_{j=0}^{N-1} \, F_j \, e^{+ k \,  j \, 2 \pi i / N } \end{aligned}
-```
-Die Definition ist wieder so, dass $F_0$ dem Mittelwert entspricht.
-Wegen $f_{-k} = f_{N - k}$ liegen die positiven Frequenzen mit
-steigender Frequenz in der ersten Hälfte von $F_j$. Danach kommen die
-negativen Frequenzen, beginnend bei der 'negativsten' Frequenz steigend
-mit zur letzten Frequenz vor der Frequenz Null. Die maximal darstellbare
-Frequenz ist also die Nyquist-(Kreis-)Frequenz
-```math
-\Omega_\text{Nyquist} = \frac{\pi}{\Delta t}
-```
-"""
-
-# ╔═╡ fc843d6c-9559-4895-9e7f-7e36fb8f1ed1
-md"""
-## Nebenbemerkung: Delta-Funktion
-
-Die Delta-Funktion kann geschrieben werden als
-```math
-\delta(x) = \lim_{a \rightarrow 0} f_a(x) \quad
-   \text{mit} \quad
-    f_a(x) = \left\{ \begin{matrix}
-    a  & \text{falls } |x| < \frac{1}{2a} \\
-    0 & \text{sonst}
-    \end{matrix}
-    \right.
-```
-oder als
-```math
-\delta(x)  = \frac{1}{2 \pi}  \int_{-\infty}^{+\infty} \, e^{+ i\, x \, y} \, dy
-```
-Eine wichtige Eigenschaft ist, dass die delta-Funktion einen Wert
-selektiert, also
-```math
-\int_{-\infty}^{+\infty} \, \delta(x) \, f(x) \, dx = f(0)
-```
 """
 
 # ╔═╡ 1a6ceadb-ac9c-4ae5-bb27-de1e402d6769
@@ -375,7 +312,9 @@ i \omega \,  F(\omega)
 
 # ╔═╡ 9efa0309-66a1-42a4-b426-7f37df6b6343
 md"""
-## Selbstkontrolle
+# Selbstkontrolle
+
+## Zeitliche Verscheibung
 
 - Skizzieren Sie Amplitude und Phase der FT eines zeitlichen Rechteckpulses, der um die zeitliche Null zentriert ist!
 
@@ -384,7 +323,7 @@ md"""
 
 # ╔═╡ ddf7074e-55a4-415a-be10-42e621e90d72
 md"""
-## Selbstkontrolle
+## Pulsfolge
 
 Sie fragen sich, wie die Fouriertransformierte (Betragsquadrat) einer unendlichen Folge von Rechteckpulsen aussieht und fangen an, danach im Internet zu suchen.
 Ihre Kommilitonin entgegnet, das „sehe“ man doch sofort.
@@ -394,9 +333,10 @@ Ihre Kommilitonin entgegnet, das „sehe“ man doch sofort.
 
 # ╔═╡ de69cf55-8674-465b-8d12-498335e28673
 md"""
-## Selbstkontrolle
+## Lichtpuls
 
-Stellen Sie sich einen „Lichtpuls“ vor als mathematische Konstruktion aus einer unendlich langen Cosinusschwingung, die der Lichtfrequenz entspricht. Den „Puls“ erhält man daraus, indem man die Welle mit einer zeitlich begrenzten Gaußpuls-Einhüllenden (z.B. Halbwertsbreite von 10 Lichtschwingungen) multipliziert.  Skizzieren Sie die Konstruktion der Fouriertransformation im Spektralbereich
+Stellen Sie sich einen „Lichtpuls“ vor als mathematische Konstruktion aus einer unendlich langen Cosinusschwingung, die der Lichtfrequenz entspricht. Den „Puls“ erhält man daraus, indem man die Welle mit einer zeitlich begrenzten Gaußpuls-Einhüllenden (z.B. Halbwertsbreite von 10 Lichtschwingungen) multipliziert. 
+- Skizzieren Sie die Konstruktion der Fouriertransformation im Spektralbereich
 """
 
 # ╔═╡ d2425be8-db4f-4f84-b991-6bac1937e78e
@@ -729,8 +669,6 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─87cc27e7-f022-459c-b18b-822db429a9ac
 # ╟─abaed463-1734-4801-9046-87d8b6fcf41a
 # ╟─31bb538c-f011-4c7c-904b-e4aaafa47fc1
-# ╟─57172dec-aadd-4d76-8d02-cbfb34105094
-# ╟─fc843d6c-9559-4895-9e7f-7e36fb8f1ed1
 # ╟─1a6ceadb-ac9c-4ae5-bb27-de1e402d6769
 # ╟─c960650a-75e1-4408-a1a7-b820d6a5eae2
 # ╟─19db36cf-1341-4604-bfb4-2ecf0a72aaaf

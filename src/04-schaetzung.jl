@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.0
+# v0.19.4
 
 using Markdown
 using InteractiveUtils
@@ -35,7 +35,7 @@ html"""<div>
 <font size="7"><b>4 Schätzung</b></font> </div>
 
 <div><font size="5"> Markus Lippitz </font> </div>
-<div><font size="5"> 2. Mai 2022 </font> </div>
+<div><font size="5"> 10. Mai 2022 </font> </div>
 """
 
 # ╔═╡ 73429f7a-96f1-11ec-2061-8f45c81fe4bc
@@ -186,7 +186,7 @@ Schätzer liefern als einen Schätzwert für den Parameter einer Wahrscheinlichk
 
 # ╔═╡ 655f1aa1-7397-45c5-973e-6a690f9807ff
 md"""
-Wir folgen hier dem Beispiel von Stahel, Kapitel 7.4. Wir führen ein Experiment durch, werfen eine Münze o.ä. Dies gelingt mit einer Wahrscheinlichkeit $p$. Wir führen das so oft durch, bis es einmal misslingt. Die Wahrscheinlichkeit, dass es bei Versuch $x$ misslingt ist geometrisch verteilt, also
+Wir folgen hier dem **Beispiel** von Stahel, Kapitel 7.4. Wir führen ein Experiment durch, werfen eine Münze o.ä. Dies gelingt mit einer Wahrscheinlichkeit $p$. Wir führen das so oft durch, bis es einmal misslingt. Die Wahrscheinlichkeit, dass es nach dem Versuch $x$ misslingt ist geometrisch verteilt, also
 ```math
 P\left<X=x\right> = (1-p)\, p^x
 ```
@@ -527,22 +527,29 @@ md"""
 Ein Problem ist hier, dass die Standardabweichung $\sigma$ hier die **wahre** Standardabweichung ist. Wir kennen aber typischerweise nur eine **geschätzte** Standardabweichung, die wir auf Grundlage unserer Messwerte schätzen müssen. Diesen zusätzlichen Faktor diskutieren wir im nächsten Kapitel.
 """
 
-# ╔═╡ 046e3c23-ba68-431c-abf0-222e7baa1696
+# ╔═╡ 2124df9e-9c06-46da-acc0-299ff9854e45
 md"""
 ## Bsp. Gauß'sche Fehlerrechnung
 
-Die Gauß'sche Fehlerrechnung kann als Methode der Intervallschätzung gesehen werden. Wir haben mehrere Messwerte $x_i$, die wir durch ein Modell $f(x; p_j)$ mit den Parametern $p_j$ beschreiben wollen. Wir finden die $p_j$, indem wir die quadratische Abweichung minimieren, also nach den $p_j$ ableiten und Null setzen, also
+Die Gauß'sche Fehlerrechnung kann als Methode der Intervallschätzung gesehen werden. Wir haben mehrere Messwerte $y_i$ an Stellen $x_i$, die wir durch ein Modell $f(x; p_j)$ mit den Parametern $p_j$ beschreiben wollen. Wir finden die $p_j$, indem wir die quadratische Abweichung minimieren, also nach den $p_j$ ableiten und Null setzen, also
 ```math
-\frac{\partial}{\partial p_k} \sum_i (x_i - f(x_i; p_j))^2 = 0
+\frac{\partial}{\partial p_j} \sum_i (y_i - f(x_i; p_k))^2 = 0
 ```
 So erhalten wir ein Gleichungssystem zur Bestimmung der $p_j$, das wir lösen.
+"""
 
-Das Konfidenzintervall um diese optimalen $p_j$ erhalten wir durch Gauß'sche Fehlerfortpflanzung durch dieses Gleichungssystem. Dazu nehmen wir zum einen eine Normalverteilung bei den Messwerten $x_i$ an, zum anderen linearisieren wir die Bestimmungsgleichen in der Nähe der optimalen $p_j$. (Wenn man beides nicht machen will: siehe nächstes Kapitel)
+# ╔═╡ 91d436f1-166a-4d08-b376-2f365b56bece
+md"""
+Das Konfidenzintervall um diese optimalen $p_j$ erhalten wir durch Gauß'sche Fehlerfortpflanzung durch dieses Gleichungssystem: Die Unsicherheit $\sigma_j$ im Paramter $p_j$ ist die partielle Ableitung des Parameters nach allen Messwerten $y_i$ multipliziert mit deren Unsicherheit $\sigma_i$, und alles quadratisch addiert, also
+```math
+\sigma_j^2 = \sum_i \sigma_i^2 \left(  \frac{\partial p_j}{\partial y_i} \right)^2
+```
+Dabei haben wir die Bestimmungsgleichung für die $p_j$ in der Nähe der optimalen $p_j$ linearisiert, weil nur die erste Ableitung eingeht.
 """
 
 # ╔═╡ 050f5698-8419-422a-b0ff-5cca01881e64
 md"""
-Sei unser Modell eine Gerade
+Als Beispiel betrachetn wir jetzt eine Gerade
 ```math
 y = a + b x
 ```
@@ -552,14 +559,15 @@ Die Koeffizienten werden bestimmt über
 \hat{b} = cor_{xy} \,  \frac{\sigma_y}{\sigma_x}  \quad \text{und} \quad
 	\hat{a} = \bar{y} - \hat{b} \bar{x} 
 ```
+wobei $\sigma_x$ bzw.  $\sigma_y$ die Standardabweichung über alle Werte $x_i$ bzw. $y_i$ ist und $cor_{xy}$ der Korrealtions-Koeffizient (siehe auch Kapitel 2).
 
 Unter der Annahme von identischen Unsicherheiten in allen Messwerten ist ein guter Schätzer der Unsicherheit des einzelnen Messpunkts die mittlere quadratische Abweichung zum Modell, also
 ```math
 \hat{\sigma} = \frac{1}{N-2} \sum_i \left( y_i - (\hat{a} + \hat{b} x_i) \right)^2
 ```
-Die 2 in $N-2$ stammt von den zwei durch $\hat{a}$ udn $\hat{b}$ verbrauchten Freiheitsgarden der Messung, analog zur Schätzung der Standardabweichung oben.
+Die 2 in $N-2$ stammt von den zwei durch $\hat{a}$ und $\hat{b}$ verbrauchten Freiheitsgarden der Messung, analog zur Schätzung der Standardabweichung oben.
 
-Damit bekommt man durch Fehlerfortpflanzung (siehe Bevoington Kap 6.4 und Stahel Kap. 13.2)
+Damit bekommt man durch Fehlerfortpflanzung (siehe Bevington Kap 6.4 und Stahel Kap. 13.2)
 ```math
 \hat{\sigma_a} = \hat{\sigma} \, \sqrt{\frac{\sum x_i^2}{\Delta}}
 \quad \text{und} \quad
@@ -600,19 +608,39 @@ let
 	annotate!(10,7, "b: $(b_true) vs. $(round(b, digits=2)) +- $(round(σ_b, digits=2))")
 end
 
-# ╔═╡ edc35660-7d0b-4a58-b158-5fb73e70a89f
+# ╔═╡ bbd7467e-7f68-4446-b6aa-90730f8eb497
 md"""
-## Zusammenhang mit Log-Likelihood
+## Bedingung an $\chi^2$ 
 
-Die Log-Likelihood-Funktion $\mathcal{L}$ hat ihr Maximum am wahrscheinlichsten Parameter $\tau_0$. Dies hat zur Folge, dass in der Taylor-Entwicklung von $\mathcal{L}$ um das Maximum herum schon $\sigma_0$ enthalten ist und der passende Taylor-Koeffizient die partielle Ableitung darstellt. Damit gilt
+Wir hatten oben gesehen, dass die Summe der gewichteten Residuen $\chi^2$ 
 ```math
- \sigma_\tau^2 = \left( \frac{\partial^2 \mathcal{L}(\tau)}{\partial \tau^2} \right)^{-1}
+\chi^2 = \sum_i \frac{(y_i - f(x_i; p))^2}{\sigma_i^2}
 ```
-für die Unsicherheit im Parameter $\tau$. Dies ist in dieser Näherung äquivalent mit
+minimal wird für die wahrscheinlichsten Parameter $p$. Der Erwartungswert für dieses Minimum ist die Anzahl der Freiheitsgrade $\nu$ der Messung (Bevington, Kap. 4.4)
 ```math
- \mathcal{L}(\tau_0 \pm \sigma_\tau) =  \mathcal{L}(\tau_0) - \frac{1}{2} 
+\mathcal{E}(\chi^2) = \nu = n - n_c
 ```
-wobei $\tau_0$ der Parameter ist, der $\mathcal{L}$ maximiert. Bei mehr als einem Parameter stellt die Kontur bei  $\mathcal{L}_{\text{max}} - 1/2$ auch die Kovarianz der Unsicherheit in den  Parametern dar.
+wobei die Messung $n$ Datenpunkte umfasst und $n_c$ Parameter im Modell verwendet ('verbraucht') wurden. Manchmal definiert man 
+```math
+\chi_\nu^2 = \chi^2 / \nu \quad \text{mit} \quad \mathcal{E}(\chi_\nu^2) =1 
+```
+"""
+
+# ╔═╡ a396e3c3-8082-404c-9d42-46aa77444ba5
+md"""
+Wie ändert sich $\chi^2$ mit den Parametern $p_j$? Die erste Ableitung ist nach Definition Null. Die zweite ist verknüpft mit der Unsicherheit $\sigma_j$ im Parameter $p_j$ (aus der Verbindung zur Log-Likelihood-Funktion $\mathcal{L}$, Bevington, eq. 8.10)
+```math
+\frac{\partial^2 \chi^2}{\partial p_j^2} = \frac{2}{\sigma_j^2}
+```
+bzw
+```math
+ \sigma_j^2 = \left( \frac{\partial^2 \mathcal{L}(p_j)}{\partial p_j^2} \right)^{-1}
+```
+oder andersherum
+```math
+ \mathcal{L}(p_j \pm \sigma_j) =  \mathcal{L}(p_j) - \frac{1}{2} 
+```
+Bei mehr als einem Parameter stellt die Kontur bei  $\mathcal{L}_{\text{max}} - 1/2$ also auch die Kovarianz der Unsicherheit in den  Parametern dar.
 """
 
 # ╔═╡ 783b2d7a-f937-4bf9-a15c-380078bb27cc
@@ -1919,10 +1947,12 @@ version = "0.9.1+5"
 # ╟─3eed2b8a-c56f-45c6-b796-b7e0f8d69a1e
 # ╠═b1c45b8b-8818-4417-afa3-dc4f207b44a6
 # ╟─4c426122-22bc-4ccf-ac1c-ffe3f1ee68fc
-# ╟─046e3c23-ba68-431c-abf0-222e7baa1696
+# ╟─2124df9e-9c06-46da-acc0-299ff9854e45
+# ╟─91d436f1-166a-4d08-b376-2f365b56bece
 # ╟─050f5698-8419-422a-b0ff-5cca01881e64
 # ╠═ed9157d6-ca3c-4440-9b68-e6954999e231
-# ╟─edc35660-7d0b-4a58-b158-5fb73e70a89f
+# ╟─bbd7467e-7f68-4446-b6aa-90730f8eb497
+# ╟─a396e3c3-8082-404c-9d42-46aa77444ba5
 # ╟─783b2d7a-f937-4bf9-a15c-380078bb27cc
 # ╠═b3511771-d307-4e33-8406-e561bfe72958
 # ╠═ea9b0a84-3b02-433a-b5df-d1b76b16ceaf

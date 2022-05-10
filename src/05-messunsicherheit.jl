@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.0
+# v0.19.4
 
 using Markdown
 using InteractiveUtils
@@ -19,14 +19,14 @@ html"""<div>
 <font size="7"><b>5 Messunsicherheit</b></font> </div>
 
 <div><font size="5"> Markus Lippitz</font> </div>
-<div><font size="5"> 2. Mai 2022 </font> </div>
+<div><font size="5"> 6. Mai 2022 </font> </div>
 """
 
 # ╔═╡ 2b3ac165-b309-4f18-b28b-18a5aa2c529a
 md"""
 
 
-**Ziele** Ich kann verschiedene Arten von Messunsicherheiten
+**Ziele** Sie können verschiedene Arten von Messunsicherheiten
 *unterscheiden*, sowie den Formalismus ihrer Zusammenführung *erklären*
 und *anwenden*.
 
@@ -172,7 +172,7 @@ Als erstes betrachten wir das Verfahren, mit dem nach GUM die
 Messunsicherheit eines Ergebnisses aus den Standard-Abweichungen der
 Eingangswerte berechnet wird. Dies ist sehr nahe an der traditionellen
 Fehlerrechnung. Die Abbildung zeigt ein Schema dieses Verfahrens. Dieses
-Verfahren wird dann in den folgenden Kapiteln durch Einführung des
+Verfahren wird dann in den folgenden Abschnitten durch Einführung des
 Überdeckungsintervalls und Verallgemeinerung auf andere
 Wahrscheinlichkeitsverteilungen als die Normalverteilung erweitert.
 """
@@ -240,7 +240,7 @@ Der hier beschriebe Formalismus
 behandelt also nur ein Ergebnis pro Experiment. Wenn zwei oder mehr
 Ergebnisse aus einem gemeinsamen Datensatz gewonnen werden sollen, dann
 würde auch die Kovarianz dieser Ergebnisse interessieren. Dies ist ein
-fortgeschritteneres Thema, ebenso wie hier ebenso nicht berücksichtige
+fortgeschritteneres Thema, ebenso wie die hier nicht berücksichtige
 Kovarianzen zwischen den Eingangswerten $x_i$.
 """
 
@@ -598,7 +598,7 @@ end
 # ╔═╡ 95b1b54d-cabb-486e-a6f8-215bc18c095b
 let
 	p = (66, 95, 99)
-	k = [quantile.(Normal(), 0.5 + q/200)  for q in p]
+	k = [-quantile.(Normal(), (1 - q/100)/2)  for q in p]
 end
 
 # ╔═╡ 2466be2c-590f-428e-bdb1-5ba1c389adf7
@@ -623,7 +623,7 @@ Normalverteilung an. Hier ein paar Werte für $k$ bei einem 95%-Intervall
 let
 	nu = (1, 2, 3, 4, 5, 10, 20, 1e10)
 	p = 95
-	k = [quantile.(TDist(n), 0.5 + p/200)  for n in nu]
+	k = [-quantile.(TDist(n), (1 - p/100)/2)  for n in nu]
 end
 
 # ╔═╡ a366a4c2-71c3-4999-8bd5-782870fbafa9
@@ -648,7 +648,7 @@ diesem Intervall mit der oben festgelegten Wahrscheinlichkeit.
 md"""
 # Andere Wahrscheinlichkeitsverteilungen und Monte-Carlo-Simulationen
 
-comming soon \...
+coming soon \...
 see [MonteCarloMeasurements.jl](https://baggepinnen.github.io/MonteCarloMeasurements.jl/stable/)
 """
 
