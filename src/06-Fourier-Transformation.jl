@@ -16,7 +16,7 @@ html"""<div>
 <font size="7"><b>6 Fourier-Transformation</b></font> </div>
 
 <div><font size="5"> Markus Lippitz </font> </div>
-<div><font size="5"> 5. Mai 2022 </font> </div>
+<div><font size="5"> 13. Mai 2022 </font> </div>
 """
 
 # ╔═╡ bc0bc1f4-96f2-11ec-26ff-c53449a3e782
@@ -45,12 +45,12 @@ md"""
 
 # Überblick
 
-An vielen Stellen in der Phyisk ist es sinnvoll und hilfreich, einen intuitiven Zugang zur Fourier-Transformation zu haben.
+An vielen Stellen in der Physik ist es sinnvoll und hilfreich, einen intuitiven Zugang zur Fourier-Transformation zu haben.
 Im Endeffekt muss man in der Experimentalphysik nur selten eine
 Fourier-Transformation wirklich ausrechnen. Sehr oft reicht es, ein paar
 oft vorkommende Fourier-Paare zu kennen und diese mit einfachen Regeln
 zu kombinieren. Dies möchte ich hier kurz vorstellen. Eine sehr schöne
-und viel detailliertere Darstellung findet sich in [@Butz2011]. Ich
+und viel detailliertere Darstellung findet sich in **Butz: Fourier-Transformation für Fußgänger**. Ich
 folge hier seiner Notation.
 
 Bevor wir zu den Fourier-Paaren kommen, müssen allerdings doch erst ein
@@ -103,6 +103,31 @@ aber notwendig, wenn man weiterhin $F(\omega = 0)$ als Mittelwert
 behalten will. Alternativ könnte man das alles mit $\nu$ statt $\omega$
 formulieren, hätte dann aber an viel mehr Stellen ein $2 \pi$, wenn auch
 nicht vor dem Integral.
+"""
+
+# ╔═╡ e66de2f3-14e5-4fdc-8aab-8fe16e621393
+md"""
+## Nebenbemerkung: Delta-Funktion
+
+Die Delta-Funktion kann geschrieben werden als
+```math
+\delta(x) = \lim_{a \rightarrow 0} f_a(x) \quad
+   \text{mit} \quad
+    f_a(x) = \left\{ \begin{matrix}
+    a  & \text{falls } |x| < \frac{1}{2a} \\
+    0 & \text{sonst}
+    \end{matrix}
+    \right.
+```
+oder als
+```math
+\delta(x)  = \frac{1}{2 \pi}  \int_{-\infty}^{+\infty} \, e^{+ i\, x \, y} \, dy
+```
+Eine wichtige Eigenschaft ist, dass die delta-Funktion einen Wert
+selektiert, also
+```math
+\int_{-\infty}^{+\infty} \, \delta(x) \, f(x) \, dx = f(0)
+```
 """
 
 # ╔═╡ 1a6ceadb-ac9c-4ae5-bb27-de1e402d6769
@@ -310,11 +335,40 @@ i \omega \,  F(\omega)
 ```
 """
 
+# ╔═╡ 94891df8-79af-4849-8245-8cc06d3e76b8
+md"""
+# Beispiel: Beugung am Doppelspalt
+
+Als Beispiel betrachten wir die Fourier-Transformierte eines
+Doppelspalts, die gerade sein Beugungsbild beschreibt. Die Spalten haben
+eine Breite $b$ und einem Mitten-Abstand $d$. Damit wird der Spalt
+beschrieben durch eine Faltung der Rechteck-Funktion mit zwei
+Delta-Funktionen im Abstand $d$
+```math
+f(x) = \text{rect} _b (x) \, \otimes \, \left( \delta (x - d/2) + \delta (x + d/2) \right)
+```
+Die Fourier-Transformierte der Rechteck-Funktion ist der $\text{sinc}$,
+die der delta-Funktionen eine Konstante. Die Verschiebung im Ort bewirkt
+allerdings eine Modulation im $k$-Raum. Aus der Summe der beiden
+Delta-Funktionen wird also
+```math
+\mathcal{FT}\left\{ \delta (x - d/2) + \delta (x + d/2)  \right\} =
+e^{-i k d/2} + e^{+i k d/2}  = 2 \cos ( k d/2)
+```
+Die Faltung mit der
+Rechteck-Funktion geht über in eine Multiplikation mit dem
+$\text{sinc}$. Zusammen erhalten wir somit
+```math
+\mathcal{FT}\left\{ f(x)  \right\} = b \frac{\sin (k b/2) }{kb/2} \, 2 \cos ( k d/2) = \frac{4}{k} \, \sin (k b/2) \,  \cos ( k d/2)
+```
+Die Intensität in Richtung $k$ ist dann das Betragsquadrat davon.
+"""
+
 # ╔═╡ 9efa0309-66a1-42a4-b426-7f37df6b6343
 md"""
 # Selbstkontrolle
 
-## Zeitliche Verscheibung
+## Zeitliche Verschiebung
 
 - Skizzieren Sie Amplitude und Phase der FT eines zeitlichen Rechteckpulses, der um die zeitliche Null zentriert ist!
 
@@ -325,9 +379,9 @@ md"""
 md"""
 ## Pulsfolge
 
-Sie fragen sich, wie die Fouriertransformierte (Betragsquadrat) einer unendlichen Folge von Rechteckpulsen aussieht und fangen an, danach im Internet zu suchen.
+Sie fragen sich, wie die Fourier-Transformierte (Betragsquadrat) einer unendlichen Folge von Rechteck-Pulsen aussieht und fangen an, danach im Internet zu suchen.
 Ihre Kommilitonin entgegnet, das „sehe“ man doch sofort.
-- Skizzieren Sie sich die Fouriertransformierte.
+- Skizzieren Sie sich die Fourier-Transformierte.
 - Erklären Sie wieso man das direkt herleiten könnte oder „sehen“ solle.
 """
 
@@ -335,7 +389,7 @@ Ihre Kommilitonin entgegnet, das „sehe“ man doch sofort.
 md"""
 ## Lichtpuls
 
-Stellen Sie sich einen „Lichtpuls“ vor als mathematische Konstruktion aus einer unendlich langen Cosinusschwingung, die der Lichtfrequenz entspricht. Den „Puls“ erhält man daraus, indem man die Welle mit einer zeitlich begrenzten Gaußpuls-Einhüllenden (z.B. Halbwertsbreite von 10 Lichtschwingungen) multipliziert. 
+Stellen Sie sich einen „Lichtpuls“ vor als mathematische Konstruktion aus einer unendlich langen Cosinus-Schwingung, die der Lichtfrequenz entspricht. Den „Puls“ erhält man daraus, indem man die Welle mit einer zeitlich begrenzten Gausspuls-Einhüllenden (z.B. Halbwertsbreite von 10 Lichtschwingungen) multipliziert. 
 - Skizzieren Sie die Konstruktion der Fouriertransformation im Spektralbereich
 """
 
@@ -402,46 +456,6 @@ J_1(x) = \frac{1}{\pi} \int_0^\pi \cos (\tau - x \sin \tau) \,d\tau \quad ,
 ```
 die das zylindrische Analogon einer Sinc-Funktion ist.
 
-"""
-
-# ╔═╡ e2f39982-88e9-461e-861a-cd2b25972dfe
-md"""
-### Dreidimensionale kubische Gitter
-
-Ein dreidimensionales primitives kubisches Gitter der Kantenlänge $a$
-geht über in primitiv-kubisches Gitter der Kantenlänge $2 \pi/a$. Ein
-kubisch-flächenzentriertes Gitter mit der Gitterkonstante $a$ der
-konventionellen Einheitszelle geht über in ein kubisch-raumzentriertes
-Gitter mit der Gitterkonstanten $4 \pi / a$ und umgekehrt.
-"""
-
-# ╔═╡ 94891df8-79af-4849-8245-8cc06d3e76b8
-md"""
-# Beispiel: Beugung am Doppelspalt
-
-Als Beispiel betrachten wir die Fourier-Transformierte eines
-Doppelspalts, die gerade sein Beugungsbild beschreibt. Die Spalten haben
-eine Breite $b$ und einem Mitten-Abstand $d$. Damit wird der Spalt
-beschrieben durch eine Faltung der Rechteck-Funktion mit zwei
-Delta-Funktionen im Abstand $d$
-```math
-f(x) = \text{rect} _b (x) \, \otimes \, \left( \delta (x - d/2) + \delta (x + d/2) \right)
-```
-Die Fourier-Transformierte der Rechteck-Funktion ist der $\text{sinc}$,
-die der delta-Funktionen eine Konstante. Die Verschiebung im Ort bewirkt
-allerdings eine Modulation im $k$-Raum. Aus der Summe der beiden
-Delta-Funktionen wird also
-```math
-\mathcal{FT}\left\{ \delta (x - d/2) + \delta (x + d/2)  \right\} =
-e^{-i k d/2} + e^{+i k d/2}  = 2 \cos ( k d/2)
-```
-Die Faltung mit der
-Rechteck-Funktion geht über in eine Multiplikation mit dem
-$\text{sinc}$. Zusammen erhalten wir somit
-```math
-\mathcal{FT}\left\{ f(x)  \right\} = b \frac{\sin (k b/2) }{kb/2} \, 2 \cos ( k d/2) = \frac{4}{k} \, \sin (k b/2) \,  \cos ( k d/2)
-```
-Die Intensität in Richtung $k$ ist dann das Betragsquadrat davon.
 """
 
 # ╔═╡ a8d8f494-cdbd-4276-b9ea-ab04a00b0f3e
@@ -669,6 +683,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─87cc27e7-f022-459c-b18b-822db429a9ac
 # ╟─abaed463-1734-4801-9046-87d8b6fcf41a
 # ╟─31bb538c-f011-4c7c-904b-e4aaafa47fc1
+# ╟─e66de2f3-14e5-4fdc-8aab-8fe16e621393
 # ╟─1a6ceadb-ac9c-4ae5-bb27-de1e402d6769
 # ╟─c960650a-75e1-4408-a1a7-b820d6a5eae2
 # ╟─19db36cf-1341-4604-bfb4-2ecf0a72aaaf
@@ -683,12 +698,11 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─69352450-7c96-47bd-88f4-a905e119c1f3
 # ╟─2043b1ca-f6eb-43e0-96c7-b35bd81d14fc
 # ╟─59f1f035-a9be-44d4-bd0f-d3f2b20af2a4
+# ╟─94891df8-79af-4849-8245-8cc06d3e76b8
 # ╟─9efa0309-66a1-42a4-b426-7f37df6b6343
 # ╟─ddf7074e-55a4-415a-be10-42e621e90d72
 # ╟─de69cf55-8674-465b-8d12-498335e28673
 # ╟─d2425be8-db4f-4f84-b991-6bac1937e78e
-# ╟─e2f39982-88e9-461e-861a-cd2b25972dfe
-# ╟─94891df8-79af-4849-8245-8cc06d3e76b8
 # ╠═265087fe-4cda-4f6b-aa7a-e1668d6601e2
 # ╠═a8d8f494-cdbd-4276-b9ea-ab04a00b0f3e
 # ╟─00000000-0000-0000-0000-000000000001

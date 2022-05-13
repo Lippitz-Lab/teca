@@ -623,7 +623,7 @@ Normalverteilung an. Hier ein paar Werte für $k$ bei einem 95%-Intervall
 let
 	nu = (1, 2, 3, 4, 5, 10, 20, 1e10)
 	p = 95
-	k = [-quantile.(TDist(n), (1 - p/100)/2)  for n in nu]
+	k = [-quantile(TDist(n), (1 - p/100)/2)  for n in nu]
 end
 
 # ╔═╡ a366a4c2-71c3-4999-8bd5-782870fbafa9

@@ -35,11 +35,8 @@ html"""<div>
 <font size="7"><b>7 Frequenzraum</b></font> </div>
 
 <div><font size="5"> Markus Lippitz </font> </div>
-<div><font size="5"> 10. Mai 2022 </font> </div>
+<div><font size="5"> 13. Mai 2022 </font> </div>
 """
-
-# ╔═╡ 8b0f8729-26eb-42b5-8c8e-bec3a11ce29f
-
 
 # ╔═╡ d98ac7ca-96f2-11ec-0d44-b7943badb165
 md"""
@@ -99,11 +96,12 @@ bzw. Nyquist-Kreis-Frequenz
 ```math
 \Omega_\text{Nyquist} = \frac{\pi}{\Delta t}
 ```
+Diese Frequenz ist also gerade so, dass wir zwei Samples pro Periode der Oszillation messen. Schnellere Oszillationen bzw. weniger Samples pro Periode sind nicht darstellbar. Schon bei $f_\text{Nyquist}$ ist der Imaginärteil immer Null, weil wir den Sinus gerade immer in Nulldurchgang sampeln.
 """
 
 # ╔═╡ 8fe17b2a-356f-4fdb-b04b-a440402f3a12
 md"""
-Es ist je nach geradem oder ungearden $N$ ein klein wenig aufwändig, die jeweiligen Frequenzen zu berechnen. Wir benutzen hier und im folgenden das Paket [FFTW](https://www.fftw.org/), das dies für uns erledigt.
+Es ist je nach geradem oder ungeraden $N$ ein klein wenig aufwändig, die jeweiligen Frequenzen zu berechnen. Wir benutzen hier und im folgenden das Paket [FFTW](https://www.fftw.org/), das dies für uns erledigt.
 
 Hier als Beispiel die Frequenzen bei $\Delta t = 1$ und 5 bzw 6 Elementen
 """
@@ -152,36 +150,11 @@ Die inverse FFT geht auch und beinhaltet hier das $1/N$
 # ╔═╡ f72a909a-40ef-4c8f-8ee3-e3a773e4b68a
 ifft([1 0 0 0])
 
-# ╔═╡ 4f4b853a-943f-43ab-ad50-c12ad9735d62
-md"""
-## Nebenbemerkung: Delta-Funktion
-
-Die Delta-Funktion kann geschrieben werden als
-```math
-\delta(x) = \lim_{a \rightarrow 0} f_a(x) \quad
-   \text{mit} \quad
-    f_a(x) = \left\{ \begin{matrix}
-    a  & \text{falls } |x| < \frac{1}{2a} \\
-    0 & \text{sonst}
-    \end{matrix}
-    \right.
-```
-oder als
-```math
-\delta(x)  = \frac{1}{2 \pi}  \int_{-\infty}^{+\infty} \, e^{+ i\, x \, y} \, dy
-```
-Eine wichtige Eigenschaft ist, dass die delta-Funktion einen Wert
-selektiert, also
-```math
-\int_{-\infty}^{+\infty} \, \delta(x) \, f(x) \, dx = f(0)
-```
-"""
-
 # ╔═╡ fc5c971a-6eb7-4fa4-be01-0744418ca9cd
 md"""
 ## Wrapping & fftshift
 
-Im nächsten Beispiel Fourier-Transformieren wir eine Cosinus
+Im nächsten Beispiel Fourier-transformieren wir eine Cosinus
 """
 
 # ╔═╡ 26a9e690-48b0-4570-ad93-7f9313c9c56d
@@ -214,7 +187,7 @@ Es müssen zwei Werte von Null verschieden sein, weil
 
 # ╔═╡ 80ed06c1-21bf-4d5d-be96-0ece54fb69f5
 md"""
-Die Position dieser zwei von Null verschiedenen Werte ist eine Folge der Definiton der $F_k$: zunächst kommen alle positioibven Ferquenzen und dann alle negativen, odder
+Die Position dieser zwei von Null verschiedenen Werte ist eine Folge der Definition der $F_k$: zunächst kommen alle positiven Frequenzen und dann alle negativen, odder
 """
 
 # ╔═╡ 3e195fd3-9f69-4f27-8f93-c1f6346ce93a
@@ -222,7 +195,7 @@ fftfreq(length(f_cos))
 
 # ╔═╡ 76561f01-fdf0-4e54-8d7b-3902833a0614
 md"""
-Zur Darstellung schöner ist es oft, wenn die Frequenz Null nicht am Rand sondern in der Mitte zwischen den positiben und negativen Frequenzen ist. Dies bewirkt fftshift bzw. rückwärts  ifftshift
+Zur Darstellung schöner ist es oft, wenn die Frequenz Null nicht am Rand sondern in der Mitte zwischen den positiven und negativen Frequenzen ist. Dies bewirkt fftshift bzw. rückwärts  ifftshift
 """
 
 # ╔═╡ 37487ff0-e727-4f7f-83b6-5e12b3c93aaa
@@ -246,6 +219,29 @@ Ersetzen Sie den Cosinus durch einen Sinus in diesem Beispiel und erklären Sie 
 # ╔═╡ b4f09614-bfa4-48a2-8f5a-8c73d8312146
 md"""
 # Sampling-Theorem
+
+Wir brauchen mindestens zwei Samples pro Periode, um eine Funktion durch ihre Fourier-Koeffizienten darstellen zu können. Die Frequenzen müssen also unterhalb der Nyquist-Frequenz $f_\text{Nyquist}$ liegen mit
+```math
+f_\text{Nyquist} = \frac{1}{2 \Delta t} \quad .
+```
+Das Sampling-Theorem besagt, dass dies dann aber auch ausreichend ist.
+"""
+
+# ╔═╡ 3f313616-96e2-4ed2-95db-ba8f12dd98b3
+md"""
+Sei $f(t)$ eine bandbreiten-begrenzte Funktion, also $F(\omega)$ nur im Intervall $|\omega| \le \Omega_\text{Nyquist}$ von Null verschieden. Dann gilt das Sampling-Theorem(Beweis siehe Butz Kap.4.4)
+```math
+f(t) = \sum_{k=-\infty}^{\infty} \, f( k \Delta t) \, \text{sinc} \left( \Omega_\text{Nyquist} \cdot [t - k \Delta t] \right)
+```
+"""
+
+# ╔═╡ 21cd702b-f125-4326-b15c-5ab1a68063aa
+md"""
+Es reicht also aus, $f$ alles $\Delta t$ zu samplen. An den Zeiten dazwischen ist $f$ durch die (unendlich lange) Summe der benachbarten Werte mal sinc vollständig beschrieben.
+
+In der Messtechnik müssen wir also nur beispielsweise durch einen Filter sicherstellen, dass alle Frequenzen eines Signals unter $\Omega_\text{Nyquist}$ liegen, und unsere digitale Erfassung des Signals ist identisch mit dem Signal selbst.
+
+Wenn wir aber zu selten samplen, bzw. doch höhere Frequenzen vorhanden sind, dann werden diese zu hohen Frequenz-Komponenten an der dann niedrigeren Nyquist-Frequenz gespiegelt und landen bei scheinbar niedrigeren Frequenzen. Dieses 'aliasing' verfälscht dann das Signal.
 """
 
 # ╔═╡ e9da4158-8713-4ec1-9c86-f8fea01f475b
@@ -255,7 +251,7 @@ md"""
 
 # ╔═╡ dbcd21a9-756b-414b-8972-a8e6b32a054e
 md"""
-Wir hatten ganz oben angefangen mit einer periodischen Zahlenfolge und deren Fourier-Transformation. Die Länge der Zahlenfolge war in den Beispielen immer so gewählt, dass dies gerade einem ganzzahligen Vielfachen der Periodendauer entsprach. Die geht aber natürlkoch in der Praxis nicht. Wir kennen in Zweifelsfall die Periodendauer des Signals nicht, oder nicht genau genug. Oder es sind sogar mehererr Signale mit unterscheidlciher Ferquenz von Interesse.
+Wir hatten ganz oben angefangen mit einer periodischen Zahlenfolge und deren Fourier-Transformation. Die Länge der Zahlenfolge war in den Beispielen immer so gewählt, dass dies gerade einem ganzzahligen Vielfachen der Periodendauer entsprach. Die geht aber natürlich in der Praxis nicht. Wir kennen in Zweifelsfall die Periodendauer des Signals nicht, oder nicht genau genug. Oder es sind sogar mehrere Signale mit unterschiedlicher Frequenz von Interesse.
 
 Das Problem ist der Abschneide-Fehler, der zu Artefakten in der Fourier-Transformation führt.
 """
@@ -293,11 +289,11 @@ Der Ausweg ist **zero-padding**. Sei unsere eigentlich gemessene Signalfolge $f(
 ```math
 g(t) = f(t) \cdot w(t)
 ```
-mit der Fensterfuntkion $w(t)$
+mit der Fensterfunktion $w(t)$
 ```math
 w(t) = 1 \quad \text{für} \quad  -T < t < T \quad \text{sonst}  = 0
 ```
-Damit können wir $g(t)$ über belibig lange Zeiten 'messen', weil es ja quasi immer Null ist. Die Fourier-Transformierte ist aber
+Damit können wir $g(t)$ über beliebig lange Zeiten 'messen', weil es ja quasi immer Null ist. Die Fourier-Transformierte ist aber
 ```math
 G(\omega) = F(\omega) \otimes W(\omega)
 ```
@@ -309,12 +305,12 @@ W(\omega)=  2T \,  \frac{\sin \omega T}{\omega T} = 2T \, \text{sinc}( \omega T)
 
 # ╔═╡ 42be164a-a8ea-4008-9e47-6adbf687fdeb
 md"""
-Wir verlkängern also unseren Datensatz zu beiden Seiten mit Nullen. Der Effekt ist, dass wir die eigentliche Fourier-Transformation unseres Datensatzen falten mit einem $\text{sinc}$, dessen charakteristische Breite durch die eigentliche Messdauer bestimmt ist. Die Freqienzauflösung steigt dadurch also nicht. Vielmhger geschieht eine Art Interpolation im Fourier-Raum, die gerade die Artefakte des Abschneide-Fehlers beseitigt.
+Wir verlängern also unseren Datensatz zu beiden Seiten mit Nullen. Der Effekt ist, dass wir die eigentliche Fourier-Transformation unseres Datensatzes falten mit einem $\text{sinc}$, dessen charakteristische Breite durch die eigentliche Messdauer bestimmt ist. Die Frequenzauflösung steigt dadurch also nicht. Vielmehr geschieht eine Art Interpolation im Fourier-Raum, die gerade die Artefakte des Abschneide-Fehlers beseitigt.
 """
 
 # ╔═╡ 4a0111a9-afa5-4df7-9abe-73440ea10489
 md"""
-Wir betrachten den gleichen Datensatz wie oben, nur 'verlängern' wir ihn auf die 10-fache Länge. Dadurch hat der Abschneidefehler weniger Einfluss und der Peak liegt im Frequenraum immer bei 1 Hz. Das erzeigt aber natürlich nicht mehr QAuflösung. Nahe beieinander liegende Peaks können durch zero-padding nicht getrennt werden, nur die Position eines Peaks besser bestimmt werden.
+Wir betrachten den gleichen Datensatz wie oben, nur 'verlängern' wir ihn auf die 10-fache Länge. Dadurch hat der Abschneidefehler weniger Einfluss und der Peak liegt im Frequenzraum immer bei 1 Hz. Das erzeugt aber natürlich nicht mehr Auflösung. Nahe beieinander liegende Peaks können durch zero-padding nicht getrennt werden, nur die Position eines Peaks besser bestimmt werden.
 """
 
 # ╔═╡ 29a55b4d-68cc-438f-af96-1269b1794791
@@ -363,16 +359,20 @@ Typische Fensterfunktionen sind im Bereich $|x| = |t/T| < 1/2$
 
 # ╔═╡ 99bbe9f9-13fd-4f3b-8992-84025ccbe233
 md"""
-Fensterfunktion $(@bind window Select(["rect", "hanning", "hamming", "cosine",  "triang", "gaussian","kaiser"]; 	default="hanning")) , Paramter bei Gauss bzw. Kaiser $(@bind win_p NumberField(0.1:0.1:10, default=2))
+Fensterfunktion $(@bind window Select(["rect", "hanning", "hamming", "cosine",  "triang", "gaussian","kaiser"]; 	default="hanning")) , Paramter σ bei Gauss bzw. 1/α bei Kaiser $(@bind win_p NumberField(0.1:0.1:1, default=0.5))
 """
 
 # ╔═╡ d3e33164-811d-4abd-b04f-8d72ab4959d9
 let
 	
-	if (window=="kaiser") || (window=="gaussian")
+	if  (window=="gaussian")
 		expr = "DSP.Windows.$(window)(100, $(win_p); padding=1000)"
 	else
-		expr = "DSP.Windows.$(window)(100; padding=1000)"
+		if (window=="kaiser") 
+			expr = "DSP.Windows.$(window)(100, $(1/win_p); padding=1000)"
+		else
+			expr = "DSP.Windows.$(window)(100; padding=1000)"
+		end
 	end
 	w = eval(Meta.parse(expr))
 	
@@ -385,7 +385,7 @@ end
 
 # ╔═╡ 075311f1-ee81-4817-9b50-f82043a8d14f
 md"""
-Mit einem Fenster verjkleinert man zwar die gemessenen Werte, macht die Fourier-Transformsation aber glatter, weil der Übergang zum zero-Padding glatter wird. Damit erkennt man die Peaks bei $\pm 1$Hz auch schon bei sehr wenig gesampelten Punkten.
+Mit einem Fenster verkleinert man zwar die gemessenen Werte, macht die Fourier-Transformation aber glatter, weil der Übergang zum zero-Padding glatter wird. Damit erkennt man die Peaks bei $\pm 1$Hz auch schon bei sehr wenig gesampelten Punkten.
 """
 
 # ╔═╡ dc62ff66-1b00-4f2c-911b-f45edd18edb7
@@ -425,12 +425,12 @@ aus Butz, Kapitel 3.10
 
 # ╔═╡ 27e978c0-063b-4b79-81c5-b05be2a2979c
 md"""
-Wir betrachten eine Summe aus 6 Cosinus-Funktionen mit teils sehr unterschiedlochen Amplituden $A_l$ und Frequenzen $f_l$. Wir samplen 256 Datenpunkte im Abstand von  $1/8$ der längsten Periode, also nur $8/3$ Datenpunkte pro Oszillation der höchsten vorkommenden Frequenz. Diese ist um 5 Größenordnungen schwächer als die nioedrigste Frequenz. Trotzdem findet man diesen Peak durch ein passendes Fenster und zero-padding.
+Wir betrachten eine Summe aus 6 Cosinus-Funktionen mit teils sehr unterschiedlichen Amplituden $A_l$ und Frequenzen $f_l$. Wir samplen 256 Datenpunkte im Abstand von  $1/8$ der längsten Periode, also nur $8/3$ Datenpunkte pro Oszillation der höchsten vorkommenden Frequenz. Diese ist um 5 Größenordnungen schwächer als die niedrigste Frequenz. Trotzdem findet man diesen Peak durch ein passendes Fenster und zero-padding.
 """
 
 # ╔═╡ 7a421503-9dd0-49c2-82b2-d709652ef4a9
 md"""
-Fensterfunktion $(@bind window2 Select(["rect", "hanning", "hamming", "cosine", "lanczos", "triang", "gaussian","kaiser"]; 	default="hanning")) , Paramter bei Gauss bzw. Kaiser $(@bind win_p2 NumberField(0.1:0.1:10, default=2))
+Fensterfunktion $(@bind window2 Select(["rect", "hanning", "hamming", "cosine", "lanczos", "triang", "gaussian","kaiser"]; 	default="hanning")) , Paramter σ bei Gauss bzw. 1/α bei Kaiser $(@bind win_p2 NumberField(0.1:0.1:1, default=0.5))
 """
 
 # ╔═╡ 972b455a-0d20-4f1d-98df-28e9b219b148
@@ -442,10 +442,14 @@ let
 	time = (-127:127).*dt;
 	signal = [ sum(Al .* cos.(2pi .* fl .* t)) for t in time];
 
-	if (window2=="kaiser") || (window2=="gaussian")
+	if (window2=="gaussian")
 		expr = "DSP.Windows.$(window2)($(length(signal)),$(win_p2))"
 	else
-		expr = "DSP.Windows.$(window2)($(length(signal)))"
+		if (window2=="kaiser") 
+			expr = "DSP.Windows.$(window2)($(length(signal)),$(1/win_p2))"
+		else
+			expr = "DSP.Windows.$(window2)($(length(signal)))"
+		end
 	end
 
 	window = eval(Meta.parse(expr))
@@ -474,7 +478,7 @@ aside(embed_display(plot(F_cos, leg=false, xlabel="Index", ylabel="fcos")))
 md"""
 # Windowing
 
-Die Oszillationen im Spektrum im letzten Beispiel sind immer noch Artefakte. Eigentlich würde man ja zwei Delta-Funktionen bei $\pm 1$Hz erwarten. Sie sind eine Kosneqnuz des Rechteck-Fensters $w(t)$, das zum sinc in Frequenzraum führt. Das Rechteck-fenster ist in dem Sinne natürlich, dass wir immer zu einen bestimmten zeotpunkt anfangen und aufhören, zu messen. 
+Die Oszillationen im Spektrum im letzten Beispiel sind immer noch Artefakte. Eigentlich würde man ja zwei Delta-Funktionen bei $\pm 1$Hz erwarten. Sie sind eine Konsequenz des Rechteck-Fensters $w(t)$, das zum sinc in Frequenzraum führt. Das Rechteck-fenster ist in dem Sinne natürlich, dass wir immer zu einen bestimmten Zeitpunkt anfangen und aufhören, zu messen. 
 
 [Andere Fensterfunktionen](https://en.wikipedia.org/wiki/Window_function#A_list_of_window_functions) sind aber unter Umständen besser. Sie unterscheiden sich in der Breite des Peaks und im Abfall der Flanken. Leider muss man aber das eine gegen das andere einhandeln. Interessante Parameter sind die Breite des zentralen Peaks im Frequenzraum, gemessen als -3dB-Bandbreite, sowie die Seitenbandenunterdrückung in dB oder deren Abfall in dB/Oktave.
 $(aside(md"dB = Dezibel = 10 log_10 x"))
@@ -1484,7 +1488,6 @@ version = "0.9.1+5"
 # ╔═╡ Cell order:
 # ╟─f5450eab-0f9f-4b7f-9b80-992d3c553ba9
 # ╟─aaa4db38-4e95-4d52-a316-67386c7393e6
-# ╠═8b0f8729-26eb-42b5-8c8e-bec3a11ce29f
 # ╟─d98ac7ca-96f2-11ec-0d44-b7943badb165
 # ╟─b462d67d-e8fe-4970-8346-1561ab2e3fc7
 # ╟─8fe17b2a-356f-4fdb-b04b-a440402f3a12
@@ -1496,7 +1499,6 @@ version = "0.9.1+5"
 # ╠═dd7bc6e1-8940-4cd6-aa51-6e5d5646c5f3
 # ╟─e1340e20-7e6a-4a2e-a2f1-7675339000f2
 # ╠═f72a909a-40ef-4c8f-8ee3-e3a773e4b68a
-# ╟─4f4b853a-943f-43ab-ad50-c12ad9735d62
 # ╟─fc5c971a-6eb7-4fa4-be01-0744418ca9cd
 # ╠═26a9e690-48b0-4570-ad93-7f9313c9c56d
 # ╠═8efe839c-a111-4810-a175-5365a55c4900
@@ -1512,7 +1514,9 @@ version = "0.9.1+5"
 # ╟─a9cd6620-e89d-4219-b96b-6a8ee44f0e1f
 # ╠═92d632ec-1f53-4fa5-bc1c-2aeddce63c37
 # ╟─ee83e070-5cfa-4335-87cb-b4d9614182c9
-# ╠═b4f09614-bfa4-48a2-8f5a-8c73d8312146
+# ╟─b4f09614-bfa4-48a2-8f5a-8c73d8312146
+# ╟─3f313616-96e2-4ed2-95db-ba8f12dd98b3
+# ╟─21cd702b-f125-4326-b15c-5ab1a68063aa
 # ╟─e9da4158-8713-4ec1-9c86-f8fea01f475b
 # ╟─dbcd21a9-756b-414b-8972-a8e6b32a054e
 # ╟─0eb60e57-1fd1-4df8-866c-851a13bb765e
