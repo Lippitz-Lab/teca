@@ -68,7 +68,6 @@ Frequenzraum zu *analysieren*.
 md"""
 # Diskrete FT: eine periodische Zahlenfolge und deren Fourier-Transformierte Zahlenfolge
 
-Zunächst noch eine Nebenbemerkung zur diskreten Fourier-Transformation.
 Insbesondere wenn man mit einem Computer Messwerte erfasst und
 auswertet, dann kennt man die gemessene Funktion $f(t)$ weder auf einer
 kontinuierlichen Achse $t$, sondern nur zu diskreten Zeiten
