@@ -245,11 +245,11 @@ Eine äquidistante Kette von Punkten bzw. Delta-Funktionen geht bei
 Fourier-Transformation wieder in eine solche über. Die Abstände nehmen
 dabei den reziproken Wert an. Also aus
 ```math
-f(t) = \sum_n \, \delta (t - \Delta t \, n)
+f(t) = \sum_{n=-\infty}^{\infty} \, \delta (t - \Delta t \, n)
 ```
 wird
 ```math
-F(\omega) = \frac{2 \pi}{\Delta t} \, \sum_n \, \delta \left(\omega - n\frac{2 \pi}{\Delta t} \right)
+F(\omega) = \frac{2 \pi}{\Delta t} \, \sum_{n=-\infty}^{\infty} \, \delta \left(\omega - n\frac{2 \pi}{\Delta t} \right)
 ```
 """
 

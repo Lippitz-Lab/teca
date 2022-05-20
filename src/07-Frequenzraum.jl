@@ -20,6 +20,12 @@ using FFTW
 # ╔═╡ 9cd7e35f-aa7f-465d-b4a2-343f65db63ac
 using DSP
 
+# ╔═╡ 317f4244-4748-48a8-b6ea-f5a7d09f8f0c
+using StatsBase
+
+# ╔═╡ 97a45280-804e-405a-afda-c220f21406b4
+using  Colors, ImageShow, ImageIO
+
 # ╔═╡ c3cb0bbb-fcc0-49f8-b66e-74ca7ac96108
 using PlutoUI
 
@@ -35,7 +41,7 @@ html"""<div>
 <font size="7"><b>7 Frequenzraum</b></font> </div>
 
 <div><font size="5"> Markus Lippitz </font> </div>
-<div><font size="5"> 13. Mai 2022 </font> </div>
+<div><font size="5"> 20. Mai 2022 </font> </div>
 """
 
 # ╔═╡ d98ac7ca-96f2-11ec-0d44-b7943badb165
@@ -116,7 +122,7 @@ fftfreq(6)
 md"""
 # FFTW
 
-In Julia können wir das Paket [FFTW](https://www.fftw.org/) benutzen. Dabei wechselt allerdings der Vorfaktror $1/N$ von der Hin- zur Rück-Transformation, also
+In Julia können wir das Paket [FFTW](https://www.fftw.org/) benutzen. Dabei wechselt allerdings der Vorfaktor $1/N$ von der Hin- zur Rück-Transformation, also
 ```math
  F_j =   \sum_{k=0}^{N-1} \, f_k \, e^{- k \, j \, 2 \pi i / N } \\
 ```
@@ -154,7 +160,7 @@ ifft([1 0 0 0])
 md"""
 ## Wrapping & fftshift
 
-Im nächsten Beispiel Fourier-transformieren wir eine Cosinus
+Im nächsten Beispiel Fourier-transformieren wir einen Kosinus
 """
 
 # ╔═╡ 26a9e690-48b0-4570-ad93-7f9313c9c56d
@@ -187,7 +193,7 @@ Es müssen zwei Werte von Null verschieden sein, weil
 
 # ╔═╡ 80ed06c1-21bf-4d5d-be96-0ece54fb69f5
 md"""
-Die Position dieser zwei von Null verschiedenen Werte ist eine Folge der Definition der $F_k$: zunächst kommen alle positiven Frequenzen und dann alle negativen, odder
+Die Position dieser zwei von Null verschiedenen Werte ist eine Folge der Definition der $F_k$: zunächst kommen alle positiven Frequenzen und dann alle negativen, oder
 """
 
 # ╔═╡ 3e195fd3-9f69-4f27-8f93-c1f6346ce93a
@@ -229,7 +235,7 @@ Das Sampling-Theorem besagt, dass dies dann aber auch ausreichend ist.
 
 # ╔═╡ 3f313616-96e2-4ed2-95db-ba8f12dd98b3
 md"""
-Sei $f(t)$ eine bandbreiten-begrenzte Funktion, also $F(\omega)$ nur im Intervall $|\omega| \le \Omega_\text{Nyquist}$ von Null verschieden. Dann gilt das Sampling-Theorem(Beweis siehe Butz Kap.4.4)
+Sei $f(t)$ eine bandbreiten-begrenzte Funktion, also $F(\omega)$ nur im Intervall $|\omega| \le \Omega_\text{Nyquist}$ von Null verschieden. Dann gilt das Sampling-Theorem (Beweis siehe Butz Kap.4.4)
 ```math
 f(t) = \sum_{k=-\infty}^{\infty} \, f( k \Delta t) \, \text{sinc} \left( \Omega_\text{Nyquist} \cdot [t - k \Delta t] \right)
 ```
@@ -237,7 +243,7 @@ f(t) = \sum_{k=-\infty}^{\infty} \, f( k \Delta t) \, \text{sinc} \left( \Omega_
 
 # ╔═╡ 21cd702b-f125-4326-b15c-5ab1a68063aa
 md"""
-Es reicht also aus, $f$ alles $\Delta t$ zu samplen. An den Zeiten dazwischen ist $f$ durch die (unendlich lange) Summe der benachbarten Werte mal sinc vollständig beschrieben.
+Es reicht also aus, $f$ alle $\Delta t$ zu samplen. An den Zeiten dazwischen ist $f$ durch die (unendlich lange) Summe der benachbarten Werte mal sinc vollständig beschrieben.
 
 In der Messtechnik müssen wir also nur beispielsweise durch einen Filter sicherstellen, dass alle Frequenzen eines Signals unter $\Omega_\text{Nyquist}$ liegen, und unsere digitale Erfassung des Signals ist identisch mit dem Signal selbst.
 
@@ -251,9 +257,9 @@ md"""
 
 # ╔═╡ dbcd21a9-756b-414b-8972-a8e6b32a054e
 md"""
-Wir hatten ganz oben angefangen mit einer periodischen Zahlenfolge und deren Fourier-Transformation. Die Länge der Zahlenfolge war in den Beispielen immer so gewählt, dass dies gerade einem ganzzahligen Vielfachen der Periodendauer entsprach. Die geht aber natürlich in der Praxis nicht. Wir kennen in Zweifelsfall die Periodendauer des Signals nicht, oder nicht genau genug. Oder es sind sogar mehrere Signale mit unterschiedlicher Frequenz von Interesse.
+Wir hatten ganz oben angefangen mit einer periodischen Zahlenfolge und deren Fourier-Transformation. Die Länge der Zahlenfolge war in den Beispielen immer so gewählt, dass dies gerade einem ganzzahligen Vielfachen der Periodendauer entsprach. Das geht aber natürlich in der Praxis nicht. Wir kennen in Zweifelsfall die Periodendauer des Signals nicht, oder nicht genau genug. Oder es sind sogar mehrere Signale mit unterschiedlicher Frequenz von Interesse.
 
-Das Problem ist der Abschneide-Fehler, der zu Artefakten in der Fourier-Transformation führt.
+Das Problem ist dann der Abschneide-Fehler, der zu Artefakten in der Fourier-Transformation führt.
 """
 
 # ╔═╡ 0eb60e57-1fd1-4df8-866c-851a13bb765e
@@ -263,7 +269,7 @@ Stellen Sie in diesem Beispiel $n_\text{sample}$ so ein, dass der Fehler minimal
 
 # ╔═╡ 1d0fd915-c0c2-41cd-a788-11ff2a054bce
 md"""
-Datenpunkte im Sample $(@bind n_sample Slider(5:17; default=12, show_value=true))
+Datenpunkte im Sample $n_\text{sample}$ $(@bind n_sample Slider(5:17; default=12, show_value=true))
 """
 
 # ╔═╡ 4d9e9381-4510-4a61-84f2-ffc927e1b64c
@@ -338,7 +344,7 @@ end
 md"""
 Typische Fensterfunktionen sind im Bereich $|x| = |t/T| < 1/2$
 ```math
-\text{Cosinus} = \cos \pi x
+\text{Kosinus} = \cos \pi x
 ```
 ```math
 \text{Dreieck} = 1 - 2 |x|
@@ -359,7 +365,7 @@ Typische Fensterfunktionen sind im Bereich $|x| = |t/T| < 1/2$
 
 # ╔═╡ 99bbe9f9-13fd-4f3b-8992-84025ccbe233
 md"""
-Fensterfunktion $(@bind window Select(["rect", "hanning", "hamming", "cosine",  "triang", "gaussian","kaiser"]; 	default="hanning")) , Paramter σ bei Gauss bzw. 1/α bei Kaiser $(@bind win_p NumberField(0.1:0.1:1, default=0.5))
+Fensterfunktion $(@bind window Select(["rect", "hanning", "hamming", "cosine",  "triang", "gaussian","kaiser"]; 	default="hanning")) , Parameter σ bei Gauss bzw. 1/α bei Kaiser $(@bind win_p NumberField(0.1:0.1:1, default=0.5))
 """
 
 # ╔═╡ d3e33164-811d-4abd-b04f-8d72ab4959d9
@@ -390,7 +396,7 @@ Mit einem Fenster verkleinert man zwar die gemessenen Werte, macht die Fourier-T
 
 # ╔═╡ dc62ff66-1b00-4f2c-911b-f45edd18edb7
 md"""
-Datenpunkte im Sample $(@bind n_sample3 Slider(5:48; default=12, show_value=true))
+Datenpunkte im Sample $(@bind n_sample3 Slider(5:22; default=12, show_value=true))
 """
 
 # ╔═╡ 6c3e13d5-3dcf-4470-839b-e4057ef61fe7
@@ -425,12 +431,12 @@ aus Butz, Kapitel 3.10
 
 # ╔═╡ 27e978c0-063b-4b79-81c5-b05be2a2979c
 md"""
-Wir betrachten eine Summe aus 6 Cosinus-Funktionen mit teils sehr unterschiedlichen Amplituden $A_l$ und Frequenzen $f_l$. Wir samplen 256 Datenpunkte im Abstand von  $1/8$ der längsten Periode, also nur $8/3$ Datenpunkte pro Oszillation der höchsten vorkommenden Frequenz. Diese ist um 5 Größenordnungen schwächer als die niedrigste Frequenz. Trotzdem findet man diesen Peak durch ein passendes Fenster und zero-padding.
+Wir betrachten eine Summe aus 6 Kosinus-Funktionen mit teils sehr unterschiedlichen Amplituden $A_l$ und Frequenzen $f_l$. Wir samplen 256 Datenpunkte im Abstand von  $1/8$ der längsten Periode, also nur $8/3$ Datenpunkte pro Oszillation der höchsten vorkommenden Frequenz. Diese ist um 5 Größenordnungen schwächer als die niedrigste Frequenz. Trotzdem findet man diesen Peak durch ein passendes Fenster und zero-padding.
 """
 
 # ╔═╡ 7a421503-9dd0-49c2-82b2-d709652ef4a9
 md"""
-Fensterfunktion $(@bind window2 Select(["rect", "hanning", "hamming", "cosine", "lanczos", "triang", "gaussian","kaiser"]; 	default="hanning")) , Paramter σ bei Gauss bzw. 1/α bei Kaiser $(@bind win_p2 NumberField(0.1:0.1:1, default=0.5))
+Fensterfunktion $(@bind window2 Select(["rect", "hanning", "hamming", "cosine", "lanczos", "triang", "gaussian","kaiser"]; 	default="rect")) , Parameter σ bei Gauss bzw. 1/α bei Kaiser $(@bind win_p2 NumberField(0.1:0.1:1, default=0.5))
 """
 
 # ╔═╡ 972b455a-0d20-4f1d-98df-28e9b219b148
@@ -462,6 +468,21 @@ let
 	scatter!(fl, Al)
 end
 
+# ╔═╡ 77f4138a-0897-4153-b752-d938062d62ed
+md"""
+# Spielwiese: 2D FFT von Bildern
+"""
+
+# ╔═╡ f2189dbb-163e-40b9-bae4-65f7691a1bdd
+md"""
+Erlauben Sie ihrem Webbrowser, auf die Kamera zuzugreifen und nehmen Sie dann einen Schnappschuss auf! Zeigen Sie Ihrer Kamera einfache Muster und vergleichen Sie die Fourier-Transformierte mit Ihren Erwartungen.
+"""
+
+# ╔═╡ 9b933f4b-92bf-48b8-91f6-980ea65ea18c
+md"""
+
+"""
+
 # ╔═╡ 008c6d5a-263a-4388-88bb-6521a9cb8aab
 TableOfContents(title="Inhalt")
 
@@ -478,25 +499,293 @@ aside(embed_display(plot(F_cos, leg=false, xlabel="Index", ylabel="fcos")))
 md"""
 # Windowing
 
-Die Oszillationen im Spektrum im letzten Beispiel sind immer noch Artefakte. Eigentlich würde man ja zwei Delta-Funktionen bei $\pm 1$Hz erwarten. Sie sind eine Konsequenz des Rechteck-Fensters $w(t)$, das zum sinc in Frequenzraum führt. Das Rechteck-fenster ist in dem Sinne natürlich, dass wir immer zu einen bestimmten Zeitpunkt anfangen und aufhören, zu messen. 
+Die Oszillationen im Spektrum im letzten Beispiel sind immer noch Artefakte. Eigentlich würde man ja zwei Delta-Funktionen bei $\pm 1$Hz erwarten. Sie sind eine Konsequenz des Rechteck-Fensters $w(t)$, das zum sinc in Frequenzraum führt. Das Rechteck-Fenster ist in dem Sinne natürlich, dass wir immer zu einen bestimmten Zeitpunkt anfangen und aufhören, zu messen. 
 
 [Andere Fensterfunktionen](https://en.wikipedia.org/wiki/Window_function#A_list_of_window_functions) sind aber unter Umständen besser. Sie unterscheiden sich in der Breite des Peaks und im Abfall der Flanken. Leider muss man aber das eine gegen das andere einhandeln. Interessante Parameter sind die Breite des zentralen Peaks im Frequenzraum, gemessen als -3dB-Bandbreite, sowie die Seitenbandenunterdrückung in dB oder deren Abfall in dB/Oktave.
 $(aside(md"dB = Dezibel = 10 log_10 x"))
 """
 
+# ╔═╡ 1dfdcd5f-a35b-4297-ad7a-35c83206e181
+md"""
+Webcam routines from 
+https://computationalthinking.mit.edu/Spring21/notebooks/week1/images.html
+"""
+
+# ╔═╡ 474eaefe-470d-46bf-bbb2-1f80773a85d2
+function process_raw_camera_data(raw_camera_data)
+	# the raw image data is a long byte array, we need to transform it into something
+	# more "Julian" - something with more _structure_.
+	
+	# The encoding of the raw byte stream is:
+	# every 4 bytes is a single pixel
+	# every pixel has 4 values: Red, Green, Blue, Alpha
+	# (we ignore alpha for this notebook)
+	
+	# So to get the red values for each pixel, we take every 4th value, starting at 
+	# the 1st:
+	reds_flat = UInt8.(raw_camera_data["data"][1:4:end])
+	greens_flat = UInt8.(raw_camera_data["data"][2:4:end])
+	blues_flat = UInt8.(raw_camera_data["data"][3:4:end])
+	
+	# but these are still 1-dimensional arrays, nicknamed 'flat' arrays
+	# We will 'reshape' this into 2D arrays:
+	
+	width = raw_camera_data["width"]
+	height = raw_camera_data["height"]
+	
+	# shuffle and flip to get it in the right shape
+	reds = reshape(reds_flat, (width, height))' / 255.0
+	greens = reshape(greens_flat, (width, height))' / 255.0
+	blues = reshape(blues_flat, (width, height))' / 255.0
+	
+	# we have our 2D array for each color
+	# Let's create a single 2D array, where each value contains the R, G and B value of 
+	# that pixel
+	
+	RGB.(reds, greens, blues)
+end
+
+# ╔═╡ 44730fab-9238-4135-ae6e-43a114db810e
+function camera_input(;max_size=150, default_url="https://i.imgur.com/SUmi94P.png")
+"""
+<span class="pl-image waiting-for-permission">
+<style>
+	
+	.pl-image.popped-out {
+		position: fixed;
+		top: 0;
+		right: 0;
+		z-index: 5;
+	}
+
+	.pl-image #video-container {
+		width: 250px;
+	}
+
+	.pl-image video {
+		border-radius: 1rem 1rem 0 0;
+	}
+	.pl-image.waiting-for-permission #video-container {
+		display: none;
+	}
+	.pl-image #prompt {
+		display: none;
+	}
+	.pl-image.waiting-for-permission #prompt {
+		width: 250px;
+		height: 200px;
+		display: grid;
+		place-items: center;
+		font-family: monospace;
+		font-weight: bold;
+		text-decoration: underline;
+		cursor: pointer;
+		border: 5px dashed rgba(0,0,0,.5);
+	}
+
+	.pl-image video {
+		display: block;
+	}
+	.pl-image .bar {
+		width: inherit;
+		display: flex;
+		z-index: 6;
+	}
+	.pl-image .bar#top {
+		position: absolute;
+		flex-direction: column;
+	}
+	
+	.pl-image .bar#bottom {
+		background: black;
+		border-radius: 0 0 1rem 1rem;
+	}
+	.pl-image .bar button {
+		flex: 0 0 auto;
+		background: rgba(255,255,255,.8);
+		border: none;
+		width: 2rem;
+		height: 2rem;
+		border-radius: 100%;
+		cursor: pointer;
+		z-index: 7;
+	}
+	.pl-image .bar button#shutter {
+		width: 3rem;
+		height: 3rem;
+		margin: -1.5rem auto .2rem auto;
+	}
+
+	.pl-image video.takepicture {
+		animation: pictureflash 200ms linear;
+	}
+
+	@keyframes pictureflash {
+		0% {
+			filter: grayscale(1.0) contrast(2.0);
+		}
+
+		100% {
+			filter: grayscale(0.0) contrast(1.0);
+		}
+	}
+</style>
+
+	<div id="video-container">
+		<div id="top" class="bar">
+			<button id="stop" title="Stop video">✖</button>
+			<button id="pop-out" title="Pop out/pop in">⏏</button>
+		</div>
+		<video playsinline autoplay></video>
+		<div id="bottom" class="bar">
+		<button id="shutter" title="Click to take a picture">📷</button>
+		</div>
+	</div>
+		
+	<div id="prompt">
+		<span>
+		Enable webcam
+		</span>
+	</div>
+
+<script>
+	// based on https://github.com/fonsp/printi-static (by the same author)
+
+	const span = currentScript.parentElement
+	const video = span.querySelector("video")
+	const popout = span.querySelector("button#pop-out")
+	const stop = span.querySelector("button#stop")
+	const shutter = span.querySelector("button#shutter")
+	const prompt = span.querySelector(".pl-image #prompt")
+
+	const maxsize = $(max_size)
+
+	const send_source = (source, src_width, src_height) => {
+		const scale = Math.min(1.0, maxsize / src_width, maxsize / src_height)
+
+		const width = Math.floor(src_width * scale)
+		const height = Math.floor(src_height * scale)
+
+		const canvas = html`<canvas width=\${width} height=\${height}>`
+		const ctx = canvas.getContext("2d")
+		ctx.drawImage(source, 0, 0, width, height)
+
+		span.value = {
+			width: width,
+			height: height,
+			data: ctx.getImageData(0, 0, width, height).data,
+		}
+		span.dispatchEvent(new CustomEvent("input"))
+	}
+	
+	const clear_camera = () => {
+		window.stream.getTracks().forEach(s => s.stop());
+		video.srcObject = null;
+
+		span.classList.add("waiting-for-permission");
+	}
+
+	prompt.onclick = () => {
+		navigator.mediaDevices.getUserMedia({
+			audio: false,
+			video: {
+				facingMode: "environment",
+			},
+		}).then(function(stream) {
+
+			stream.onend = console.log
+
+			window.stream = stream
+			video.srcObject = stream
+			window.cameraConnected = true
+			video.controls = false
+			video.play()
+			video.controls = false
+
+			span.classList.remove("waiting-for-permission");
+
+		}).catch(function(error) {
+			console.log(error)
+		});
+	}
+	stop.onclick = () => {
+		clear_camera()
+	}
+	popout.onclick = () => {
+		span.classList.toggle("popped-out")
+	}
+
+	shutter.onclick = () => {
+		const cl = video.classList
+		cl.remove("takepicture")
+		void video.offsetHeight
+		cl.add("takepicture")
+		video.play()
+		video.controls = false
+		console.log(video)
+		send_source(video, video.videoWidth, video.videoHeight)
+	}
+	
+	
+	document.addEventListener("visibilitychange", () => {
+		if (document.visibilityState != "visible") {
+			clear_camera()
+		}
+	})
+
+
+	// Set a default image
+
+	const img = html`<img crossOrigin="anonymous">`
+
+	img.onload = () => {
+	console.log("helloo")
+		send_source(img, img.width, img.height)
+	}
+	img.src = "$(default_url)"
+	console.log(img)
+</script>
+</span>
+""" |> HTML
+end
+
+
+# ╔═╡ 3f9a3bc0-1063-44c9-9710-b81e5b528bd9
+@bind webcam_data camera_input()
+
+# ╔═╡ 49e196e2-c62e-40e2-b6d7-675640258885
+snapshot = process_raw_camera_data(webcam_data)
+
+# ╔═╡ 812372c8-82d7-4fee-8b0c-a9e22ae398c2
+spatial_data = Real.(Gray.(snapshot));
+
+# ╔═╡ 5133276a-8995-4ce9-a1f5-2c4caf116e20
+freq_data = abs.(fftshift(fft(spatial_data .- mean(spatial_data) )));
+
+# ╔═╡ dc548c88-d969-4eaf-8ddd-938f953fda1a
+ft_snapshot = Gray.(freq_data ./ maximum(freq_data))
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
+Colors = "5ae59095-9a9b-59fe-a467-6f913c188581"
 DSP = "717857b8-e6f2-59f4-9121-6e50c889abd2"
 FFTW = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
+ImageIO = "82e4d734-157c-48bb-816b-45c225c6df19"
+ImageShow = "4e3cecfd-b093-5904-9786-8bbb286a6a31"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 
 [compat]
+Colors = "~0.12.8"
 DSP = "~0.7.5"
 FFTW = "~1.4.6"
+ImageIO = "~0.6.5"
+ImageShow = "~0.3.6"
 Plots = "~1.29.0"
 PlutoUI = "~0.7.38"
+StatsBase = "~0.33.16"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -539,6 +828,11 @@ git-tree-sha1 = "19a35467a82e236ff51bc17a3a44b69ef35185a2"
 uuid = "6e34b625-4abd-537c-b88f-471c36dfa7a0"
 version = "1.0.8+0"
 
+[[deps.CEnum]]
+git-tree-sha1 = "eb4cb44a499229b3b8426dcfb5dd85333951ff90"
+uuid = "fa961155-64e5-5f13-b03f-caf6b980ea82"
+version = "0.4.2"
+
 [[deps.Cairo_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "JLLWrappers", "LZO_jll", "Libdl", "Pixman_jll", "Pkg", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Zlib_jll", "libpng_jll"]
 git-tree-sha1 = "4b859a208b2397a7a623a03449e4636bdb17bcf2"
@@ -553,9 +847,9 @@ version = "1.14.0"
 
 [[deps.ChangesOfVariables]]
 deps = ["ChainRulesCore", "LinearAlgebra", "Test"]
-git-tree-sha1 = "bf98fa45a0a4cee295de98d4c1462be26345b9a1"
+git-tree-sha1 = "1e315e3f4b0b7ce40feded39c73049692126cf53"
 uuid = "9e997f8a-9a97-42d5-a9f1-ce6bfc15e2c0"
-version = "0.1.2"
+version = "0.1.3"
 
 [[deps.ColorSchemes]]
 deps = ["ColorTypes", "ColorVectorSpace", "Colors", "FixedPointNumbers", "Random"]
@@ -565,9 +859,9 @@ version = "3.18.0"
 
 [[deps.ColorTypes]]
 deps = ["FixedPointNumbers", "Random"]
-git-tree-sha1 = "024fe24d83e4a5bf5fc80501a314ce0d1aa35597"
+git-tree-sha1 = "a985dc37e357a3b22b260a5def99f3530fb415d3"
 uuid = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
-version = "0.11.0"
+version = "0.11.2"
 
 [[deps.ColorVectorSpace]]
 deps = ["ColorTypes", "FixedPointNumbers", "LinearAlgebra", "SpecialFunctions", "Statistics", "TensorCore"]
@@ -677,6 +971,12 @@ git-tree-sha1 = "c6033cc3892d0ef5bb9cd29b7f2f0331ea5184ea"
 uuid = "f5851436-0d7a-5f13-b9de-f02708fd171a"
 version = "3.3.10+0"
 
+[[deps.FileIO]]
+deps = ["Pkg", "Requires", "UUIDs"]
+git-tree-sha1 = "9267e5f50b0e12fdfd5a2455534345c4cf2c7f7a"
+uuid = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
+version = "1.14.0"
+
 [[deps.FixedPointNumbers]]
 deps = ["Statistics"]
 git-tree-sha1 = "335bfdceacc84c5cdf16aadc768aa5ddfc5383cc"
@@ -715,15 +1015,15 @@ version = "3.3.6+0"
 
 [[deps.GR]]
 deps = ["Base64", "DelimitedFiles", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Pkg", "Printf", "Random", "RelocatableFolders", "Serialization", "Sockets", "Test", "UUIDs"]
-git-tree-sha1 = "af237c08bda486b74318c8070adb96efa6952530"
+git-tree-sha1 = "b316fd18f5bc025fedcb708332aecb3e13b9b453"
 uuid = "28b8d3ca-fb5f-59d9-8090-bfdbd6d07a71"
-version = "0.64.2"
+version = "0.64.3"
 
 [[deps.GR_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Cairo_jll", "FFMPEG_jll", "Fontconfig_jll", "GLFW_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pixman_jll", "Pkg", "Qt5Base_jll", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "cd6efcf9dc746b06709df14e462f0a3fe0786b1e"
+git-tree-sha1 = "1e5490a51b4e9d07e8b04836f6008f46b48aaa87"
 uuid = "d2c73de3-f751-5644-a686-071e5b155ba9"
-version = "0.64.2+0"
+version = "0.64.3+0"
 
 [[deps.GeometryBasics]]
 deps = ["EarCut_jll", "IterTools", "LinearAlgebra", "StaticArrays", "StructArrays", "Tables"]
@@ -742,6 +1042,12 @@ deps = ["Artifacts", "Gettext_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Libic
 git-tree-sha1 = "a32d672ac2c967f3deb8a81d828afc739c838a06"
 uuid = "7746bdde-850d-59dc-9ae8-88ece973131d"
 version = "2.68.3+2"
+
+[[deps.Graphics]]
+deps = ["Colors", "LinearAlgebra", "NaNMath"]
+git-tree-sha1 = "1c5a84319923bea76fa145d49e93aa4394c73fc2"
+uuid = "a2bd30eb-e257-5431-a919-1863eab51364"
+version = "1.1.1"
 
 [[deps.Graphite2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -773,15 +1079,56 @@ uuid = "47d2ed2b-36de-50cf-bf87-49c2cf4b8b91"
 version = "0.0.4"
 
 [[deps.HypertextLiteral]]
-git-tree-sha1 = "2b078b5a615c6c0396c77810d92ee8c6f470d238"
+deps = ["Tricks"]
+git-tree-sha1 = "c47c5fa4c5308f27ccaac35504858d8914e102f9"
 uuid = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
-version = "0.9.3"
+version = "0.9.4"
 
 [[deps.IOCapture]]
 deps = ["Logging", "Random"]
 git-tree-sha1 = "f7be53659ab06ddc986428d3a9dcc95f6fa6705a"
 uuid = "b5f81e59-6552-4d32-b1f0-c071b021bf89"
 version = "0.2.2"
+
+[[deps.ImageBase]]
+deps = ["ImageCore", "Reexport"]
+git-tree-sha1 = "b51bb8cae22c66d0f6357e3bcb6363145ef20835"
+uuid = "c817782e-172a-44cc-b673-b171935fbb9e"
+version = "0.1.5"
+
+[[deps.ImageCore]]
+deps = ["AbstractFFTs", "ColorVectorSpace", "Colors", "FixedPointNumbers", "Graphics", "MappedArrays", "MosaicViews", "OffsetArrays", "PaddedViews", "Reexport"]
+git-tree-sha1 = "9a5c62f231e5bba35695a20988fc7cd6de7eeb5a"
+uuid = "a09fc81d-aa75-5fe9-8630-4744c3626534"
+version = "0.9.3"
+
+[[deps.ImageIO]]
+deps = ["FileIO", "IndirectArrays", "JpegTurbo", "LazyModules", "Netpbm", "OpenEXR", "PNGFiles", "QOI", "Sixel", "TiffImages", "UUIDs"]
+git-tree-sha1 = "d9a03ffc2f6650bd4c831b285637929d99a4efb5"
+uuid = "82e4d734-157c-48bb-816b-45c225c6df19"
+version = "0.6.5"
+
+[[deps.ImageShow]]
+deps = ["Base64", "FileIO", "ImageBase", "ImageCore", "OffsetArrays", "StackViews"]
+git-tree-sha1 = "b563cf9ae75a635592fc73d3eb78b86220e55bd8"
+uuid = "4e3cecfd-b093-5904-9786-8bbb286a6a31"
+version = "0.3.6"
+
+[[deps.Imath_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "87f7662e03a649cffa2e05bf19c303e168732d3e"
+uuid = "905a6f67-0a94-5f89-b386-d35d92009cd1"
+version = "3.1.2+0"
+
+[[deps.IndirectArrays]]
+git-tree-sha1 = "012e604e1c7458645cb8b436f8fba789a51b257f"
+uuid = "9b13fd28-a010-5f03-acff-a1bbcff69959"
+version = "1.0.0"
+
+[[deps.Inflate]]
+git-tree-sha1 = "f5fc07d4e706b84f72d54eedcc1c13d92fb0871c"
+uuid = "d25df0c9-e2be-5dd7-82c8-3ad0b3e990b9"
+version = "0.1.2"
 
 [[deps.IniFile]]
 git-tree-sha1 = "f550e6e32074c939295eb5ea6de31849ac2c9625"
@@ -800,9 +1147,9 @@ uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
 [[deps.InverseFunctions]]
 deps = ["Test"]
-git-tree-sha1 = "91b5dcf362c5add98049e6c29ee756910b03051d"
+git-tree-sha1 = "336cc738f03e069ef2cac55a104eb823455dca75"
 uuid = "3587e190-3f89-42d0-90ee-14403ec27112"
-version = "0.1.3"
+version = "0.1.4"
 
 [[deps.IrrationalConstants]]
 git-tree-sha1 = "7fd44fd4ff43fc60815f8e764c0f352b83c49151"
@@ -830,6 +1177,12 @@ deps = ["Dates", "Mmap", "Parsers", "Unicode"]
 git-tree-sha1 = "3c837543ddb02250ef42f4738347454f95079d4e"
 uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 version = "0.21.3"
+
+[[deps.JpegTurbo]]
+deps = ["CEnum", "FileIO", "ImageCore", "JpegTurbo_jll", "TOML"]
+git-tree-sha1 = "a77b273f1ddec645d1b7c4fd5fb98c8f90ad10a5"
+uuid = "b835a17e-a41a-41e7-81f0-2f016b05efe0"
+version = "0.1.1"
 
 [[deps.JpegTurbo_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -869,6 +1222,11 @@ version = "0.15.15"
 [[deps.LazyArtifacts]]
 deps = ["Artifacts", "Pkg"]
 uuid = "4af54fe1-eca0-43a8-85a7-787d91b784e3"
+
+[[deps.LazyModules]]
+git-tree-sha1 = "f4d24f461dacac28dcd1f63ebd88a8d9d0799389"
+uuid = "8cdb02fc-e678-4876-92c5-9defec4f444e"
+version = "0.3.0"
 
 [[deps.LibCURL]]
 deps = ["LibCURL_jll", "MozillaCACerts_jll"]
@@ -943,9 +1301,9 @@ uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [[deps.LogExpFunctions]]
 deps = ["ChainRulesCore", "ChangesOfVariables", "DocStringExtensions", "InverseFunctions", "IrrationalConstants", "LinearAlgebra"]
-git-tree-sha1 = "76c987446e8d555677f064aaac1145c4c17662f8"
+git-tree-sha1 = "09e4b894ce6a976c354a69041a04748180d43637"
 uuid = "2ab3a3ac-af41-5b50-aa03-7779005ae688"
-version = "0.3.14"
+version = "0.3.15"
 
 [[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
@@ -961,6 +1319,11 @@ deps = ["Markdown", "Random"]
 git-tree-sha1 = "3d3e902b31198a27340d0bf00d6ac452866021cf"
 uuid = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
 version = "0.5.9"
+
+[[deps.MappedArrays]]
+git-tree-sha1 = "e8b359ef06ec72e8c030463fe02efe5527ee5142"
+uuid = "dbb5928d-eab1-5f90-85c2-b9b0edb7c900"
+version = "0.4.1"
 
 [[deps.Markdown]]
 deps = ["Base64"]
@@ -990,22 +1353,40 @@ version = "1.0.2"
 [[deps.Mmap]]
 uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 
+[[deps.MosaicViews]]
+deps = ["MappedArrays", "OffsetArrays", "PaddedViews", "StackViews"]
+git-tree-sha1 = "b34e3bc3ca7c94914418637cb10cc4d1d80d877d"
+uuid = "e94cdb99-869f-56ef-bcf0-1ae2bcbe0389"
+version = "0.3.3"
+
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
 
 [[deps.MutableArithmetics]]
 deps = ["LinearAlgebra", "SparseArrays", "Test"]
-git-tree-sha1 = "ba8c0f8732a24facba709388c74ba99dcbfdda1e"
+git-tree-sha1 = "4050cd02756970414dab13b55d55ae1826b19008"
 uuid = "d8a4904e-b15c-11e9-3269-09a3773c0cb0"
-version = "1.0.0"
+version = "1.0.2"
 
 [[deps.NaNMath]]
-git-tree-sha1 = "737a5957f387b17e74d4ad2f440eb330b39a62c5"
+git-tree-sha1 = "b086b7ea07f8e38cf122f5016af580881ac914fe"
 uuid = "77ba4419-2d1f-58cd-9bb1-8ffee604a2e3"
-version = "1.0.0"
+version = "0.3.7"
+
+[[deps.Netpbm]]
+deps = ["FileIO", "ImageCore"]
+git-tree-sha1 = "18efc06f6ec36a8b801b23f076e3c6ac7c3bf153"
+uuid = "f09324ee-3d7c-5217-9330-fc30815ba969"
+version = "1.0.2"
 
 [[deps.NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
+
+[[deps.OffsetArrays]]
+deps = ["Adapt"]
+git-tree-sha1 = "e6c5f47ba51b734a4e264d7183b6750aec459fa0"
+uuid = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
+version = "1.11.1"
 
 [[deps.Ogg_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1016,6 +1397,18 @@ version = "1.3.5+1"
 [[deps.OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
 uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
+
+[[deps.OpenEXR]]
+deps = ["Colors", "FileIO", "OpenEXR_jll"]
+git-tree-sha1 = "327f53360fdb54df7ecd01e96ef1983536d1e633"
+uuid = "52e1d378-f018-4a11-a4be-720524705ac7"
+version = "0.3.2"
+
+[[deps.OpenEXR_jll]]
+deps = ["Artifacts", "Imath_jll", "JLLWrappers", "Libdl", "Pkg", "Zlib_jll"]
+git-tree-sha1 = "923319661e9a22712f24596ce81c54fc0366f304"
+uuid = "18a262bb-aa17-5467-a713-aee519bc75cb"
+version = "3.1.1+0"
 
 [[deps.OpenLibm_jll]]
 deps = ["Artifacts", "Libdl"]
@@ -1050,6 +1443,18 @@ git-tree-sha1 = "b2a7af664e098055a7529ad1a900ded962bca488"
 uuid = "2f80f16e-611a-54ab-bc61-aa92de5b98fc"
 version = "8.44.0+0"
 
+[[deps.PNGFiles]]
+deps = ["Base64", "CEnum", "ImageCore", "IndirectArrays", "OffsetArrays", "libpng_jll"]
+git-tree-sha1 = "e925a64b8585aa9f4e3047b8d2cdc3f0e79fd4e4"
+uuid = "f57f5aa1-a3ce-4bc8-8ab9-96f992907883"
+version = "0.3.16"
+
+[[deps.PaddedViews]]
+deps = ["OffsetArrays"]
+git-tree-sha1 = "03a7a85b76381a3d04c7a1656039197e70eda03d"
+uuid = "5432bcbf-9aad-5242-b902-cca2824c8663"
+version = "0.5.11"
+
 [[deps.Parsers]]
 deps = ["Dates"]
 git-tree-sha1 = "1285416549ccfcdf0c50d4997a94331e88d68413"
@@ -1065,6 +1470,12 @@ version = "0.40.1+0"
 [[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
+
+[[deps.PkgVersion]]
+deps = ["Pkg"]
+git-tree-sha1 = "a7a7e1a88853564e551e4eba8650f8c38df79b37"
+uuid = "eebad327-c553-4316-9ea0-9fa01ccd7688"
+version = "0.1.1"
 
 [[deps.PlotThemes]]
 deps = ["PlotUtils", "Statistics"]
@@ -1092,9 +1503,9 @@ version = "0.7.38"
 
 [[deps.Polynomials]]
 deps = ["LinearAlgebra", "MutableArithmetics", "RecipesBase"]
-git-tree-sha1 = "0107e2f7f90cc7f756fee8a304987c574bbd7583"
+git-tree-sha1 = "ee0cfbea3d8a44f677d59f5df4677889c4d71846"
 uuid = "f27b6e38-b328-58d1-80ce-0feddd5e7a45"
-version = "3.0.0"
+version = "3.0.1"
 
 [[deps.Preferences]]
 deps = ["TOML"]
@@ -1105,6 +1516,18 @@ version = "1.3.0"
 [[deps.Printf]]
 deps = ["Unicode"]
 uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+
+[[deps.ProgressMeter]]
+deps = ["Distributed", "Printf"]
+git-tree-sha1 = "d7a7aef8f8f2d537104f170139553b14dfe39fe9"
+uuid = "92933f4c-e287-5a05-a399-4b506db050ca"
+version = "1.7.2"
+
+[[deps.QOI]]
+deps = ["ColorTypes", "FileIO", "FixedPointNumbers"]
+git-tree-sha1 = "18e8f4d1426e965c7b532ddd260599e1510d26ce"
+uuid = "4b34888f-f399-49d4-9bb3-47ed5cae4e65"
+version = "1.0.0"
 
 [[deps.Qt5Base_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Fontconfig_jll", "Glib_jll", "JLLWrappers", "Libdl", "Libglvnd_jll", "OpenSSL_jll", "Pkg", "Xorg_libXext_jll", "Xorg_libxcb_jll", "Xorg_xcb_util_image_jll", "Xorg_xcb_util_keysyms_jll", "Xorg_xcb_util_renderutil_jll", "Xorg_xcb_util_wm_jll", "Zlib_jll", "xkbcommon_jll"]
@@ -1170,6 +1593,12 @@ git-tree-sha1 = "91eddf657aca81df9ae6ceb20b959ae5653ad1de"
 uuid = "992d4aef-0814-514b-bc4d-f2e9a6c4116f"
 version = "1.0.3"
 
+[[deps.Sixel]]
+deps = ["Dates", "FileIO", "ImageCore", "IndirectArrays", "OffsetArrays", "REPL", "libsixel_jll"]
+git-tree-sha1 = "8fb59825be681d451c246a795117f317ecbcaa28"
+uuid = "45858cf5-a6b0-47a3-bbea-62219f50df47"
+version = "0.1.2"
+
 [[deps.Sockets]]
 uuid = "6462fe0b-24de-5631-8697-dd941f90decc"
 
@@ -1185,9 +1614,15 @@ uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [[deps.SpecialFunctions]]
 deps = ["ChainRulesCore", "IrrationalConstants", "LogExpFunctions", "OpenLibm_jll", "OpenSpecFun_jll"]
-git-tree-sha1 = "5ba658aeecaaf96923dce0da9e703bd1fe7666f9"
+git-tree-sha1 = "bc40f042cfcc56230f781d92db71f0e21496dffd"
 uuid = "276daf66-3868-5448-9aa4-cd146d93841b"
-version = "2.1.4"
+version = "2.1.5"
+
+[[deps.StackViews]]
+deps = ["OffsetArrays"]
+git-tree-sha1 = "46e589465204cd0c08b4bd97385e4fa79a0c770c"
+uuid = "cae243ae-269e-4f55-b966-ac2d0dc13c15"
+version = "0.1.1"
 
 [[deps.StaticArrays]]
 deps = ["LinearAlgebra", "Random", "Statistics"]
@@ -1246,6 +1681,17 @@ version = "0.1.1"
 [[deps.Test]]
 deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[[deps.TiffImages]]
+deps = ["ColorTypes", "DataStructures", "DocStringExtensions", "FileIO", "FixedPointNumbers", "IndirectArrays", "Inflate", "OffsetArrays", "PkgVersion", "ProgressMeter", "UUIDs"]
+git-tree-sha1 = "f90022b44b7bf97952756a6b6737d1a0024a3233"
+uuid = "731e570b-9d59-4bfa-96dc-6df516fadf69"
+version = "0.5.5"
+
+[[deps.Tricks]]
+git-tree-sha1 = "6bac775f2d42a611cdfcd1fb217ee719630c4175"
+uuid = "410a4b4d-49e4-4fbc-ab6d-cb71b17b3775"
+version = "0.1.6"
 
 [[deps.URIs]]
 git-tree-sha1 = "97bbe755a53fe859669cd907f2d96aee8d2c1355"
@@ -1452,6 +1898,12 @@ git-tree-sha1 = "94d180a6d2b5e55e447e2d27a29ed04fe79eb30c"
 uuid = "b53b4c65-9356-5827-b1ea-8c7a1a84506f"
 version = "1.6.38+0"
 
+[[deps.libsixel_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "78736dab31ae7a53540a6b752efc61f77b304c5b"
+uuid = "075b6546-f08a-558a-be8f-8157d0f608a5"
+version = "1.8.6+1"
+
 [[deps.libvorbis_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Ogg_jll", "Pkg"]
 git-tree-sha1 = "b910cb81ef3fe6e78bf6acee440bda86fd6ae00c"
@@ -1491,10 +1943,10 @@ version = "0.9.1+5"
 # ╟─d98ac7ca-96f2-11ec-0d44-b7943badb165
 # ╟─b462d67d-e8fe-4970-8346-1561ab2e3fc7
 # ╟─8fe17b2a-356f-4fdb-b04b-a440402f3a12
+# ╠═018cc916-0712-4bfc-9715-bf512c3930ab
 # ╠═6c5e00a0-2239-4ec8-a929-9bc695cae5b2
 # ╠═3a337cba-31b1-433d-adc0-857438731585
 # ╟─1ea381a9-5bf1-4a64-87fc-a89557b7c15b
-# ╠═018cc916-0712-4bfc-9715-bf512c3930ab
 # ╟─e8e9eeaa-7215-40c3-8da1-85619057fa24
 # ╠═dd7bc6e1-8940-4cd6-aa51-6e5d5646c5f3
 # ╟─e1340e20-7e6a-4a2e-a2f1-7675339000f2
@@ -1539,9 +1991,22 @@ version = "0.9.1+5"
 # ╟─27e978c0-063b-4b79-81c5-b05be2a2979c
 # ╟─7a421503-9dd0-49c2-82b2-d709652ef4a9
 # ╠═972b455a-0d20-4f1d-98df-28e9b219b148
+# ╟─77f4138a-0897-4153-b752-d938062d62ed
+# ╠═317f4244-4748-48a8-b6ea-f5a7d09f8f0c
+# ╠═97a45280-804e-405a-afda-c220f21406b4
+# ╟─f2189dbb-163e-40b9-bae4-65f7691a1bdd
+# ╠═3f9a3bc0-1063-44c9-9710-b81e5b528bd9
+# ╠═49e196e2-c62e-40e2-b6d7-675640258885
+# ╠═812372c8-82d7-4fee-8b0c-a9e22ae398c2
+# ╠═5133276a-8995-4ce9-a1f5-2c4caf116e20
+# ╠═dc548c88-d969-4eaf-8ddd-938f953fda1a
+# ╟─9b933f4b-92bf-48b8-91f6-980ea65ea18c
 # ╠═c3cb0bbb-fcc0-49f8-b66e-74ca7ac96108
 # ╠═54daea9f-2c1e-4934-a666-b14b960bd45f
 # ╠═008c6d5a-263a-4388-88bb-6521a9cb8aab
 # ╠═8fc2995f-762b-40be-a396-95b6bd3b914c
+# ╟─1dfdcd5f-a35b-4297-ad7a-35c83206e181
+# ╟─474eaefe-470d-46bf-bbb2-1f80773a85d2
+# ╟─44730fab-9238-4135-ae6e-43a114db810e
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
