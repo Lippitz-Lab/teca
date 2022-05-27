@@ -111,7 +111,7 @@ lassen.
 # ╔═╡ db28dc51-f417-459e-a0eb-b93dced3cc25
 md"""
 Ein solches Verfahren wird im **'Guide to the Expression of Uncertainty in
-Measurement' (GUM)** des *Bureau International des Poids et Mesures*
+Measurement' (GUM)** des [*Bureau International des Poids et Mesures*](https://www.bipm.org/en/committees/jc/jcgm/publications)
 beschrieben und ist Industriestandard in der Metrologie. Es
 standardisiert und modifiziert damit teilweise das, was in der Physik
 unter 'Fehlerrechnung' verstanden wurde. Ein wesentlicher Punkt ist,
@@ -650,6 +650,11 @@ md"""
 
 coming soon \...
 see [MonteCarloMeasurements.jl](https://baggepinnen.github.io/MonteCarloMeasurements.jl/stable/)
+"""
+
+# ╔═╡ dce58f00-78bf-424e-8f9f-35306266f0f3
+md"""
+[Uncertainty machine](https://www.nist.gov/itl/sed/topic-areas/measurement-uncertainty) des NIST
 """
 
 # ╔═╡ 8de57df0-5d80-4fa3-be75-ccf03db5a21d
@@ -1712,6 +1717,7 @@ version = "0.9.1+5"
 # ╟─a366a4c2-71c3-4999-8bd5-782870fbafa9
 # ╟─4ff70a42-a9c4-45de-911c-9f06057d8286
 # ╟─a3e5d870-f11d-4b9b-a384-d055b6df8232
+# ╟─dce58f00-78bf-424e-8f9f-35306266f0f3
 # ╠═2b794068-00e4-47b3-b082-7fba3c3adb9e
 # ╠═8de57df0-5d80-4fa3-be75-ccf03db5a21d
 # ╟─00000000-0000-0000-0000-000000000001

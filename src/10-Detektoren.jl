@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.0
+# v0.19.4
 
 using Markdown
 using InteractiveUtils
@@ -29,6 +29,13 @@ I Kap. 18, Saleh/Teich Kap. 18.6
 
 """
 
+# ╔═╡ 434da4bd-17d2-4c3e-9acf-b6714250dfe5
+md"""
+Photodetekor OE-200 von Femto
+- [website](https://www.femto.de/en/products/photoreceivers/variable-gain-up-to-500-khz-oe-200.html)
+- [Datenblatt](https://www.femto.de/images/pdf-dokumente/de-oe-200-si.pdf)
+"""
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
@@ -47,5 +54,6 @@ manifest_format = "2.0"
 # ╔═╡ Cell order:
 # ╟─f5450eab-0f9f-4b7f-9b80-992d3c553ba9
 # ╠═4580e946-96f3-11ec-38d9-bbfb594fb979
+# ╠═434da4bd-17d2-4c3e-9acf-b6714250dfe5
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.0
+# v0.19.4
 
 using Markdown
 using InteractiveUtils
@@ -25,6 +25,13 @@ funktioniert und ihn zur Messung kleiner Signal *benutzen*.
  
 """
 
+# ╔═╡ 80aff572-e704-4211-910c-657deedc9736
+md"""
+Lock-In Verstärker SR830 von Stanford Research
+- [Manual](https://www.thinksrs.com/downloads/pdfs/manuals/SR830m.pdf)
+- [website](https://www.thinksrs.com/products/sr810830.html)
+"""
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
@@ -42,6 +49,7 @@ manifest_format = "2.0"
 
 # ╔═╡ Cell order:
 # ╟─f5450eab-0f9f-4b7f-9b80-992d3c553ba9
-# ╠═5cdbcc8c-96f3-11ec-3e70-45ed796a8b3d
+# ╟─5cdbcc8c-96f3-11ec-3e70-45ed796a8b3d
+# ╟─80aff572-e704-4211-910c-657deedc9736
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
