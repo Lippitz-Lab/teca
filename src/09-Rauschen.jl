@@ -374,6 +374,15 @@ md"""
 - Erzeugen Sie mehrere,  'leistungsabhängige' Sequenzen von Zufallszahlen für diese Punkte.
 """
 
+# ╔═╡ 8b2e767d-1283-41fc-8259-c6e23fbf124f
+md"""
+# Aufgabe: Oszilloskop
+
+Berechnen Sie die effektive thermische Rauschspannung in einem 50 $\Omega$ Widerstand bei ca 17 °C (290 K) bei einer Messbandbreite von 20 MHz.
+
+Mit welchem Signal-zu-Rausch-Verhältnis wird dann eine Sinus-Oszillation von 1 $\mu$V Amplititude gemessen?
+"""
+
 # ╔═╡ d8faa994-c2b3-4475-a259-d478fcac0398
 TableOfContents(title="Inhalt")
 
@@ -1344,6 +1353,7 @@ version = "0.9.1+5"
 # ╟─34ef0881-8df5-42df-a82c-e9715ac23009
 # ╠═18216b75-2dc1-47b0-86de-240b3b1d094d
 # ╟─3e6d84e3-ed8a-470d-b85a-78c4797c1505
+# ╟─8b2e767d-1283-41fc-8259-c6e23fbf124f
 # ╠═e93ef54a-4a0b-4ed1-a476-e980224934bf
 # ╠═d8faa994-c2b3-4475-a259-d478fcac0398
 # ╠═d7671b7d-0304-4b4b-906c-dab997dde3ed
