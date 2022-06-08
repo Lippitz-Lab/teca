@@ -41,7 +41,7 @@ md"""
 
 
 **Literatur** Horowitz/Hill Kap. 7.18--21, Handbook of Optics
-I Kap. 18, Saleh/Teich Kap. 18.6
+I Kap. 18, Saleh/Teich Kap. 18 (2. Aufl.) bzw. 17 (1. Aufl.)
 
 """
 
@@ -55,42 +55,89 @@ Wir behandeln hier Licht im sichtbaren Spektrum, also einer Wellenlänge  λ = 4
 
 # ╔═╡ 29db8930-3faa-4099-babc-67f942d5b276
 md"""
-## Detektionsarten
+Es gibt sehr viele Arten, Licht zu detektieren. Die Übersicht auf dem englischen [Wikipedia-Seite](https://en.wikipedia.org/wiki/Photodetector) ist ziemlich vollständig.
 
-**Fotofilm** Belichtung führt zu bleibender chem. Reaktion 
-     (Einzelne Photonen können registriert werden, Schlüsselmethode bzgl. Empfindlichkeit und räuml. Auflösung bis vor ca. 30 Jahren)
+**Fotofilm** Belichtung führt zu bleibender chemischen Reaktion. Selbst einzelne Photonen können registriert werden. Dies war bis vor ca. 30 Jahren die Schlüsselmethode bzgl. Empfindlichkeit und räuml. Auflösung.
 
-**Thermisch** Idealerweise schwarze Absorber. 
-      Temperaturdifferenz zur Umgebung wird in el. Signal gewandelt.
-      Wichtige Typen: Thermosäule (engl. Thermopile), Pyrodetektor (zeit. Änderungen), Bolometer. 
+**Thermisch** Idealerweise schwarzer Absorber. Die
+      Temperaturdifferenz zur Umgebung wird in ein elektrisches Signal gewandelt.
+      Wichtige Typen: Thermosäule (engl. Thermopile), Pyrodetektor (zeitliche Änderungen), Bolometer. Vorteile:
       Spektral Breitbandig, robust. Nachteile: langsame Anstiegszeit, Empfindlichkeit.
 
-**Quanten-Sensoren** Innerer oder äußerer Photoeffekt
-     Photomultiplier (engl. -tube (PMT)), Photoleiter, Photodioden. Einzelne Photonen können registriert werden, schnell, oft sub-µs.
+**Quanten-Sensoren** benutzen den Inneren oder äußeren Photoeffekt.
+     Photomultiplier (-tube, PMT), Photoleiter, Photodioden. Einzelne Photonen können registriert werden, schnell, oft sub-µs. Je niederenergetischer das Photon, desto komplizierter die Detektion.
+"""
+
+# ╔═╡ 02923951-dce2-4941-be90-3b3cc0f764bb
+md"""
+In diesem Kapitel besprechen wir nur Quanten-Sensoren, im wesentloche solche, die den inneren Photoeffekt benutzen. Wir folgendem dem Kapitel 17 bzw. 18 über Halbleiter-Photodetektoren in Saleh/Teich.
+"""
+
+# ╔═╡ 870cc18a-e47e-490a-9d23-b13211bb3f5f
+md"""
+# Der äußere Photoeffekt
+
+Beim äußeren Photoeffekt wird ein Elektron im Material durch  Absoprtion eines Photons in ein freies Elektron überführt. In Metallen stammt dieses Elektron aus dem Leitungsband, und die Austrittsarbeit (engl. work function) $W$ muss überwunden werden. Die vebeliebende (kinetsiche) Enegie des Elekttons ist dann
+```math
+E_{max} = h \nu - W
+```
+Typische Werte für $W$ liegen im bereich von einigen eV. Am noedrisgten ist sie bei Cäsium (Cs) mit $W_{Cs} \approx 2$ eV. Photokathoden aus Metall verlangen also blaue bis ultarvioloette Photonen.
+
+Bei Halbleitern ist das im Wesnetlocihen indentisch. Das Elektron stammt dann aus dem Valenzband, da das Leitunsgabnd quasi leer ist. Es muss die Energie der Bandlücle überwunden werden sowie die der Elektronen-Affinität $\chi$, also die Differenz der oberen bandkante zum Vakuum. Ingesamt also
+```math
+E_{max} = h \nu - (E_g + \chi)
+```
+Für bestiommte Materialien ist $(E_g + \chi)$ aber relativ klllien, zB bei NaKCsSb 
+etewa 1.4 eV. Dieses Metarial bildet die oft benutzte S20-Photokathode.
+
+der äußere Photoeffekt wird in PMTs benutzt. Lich fällt auf die Photokathode, ein Elektron wird freigesetzt und durch eine Potentialdifferenz hin zu einer eresten Elektrode beaschleeunigt. Dort wwerden weitere Elektronen herausgeshclagen, da das erste Elektron an diersert stelle ja eine Energie hat, die viell größer als die des Photons ist. Die Elektronenzahl wid also multipliziert. DIeser Effekt wid mehrmals weisderholt. Man bekommt alspo einen messbarenb Strom-Puls, der von eibnem einzigen Photon ausgeköst wurde, und etwa $10^7$ Elektronen pro Photon umfasst.
+
+"""
+
+# ╔═╡ d740d9cf-e23f-498e-a80e-316adbab448c
+md"""
+# Der innere Photoeffekt
+
+Beim inneren Photoeffekt wird ein Elektron durch Absirption eines Photons vom Valenzband ins Leitungsband angehoben. Im BValenzband verbleibt ein Loch. Durch Anlegen einer Spannungung weden Loch und Elektron räumlich voneinander getrennt und ein Stroim fließt. Das geschieht an der Grenze zwsichen einem p- und einem n-dotiertenten Bereich in einer pn-Photodiode. 
+
+Die Elelktronen-Multuplikation des PMT kann man auch im Halbleiuter nachbilden. Dabei wird eine starkle Beschelunigungsspannung über die Genrzshcicht angelegt. Man erhält einen Lawieneneartug ansteigenden Strom, der passend gestoppt werden muss. Dies ist die Lawienen-Photodiode (engl. avalanche photodiode, APD). Sie vesrärkt den Strom gegenüber einer pn-Diode und so können einzelnen Photonen detektiert werden.
+"""
+
+# ╔═╡ d450fd59-076b-42a1-a8f8-57c769f017b2
+md"""
+# Parameter
+
+## Quanteneffizienz
+
+Die Quanteneffizienz $\eta$ beschreibt, mit welcher Wahrscheinlichkeit ein einzeles Photon freie Ladungsträger erzeigzng und so zum Photostrim beiträgt. $\eta$ liegt natürlich zwsichen 0 und 1. Darin geht ein, mit welcher Wahrscheinlichkeit das Photon überhaupt im Materuial abisoprbiert wird (Refekltivität der Oberfläöche, Absirptiond es Materials), und mit welcher Whasrcheinblichkeuit dies zu einem passendne Laddungsträger führt.
+
+In Halbleiter-Photoioden ist Quanteneffizienz $\eta$ Wellenlängenabhängig. Bei zu grroßer Wellenlänge wird die Bandlücke $E_g$ nicht überwunden und $\eta \appox 0$. In Richtung kleiner Wellenkämnge / großer Energie ist der Berreich dadurch limitiuert, dass das Photon quasi nicht in das Maetrail eindringt, an der Oberfläche absoprbiert wid, dort aber in Fallenzuständen endet und nicht zum Strom beiträgt.- 
+
+Typsiche Werte der Quanteneffizienz $\eta$ sind etwa 0.5 bis 0.9.
+
 """
 
 # ╔═╡ 6ef1f1e8-7db9-4636-811a-0bd18303358d
 md"""
 ## Empfindlichkeit
 
-Empfindlichkeit (engl responsivity), Einheit A/W:  Elektrische Stromantwort auf einfallende Lichtleistung $P$
+Die Empfindlichkeit (engl responsivity) verknüpft den einfallenden Fluss an Photonen mit dem entsehenden Dluss an Elektronen, beschreibt also die  elektrische Stromantwort auf einfallende Lichtleistung $P$. Der Strom ist 
 ```math
- R = \frac{\eta \, e}{h \nu}
+ i_P = \eta e \Phi_{opt} = \frac{\eta \, e}{h \nu} = R \, P
 ```
-Photon erzeugt nur mit Faktor der *Quanteneffizienz* $\eta$ ein Elektron, somit ist 
-Photostrom
+Die Empfindlichkeit $R$ hat die EInheit A/W
 ```math
- i_P = R \, P
+ R = \frac{\eta \, e}{h \nu} = \eta \, \frac{\lambda}{1240 \, nm} A/W
 ```
-also eine lineare Beziehung im 'linearen dynamischen Bereich'. $R$ ist frequenz-, bzw. wellenlängenabhängig!
+Die Empfindlichkeit hängt linear von der Wellenlämnge $\lambda$ ab, bei konmstanter Quanteneffizienz. Dies hämngt damit zusammen, dass ja eigentlich Photonen in Elektronen umgewandelt werden, und nicht optische Energie in Strom. Bei niedriger Wellenlänge bringt ein Photon viel LEistung mit; bei gleicher Lichtleistung $P$ bekommt man also relativ wenig ELektronen.
 
-Typische Werte der Quantenausbeite sind $\eta \approx 0.5$ bzw. der Empfindlichkeit $R \approx 0.5 A/W$. 
+Typische Werte der Empfindlichkeit sind $R \approx 0.5 A/W$. 
 
 """
 
 # ╔═╡ e99c3b8a-1942-4e07-ab27-2a44ff24eb96
 md"""
-### Beispiel: Silizium-Diode
+### Beispiel: Silizium-Photodiode
 
 FDS100, [Thorlabs](https://www.thorlabs.com/thorproduct.cfm?partnumber=FDS100)
 bzw [hier](https://www.thorlabs.com/newgrouppage9.cfm?objectgroup_id=285) auf das '(i)' klicken.
@@ -115,6 +162,70 @@ begin
 	plot(λ, R, legend=false, xlabel="Wellenlänge (nm)", ylabel="Empfindlichkeit (A/W)")
 	plot!(λ, Rmodel_AW)
 end
+
+# ╔═╡ 11d95dd8-dc96-4317-981b-b4c8bbeb6362
+md"""
+## Antwortzeit
+
+Die Antwortzeit (engl. response time) beschreibt die Impulsantwort der Photodiode. Sie wird durch zwei Größen bestimmt: die Transit-Zeit und die RC-Zeitkonstante.
+
+Die Transit-Zeit ist die Zeit, die benöigt wird, um alle LAdungsträgerr aus dem aktoiven Bereich der Photodiode heruas zu bejkommen. Wenn der aktive Bereich die Breizte $w$ hat und die Ladungsräger mit der Geschwiddigkeit $v(t)$ bewehgtr werden, dann ist der Strom
+```math
+i(t) = - \frac{Q}{w} \, v(t)
+```
+mit $Q=+e$ für Löcher und $Q=-e$ für ELekttronen. Je kleiner der aktive Bereich, desto schlenner allso die Antwort der Diode. Das ist der Vorteil der pin-Dioden (unten mehr).
+
+Die RC-Zeit entsteht dadurch, dass immer Widestände $R$ und Kapapzitäen $C$ vorrhanden sind, selbst in der Diode allein. Dies führt dazu, dass oboige Impilsantwort mit einem Exponetialgesetzt zu falten ist
+```math
+h_{rc}(t) = \frac{1}{RC} e^{- \frac{t}{RC}}
+```
+"""
+
+# ╔═╡ 8006880f-9f33-4a9b-9433-d4a31ab8502b
+md"""
+Für obige FDS100 gibt der Händler an: $C \approx 24$ pF und $\tau_{rc} \approx 10$ ns bei $R= 50 \Omega$
+"""
+
+# ╔═╡ 46cf25e2-f549-4997-95bf-fec87f6f3ced
+let
+	R = 50.0u"Ω"
+	C = 24.0u"pF"
+	tau = R * C |> u"ns"
+end
+
+# ╔═╡ 41bd75ea-907c-4db3-aac4-cffea61b6730
+md"""
+Die Impulsantwrot wird also durch die Transit-zeit dominierr.
+"""
+
+# ╔═╡ fdb400fb-d193-4fc4-8951-1d1d92741f08
+md"""
+## Kennlinie
+
+Die Strom-Spannungs-Kennlinie einer Photodiode ist identsich der einer nromalen Diode, zuzügloch einem Photostrom. Aucxh eine Solarzelle hat diese Kennlinie.
+```math
+i = i_s \left[ \exp \left( \frac{eV}{kT}   \right)  -1   \right] - i_p
+```
+mit dem Sättigungs(sperr)strom $i_s$, dem Photostriom $i_p$ und der Spanniung $V$ (positib in Durchlassrichtung)
+"""
+
+# ╔═╡ 1b091521-955d-4972-adb6-1d6e43a67e53
+let
+	x = (-3:0.1:3)
+	I(p) = exp.(x) .- 1 .- p
+	plot(x, I(0), label="dunkel")
+	plot!(x, I(5), label="mittel")
+	plot!(x, I(10), label="hell", xlabel="Spannung V", ylabel="Strom i")
+end
+
+# ╔═╡ 185633a7-584b-4da0-83b1-5621446596f3
+md"""
+Man kann die Diode bei verschiedenen Arbeitspunkten betreiben, je nach angelegter Spannung. 'open circuit' lässt keinen Strom fließen, weil (quasi) keine Last anliget. Dies sind Punkte mit $i=0$. 'short circuzit' schlißt die Diode kurz, ohne externe Spannung. Dies sind Punkte mit $V=0$. Eine Solarzeelle beetreibt man im rechten unteren QWuadraten, also bei $V>0$ und $i < 0$, idealerweise so, dass $P = i V$ maximal wird.
+
+Als Photodetektor will man einen loinearen vewrlauf zwsichen dem einfallenende Photonenstrom und damit dem Photostrom $i_p$ und dem gemessenen Gesamtstrom $i$ errecihen. Man legt eine (negative) Bias-SPannuing $V_B$ an und setzt $V = V_B. < 0$. Wenn ein Last-Widerstand vorhanden ist, dann ist $V = V_B + R_{Last} \, i$.
+
+Im Beispiel oben wurde $V_B = -20$ V gewählt.
+"""
 
 # ╔═╡ b4abca58-03ad-4a15-a490-74834495d286
 md"""
@@ -1302,7 +1413,11 @@ version = "0.9.1+5"
 # ╟─0e6b72ce-38e4-4212-921e-1221d0740b7a
 # ╟─4580e946-96f3-11ec-38d9-bbfb594fb979
 # ╟─0254558d-a260-4763-a761-629a78e0d8dd
-# ╟─29db8930-3faa-4099-babc-67f942d5b276
+# ╠═29db8930-3faa-4099-babc-67f942d5b276
+# ╟─02923951-dce2-4941-be90-3b3cc0f764bb
+# ╟─870cc18a-e47e-490a-9d23-b13211bb3f5f
+# ╟─d740d9cf-e23f-498e-a80e-316adbab448c
+# ╟─d450fd59-076b-42a1-a8f8-57c769f017b2
 # ╟─6ef1f1e8-7db9-4636-811a-0bd18303358d
 # ╟─e99c3b8a-1942-4e07-ab27-2a44ff24eb96
 # ╠═8a6359c4-5064-45fb-89c3-8d9bd799e04e
@@ -1310,6 +1425,13 @@ version = "0.9.1+5"
 # ╠═f5313df1-f07c-4407-ac37-8e9a8b667414
 # ╠═bf5e9bb0-1f21-4576-905d-b134b8c2762c
 # ╠═a880e78b-6a35-479b-ae53-6269347f1f70
+# ╠═11d95dd8-dc96-4317-981b-b4c8bbeb6362
+# ╠═8006880f-9f33-4a9b-9433-d4a31ab8502b
+# ╠═46cf25e2-f549-4997-95bf-fec87f6f3ced
+# ╠═41bd75ea-907c-4db3-aac4-cffea61b6730
+# ╠═fdb400fb-d193-4fc4-8951-1d1d92741f08
+# ╠═1b091521-955d-4972-adb6-1d6e43a67e53
+# ╟─185633a7-584b-4da0-83b1-5621446596f3
 # ╟─b4abca58-03ad-4a15-a490-74834495d286
 # ╟─e79722c5-f674-4292-9161-b49a4a935610
 # ╠═ca9fcc00-558b-4008-b9f9-7321e6115731
