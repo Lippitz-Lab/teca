@@ -111,7 +111,7 @@ md"""
 
 Die Quanteneffizienz $\eta$ beschreibt, mit welcher Wahrscheinlichkeit ein einzelnes Photon freie Ladungsträger erzeugt und so zum Photostrom beiträgt. $\eta$ liegt natürlich zwischen 0 und 1. Darin geht ein, mit welcher Wahrscheinlichkeit das Photon überhaupt im Material absorbiert wird (Reflexivität der Oberfläche, Absorption des Materials), und mit welcher Wahrscheinlichkeit dies zu einem passenden Ladungsträger führt.
 
-In Halbleiter-Photodioden ist Quanteneffizienz $\eta$ Wellenlängenabhängig. Bei zu großer Wellenlänge wird die Bandlücke $E_g$ nicht überwunden und $\eta \approx 0$. In Richtung kleiner Wellenlänge / großer Energie ist der Bereich dadurch limitiert, dass das Photon quasi nicht in das Material eindringt, an der Oberfläche absorbiert wid, dort aber in Fallenzuständen endet und nicht zum Strom beiträgt.- 
+In Halbleiter-Photodioden ist Quanteneffizienz $\eta$ wellenlängenabhängig. Bei zu großer Wellenlänge wird die Bandlücke $E_g$ nicht überwunden und $\eta \approx 0$. In Richtung kleiner Wellenlänge / großer Energie ist der Bereich dadurch limitiert, dass das Photon quasi nicht in das Material eindringt, an der Oberfläche absorbiert wid, dort aber in Fallenzuständen endet und nicht zum Strom beiträgt.- 
 
 Typische Werte der Quanteneffizienz $\eta$ sind etwa 0.5 bis 0.9.
 
@@ -173,7 +173,7 @@ Die Transit-Zeit ist die Zeit, die benötigt wird, um alle Ladungsträger aus de
 ```math
 i(t) = - \frac{Q}{w} \, v(t)
 ```
-mit $Q=+e$ für Löcher und $Q=-e$ für Elektronen. Je kleiner der aktive Bereich, desto schneller also die Antwort der Diode. Das ist der Vorteil der pin-Dioden.
+mit $Q=+e$ für Löcher und $Q=-e$ für Elektronen. Je kleiner der aktive Bereich, desto schneller also die Antwort der Diode. 
 
 Die RC-Zeit entsteht dadurch, dass immer Widerstände $R$ und Kapazitäten $C$ vorhanden sind, selbst in der Diode allein. Dies führt dazu, dass obige Impulsantwort mit einem Exponentialgesetz zu falten ist
 ```math
@@ -183,7 +183,7 @@ h_{rc}(t) = \frac{1}{RC} e^{- \frac{t}{RC}}
 
 # ╔═╡ 8006880f-9f33-4a9b-9433-d4a31ab8502b
 md"""
-Für obige FDS100 gibt der Händler an: $C \approx 24$ pF und $\tau_{rc} \approx 10$ ns bei $R= 50 \Omega$
+Für obige FDS100 gibt der Händler an: $C \approx 24$ pF und $\tau_{diode} \approx 10$ ns bei $R= 50 \Omega$
 """
 
 # ╔═╡ 46cf25e2-f549-4997-95bf-fec87f6f3ced
@@ -215,7 +215,7 @@ let
 	I(p) = exp.(x) .- 1 .- p
 	plot(x, I(0), label="dunkel")
 	plot!(x, I(5), label="mittel")
-	plot!(x, I(10), label="hell", xlabel="Spannung V", ylabel="Strom i")
+	plot!(x, I(10), label="hell", xlabel="Spannung V", ylabel="Strom i",framestyle = :zerolines)
 end
 
 # ╔═╡ 185633a7-584b-4da0-83b1-5621446596f3
@@ -282,7 +282,7 @@ Falls nur Photonen-Rauschen vorliegt, bzw. dies der dominante Anteil ist, dann i
 ```math
 \text{SNR} = \frac{n}{\sqrt{n}} = \sqrt{n}
 ```
-Ein SNR von 1 erhält man bei einem Detektierten Photon ($n=1$) pro Zeitintervall.
+Ein SNR von 1 erhält man bei einem detektierten Photon ($n=1$) pro Zeitintervall.
 """
 
 # ╔═╡ ed23907d-8627-40c4-8ebf-cb8879ffe3fd
@@ -294,7 +294,7 @@ end
 
 # ╔═╡ e31bd36e-6857-4bfb-a592-172515731ba4
 md"""
-Bei einer Integrationszeit von 1 µs und einer Wellenlänge von 620 nm beträgt die NEP also ca. 331 fW.
+Bei einer Integrationszeit von 1 µs und einer Wellenlänge von 620 nm beträgt die NEP also ca. 330 fW.
 """
 
 # ╔═╡ 6f0580a1-71a9-4553-bce2-3bd116599644
@@ -1524,7 +1524,7 @@ version = "0.9.1+5"
 # ╠═bf5e9bb0-1f21-4576-905d-b134b8c2762c
 # ╠═a880e78b-6a35-479b-ae53-6269347f1f70
 # ╟─11d95dd8-dc96-4317-981b-b4c8bbeb6362
-# ╠═8006880f-9f33-4a9b-9433-d4a31ab8502b
+# ╟─8006880f-9f33-4a9b-9433-d4a31ab8502b
 # ╠═46cf25e2-f549-4997-95bf-fec87f6f3ced
 # ╟─41bd75ea-907c-4db3-aac4-cffea61b6730
 # ╟─fdb400fb-d193-4fc4-8951-1d1d92741f08
