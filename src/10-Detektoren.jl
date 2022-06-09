@@ -25,7 +25,7 @@ html"""<div>
 <font size="7"><b>10 Detektoren</b></font> </div>
 
 <div><font size="5"> Markus Lippitz</font> </div>
-<div><font size="5"> 7. Juni 2022 </font> </div>
+<div><font size="5"> 9. Juni 2022 </font> </div>
 """
 
 # ╔═╡ 4580e946-96f3-11ec-38d9-bbfb594fb979
@@ -57,7 +57,7 @@ Wir behandeln hier Licht im sichtbaren Spektrum, also einer Wellenlänge  λ = 4
 md"""
 Es gibt sehr viele Arten, Licht zu detektieren. Die Übersicht auf dem englischen [Wikipedia-Seite](https://en.wikipedia.org/wiki/Photodetector) ist ziemlich vollständig.
 
-**Fotofilm** Belichtung führt zu bleibender chemischen Reaktion. Selbst einzelne Photonen können registriert werden. Dies war bis vor ca. 30 Jahren die Schlüsselmethode bzgl. Empfindlichkeit und räuml. Auflösung.
+**Fotofilm** Belichtung führt zu bleibender chemischen Reaktion. Selbst einzelne Photonen können registriert werden. Dies war bis vor ca. 30 Jahren die Schlüsselmethode bzgl. Empfindlichkeit und räumlicher Auflösung.
 
 **Thermisch** Idealerweise schwarzer Absorber. Die
       Temperaturdifferenz zur Umgebung wird in ein elektrisches Signal gewandelt.
@@ -70,27 +70,27 @@ Es gibt sehr viele Arten, Licht zu detektieren. Die Übersicht auf dem englische
 
 # ╔═╡ 02923951-dce2-4941-be90-3b3cc0f764bb
 md"""
-In diesem Kapitel besprechen wir nur Quanten-Sensoren, im wesentloche solche, die den inneren Photoeffekt benutzen. Wir folgendem dem Kapitel 17 bzw. 18 über Halbleiter-Photodetektoren in Saleh/Teich.
+In diesem Kapitel besprechen wir nur Quanten-Sensoren, im wesentlichen solche, die den inneren Photoeffekt benutzen. Wir folgendem dem Kapitel 17 bzw. 18 über Halbleiter-Photodetektoren in Saleh/Teich.
 """
 
 # ╔═╡ 870cc18a-e47e-490a-9d23-b13211bb3f5f
 md"""
 # Der äußere Photoeffekt
 
-Beim äußeren Photoeffekt wird ein Elektron im Material durch  Absoprtion eines Photons in ein freies Elektron überführt. In Metallen stammt dieses Elektron aus dem Leitungsband, und die Austrittsarbeit (engl. work function) $W$ muss überwunden werden. Die vebeliebende (kinetsiche) Enegie des Elekttons ist dann
+Beim äußeren Photoeffekt wird ein Elektron im Material durch  Absorption eines Photons in ein freies Elektron überführt. In Metallen stammt dieses Elektron aus dem Leitungsband, und die Austrittsarbeit (engl. work function) $W$ muss überwunden werden. Die verbleibende (kinetische) Energie des Elektrons ist dann
 ```math
 E_{max} = h \nu - W
 ```
-Typische Werte für $W$ liegen im bereich von einigen eV. Am noedrisgten ist sie bei Cäsium (Cs) mit $W_{Cs} \approx 2$ eV. Photokathoden aus Metall verlangen also blaue bis ultarvioloette Photonen.
+Typische Werte für $W$ liegen im Bereich von einigen eV. Am niedrigsten ist sie bei Cäsium (Cs) mit $W_{Cs} \approx 2$ eV. Photokathoden aus Metall verlangen also blaue bis ultraviolette Photonen.
 
-Bei Halbleitern ist das im Wesnetlocihen indentisch. Das Elektron stammt dann aus dem Valenzband, da das Leitunsgabnd quasi leer ist. Es muss die Energie der Bandlücle überwunden werden sowie die der Elektronen-Affinität $\chi$, also die Differenz der oberen bandkante zum Vakuum. Ingesamt also
+Bei Halbleitern ist das im Wesentlichen identisch. Das Elektron stammt dann aus dem Valenzband, da das Leitungsband quasi leer ist. Es muss die Energie der Bandlücke überwunden werden sowie die der Elektronen-Affinität $\chi$, also die Differenz der oberen Bandkante zum Vakuum. Insgesamt also
 ```math
 E_{max} = h \nu - (E_g + \chi)
 ```
-Für bestiommte Materialien ist $(E_g + \chi)$ aber relativ klllien, zB bei NaKCsSb 
-etewa 1.4 eV. Dieses Metarial bildet die oft benutzte S20-Photokathode.
+Für bestimmte Materialien ist $(E_g + \chi)$ aber relativ klein, z.B. bei NaKCsSb 
+etwa 1.4 eV. Dieses Material bildet die oft benutzte S20-Photokathode.
 
-der äußere Photoeffekt wird in PMTs benutzt. Lich fällt auf die Photokathode, ein Elektron wird freigesetzt und durch eine Potentialdifferenz hin zu einer eresten Elektrode beaschleeunigt. Dort wwerden weitere Elektronen herausgeshclagen, da das erste Elektron an diersert stelle ja eine Energie hat, die viell größer als die des Photons ist. Die Elektronenzahl wid also multipliziert. DIeser Effekt wid mehrmals weisderholt. Man bekommt alspo einen messbarenb Strom-Puls, der von eibnem einzigen Photon ausgeköst wurde, und etwa $10^7$ Elektronen pro Photon umfasst.
+der äußere Photoeffekt wird in PMTs benutzt. Licht fällt auf die Photokathode, ein Elektron wird freigesetzt und durch eine Potentialdifferenz hin zu einer ersten Elektrode beschleunigt. Dort werden weitere Elektronen herausgeschlagen, da das erste Elektron an dieser Stelle eine Energie hat, die viel größer als die des Photons ist. Die Elektronenzahl wid also multipliziert. Dieser Effekt wird mehrmals wiederholt. Man bekommt also einen messbaren Strom-Puls, der von einem einzigen Photon ausgelöst wurde, und etwa $10^7$ Elektronen pro Photon umfasst.
 
 """
 
@@ -98,9 +98,9 @@ der äußere Photoeffekt wird in PMTs benutzt. Lich fällt auf die Photokathode,
 md"""
 # Der innere Photoeffekt
 
-Beim inneren Photoeffekt wird ein Elektron durch Absirption eines Photons vom Valenzband ins Leitungsband angehoben. Im BValenzband verbleibt ein Loch. Durch Anlegen einer Spannungung weden Loch und Elektron räumlich voneinander getrennt und ein Stroim fließt. Das geschieht an der Grenze zwsichen einem p- und einem n-dotiertenten Bereich in einer pn-Photodiode. 
+Beim inneren Photoeffekt wird ein Elektron durch Absorption eines Photons vom Valenzband ins Leitungsband angehoben. Im Valenzband verbleibt ein Loch. Durch Anlegen einer Spannungen werden Loch und Elektron räumlich voneinander getrennt und ein Strom fließt. Das geschieht an der Grenze zwischen einem p- und einem n-dotierten Bereich in einer pn-Photodiode. 
 
-Die Elelktronen-Multuplikation des PMT kann man auch im Halbleiuter nachbilden. Dabei wird eine starkle Beschelunigungsspannung über die Genrzshcicht angelegt. Man erhält einen Lawieneneartug ansteigenden Strom, der passend gestoppt werden muss. Dies ist die Lawienen-Photodiode (engl. avalanche photodiode, APD). Sie vesrärkt den Strom gegenüber einer pn-Diode und so können einzelnen Photonen detektiert werden.
+Die Elektronen-Multiplikation des PMT kann man auch im Halbleiter nachbilden. Dabei wird eine starke Beschleunigungsspannung über die Grenzschicht angelegt. Man erhält einen lawinenartig ansteigenden Strom, der passend gestoppt werden muss. Dies ist die Lawinen-Photodiode (engl. avalanche photodiode, APD). Sie verstärkt den Strom gegenüber einer pn-Diode und so können einzelnen Photonen detektiert werden.
 """
 
 # ╔═╡ d450fd59-076b-42a1-a8f8-57c769f017b2
@@ -109,11 +109,11 @@ md"""
 
 ## Quanteneffizienz
 
-Die Quanteneffizienz $\eta$ beschreibt, mit welcher Wahrscheinlichkeit ein einzeles Photon freie Ladungsträger erzeigzng und so zum Photostrim beiträgt. $\eta$ liegt natürlich zwsichen 0 und 1. Darin geht ein, mit welcher Wahrscheinlichkeit das Photon überhaupt im Materuial abisoprbiert wird (Refekltivität der Oberfläöche, Absirptiond es Materials), und mit welcher Whasrcheinblichkeuit dies zu einem passendne Laddungsträger führt.
+Die Quanteneffizienz $\eta$ beschreibt, mit welcher Wahrscheinlichkeit ein einzelnes Photon freie Ladungsträger erzeugt und so zum Photostrom beiträgt. $\eta$ liegt natürlich zwischen 0 und 1. Darin geht ein, mit welcher Wahrscheinlichkeit das Photon überhaupt im Material absorbiert wird (Reflexivität der Oberfläche, Absorption des Materials), und mit welcher Wahrscheinlichkeit dies zu einem passenden Ladungsträger führt.
 
-In Halbleiter-Photoioden ist Quanteneffizienz $\eta$ Wellenlängenabhängig. Bei zu grroßer Wellenlänge wird die Bandlücke $E_g$ nicht überwunden und $\eta \appox 0$. In Richtung kleiner Wellenkämnge / großer Energie ist der Berreich dadurch limitiuert, dass das Photon quasi nicht in das Maetrail eindringt, an der Oberfläche absoprbiert wid, dort aber in Fallenzuständen endet und nicht zum Strom beiträgt.- 
+In Halbleiter-Photodioden ist Quanteneffizienz $\eta$ Wellenlängenabhängig. Bei zu großer Wellenlänge wird die Bandlücke $E_g$ nicht überwunden und $\eta \approx 0$. In Richtung kleiner Wellenlänge / großer Energie ist der Bereich dadurch limitiert, dass das Photon quasi nicht in das Material eindringt, an der Oberfläche absorbiert wid, dort aber in Fallenzuständen endet und nicht zum Strom beiträgt.- 
 
-Typsiche Werte der Quanteneffizienz $\eta$ sind etwa 0.5 bis 0.9.
+Typische Werte der Quanteneffizienz $\eta$ sind etwa 0.5 bis 0.9.
 
 """
 
@@ -121,15 +121,15 @@ Typsiche Werte der Quanteneffizienz $\eta$ sind etwa 0.5 bis 0.9.
 md"""
 ## Empfindlichkeit
 
-Die Empfindlichkeit (engl responsivity) verknüpft den einfallenden Fluss an Photonen mit dem entsehenden Dluss an Elektronen, beschreibt also die  elektrische Stromantwort auf einfallende Lichtleistung $P$. Der Strom ist 
+Die Empfindlichkeit (engl. responsivity) verknüpft den einfallenden Fluss an Photonen mit dem entstehenden Fluss an Elektronen, beschreibt also die  elektrische Stromantwort auf einfallende Lichtleistung $P$. Der Strom ist 
 ```math
  i_P = \eta e \Phi_{opt} = \frac{\eta \, e}{h \nu} = R \, P
 ```
-Die Empfindlichkeit $R$ hat die EInheit A/W
+Die Empfindlichkeit $R$ hat die Einheit A/W
 ```math
  R = \frac{\eta \, e}{h \nu} = \eta \, \frac{\lambda}{1240 \, nm} A/W
 ```
-Die Empfindlichkeit hängt linear von der Wellenlämnge $\lambda$ ab, bei konmstanter Quanteneffizienz. Dies hämngt damit zusammen, dass ja eigentlich Photonen in Elektronen umgewandelt werden, und nicht optische Energie in Strom. Bei niedriger Wellenlänge bringt ein Photon viel LEistung mit; bei gleicher Lichtleistung $P$ bekommt man also relativ wenig ELektronen.
+Die Empfindlichkeit hängt linear von der Wellenlänge $\lambda$ ab, bei konstanter Quanteneffizienz. Dies hängt damit zusammen, dass ja eigentlich Photonen in Elektronen umgewandelt werden, und nicht optische Energie in Strom. Bei niedriger Wellenlänge bringt ein Photon viel Leistung mit; bei gleicher Lichtleistung $P$ bekommt man also relativ wenig Elektronen.
 
 Typische Werte der Empfindlichkeit sind $R \approx 0.5 A/W$. 
 
@@ -169,13 +169,13 @@ md"""
 
 Die Antwortzeit (engl. response time) beschreibt die Impulsantwort der Photodiode. Sie wird durch zwei Größen bestimmt: die Transit-Zeit und die RC-Zeitkonstante.
 
-Die Transit-Zeit ist die Zeit, die benöigt wird, um alle LAdungsträgerr aus dem aktoiven Bereich der Photodiode heruas zu bejkommen. Wenn der aktive Bereich die Breizte $w$ hat und die Ladungsräger mit der Geschwiddigkeit $v(t)$ bewehgtr werden, dann ist der Strom
+Die Transit-Zeit ist die Zeit, die benötigt wird, um alle Ladungsträger aus dem aktiven Bereich der Photodiode heraus zu bekommen. Wenn der aktive Bereich die Breite $w$ hat und die Ladungsträger mit der Geschwindigkeit $v(t)$ bewegt werden, dann ist der Strom
 ```math
 i(t) = - \frac{Q}{w} \, v(t)
 ```
-mit $Q=+e$ für Löcher und $Q=-e$ für ELekttronen. Je kleiner der aktive Bereich, desto schlenner allso die Antwort der Diode. Das ist der Vorteil der pin-Dioden (unten mehr).
+mit $Q=+e$ für Löcher und $Q=-e$ für Elektronen. Je kleiner der aktive Bereich, desto schneller also die Antwort der Diode. Das ist der Vorteil der pin-Dioden.
 
-Die RC-Zeit entsteht dadurch, dass immer Widestände $R$ und Kapapzitäen $C$ vorrhanden sind, selbst in der Diode allein. Dies führt dazu, dass oboige Impilsantwort mit einem Exponetialgesetzt zu falten ist
+Die RC-Zeit entsteht dadurch, dass immer Widerstände $R$ und Kapazitäten $C$ vorhanden sind, selbst in der Diode allein. Dies führt dazu, dass obige Impulsantwort mit einem Exponentialgesetz zu falten ist
 ```math
 h_{rc}(t) = \frac{1}{RC} e^{- \frac{t}{RC}}
 ```
@@ -195,18 +195,18 @@ end
 
 # ╔═╡ 41bd75ea-907c-4db3-aac4-cffea61b6730
 md"""
-Die Impulsantwrot wird also durch die Transit-zeit dominierr.
+Die Impulsantwort wird also durch die Transit-Zeit dominiert.
 """
 
 # ╔═╡ fdb400fb-d193-4fc4-8951-1d1d92741f08
 md"""
 ## Kennlinie
 
-Die Strom-Spannungs-Kennlinie einer Photodiode ist identsich der einer nromalen Diode, zuzügloch einem Photostrom. Aucxh eine Solarzelle hat diese Kennlinie.
+Die Strom-Spannungs-Kennlinie einer Photodiode ist identisch der einer normalen Diode, zuzüglich einem Photostrom. Auch eine Solarzelle hat diese Kennlinie.
 ```math
 i = i_s \left[ \exp \left( \frac{eV}{kT}   \right)  -1   \right] - i_p
 ```
-mit dem Sättigungs(sperr)strom $i_s$, dem Photostriom $i_p$ und der Spanniung $V$ (positib in Durchlassrichtung)
+mit dem Sättigungs(sperr)strom $i_s$, dem Photostrom $i_p$ und der Spannung $V$ (positiv in Durchlassrichtung)
 """
 
 # ╔═╡ 1b091521-955d-4972-adb6-1d6e43a67e53
@@ -220,39 +220,177 @@ end
 
 # ╔═╡ 185633a7-584b-4da0-83b1-5621446596f3
 md"""
-Man kann die Diode bei verschiedenen Arbeitspunkten betreiben, je nach angelegter Spannung. 'open circuit' lässt keinen Strom fließen, weil (quasi) keine Last anliget. Dies sind Punkte mit $i=0$. 'short circuzit' schlißt die Diode kurz, ohne externe Spannung. Dies sind Punkte mit $V=0$. Eine Solarzeelle beetreibt man im rechten unteren QWuadraten, also bei $V>0$ und $i < 0$, idealerweise so, dass $P = i V$ maximal wird.
+Man kann die Diode bei verschiedenen Arbeitspunkten betreiben, je nach angelegter Spannung. 'open circuit' lässt keinen Strom fließen, weil (quasi) keine Last anliegt. Dies sind Punkte mit $i=0$. 'short circuit' schließt die Diode kurz, ohne externe Spannung. Dies sind Punkte mit $V=0$. Eine Solarzelle betreibt man im rechten unteren Quadraten, also bei $V>0$ und $i < 0$, idealerweise so, dass $P = i V$ maximal wird.
 
-Als Photodetektor will man einen loinearen vewrlauf zwsichen dem einfallenende Photonenstrom und damit dem Photostrom $i_p$ und dem gemessenen Gesamtstrom $i$ errecihen. Man legt eine (negative) Bias-SPannuing $V_B$ an und setzt $V = V_B. < 0$. Wenn ein Last-Widerstand vorhanden ist, dann ist $V = V_B + R_{Last} \, i$.
+Als Photodetektor will man einen linearen Verlauf zwischen dem einfallenden Photonenstrom und damit dem Photostrom $i_p$ und dem gemessenen Gesamtstrom $i$ erreichen. Man legt eine (negative) Bias-Spannung $V_B$ an und setzt $V = V_B. < 0$. Wenn ein Last-Widerstand vorhanden ist, dann ist $V = V_B + R_{Last} \, i$.
 
 Im Beispiel oben wurde $V_B = -20$ V gewählt.
 """
 
-# ╔═╡ b4abca58-03ad-4a15-a490-74834495d286
+# ╔═╡ d8bb6f1c-e9c8-4001-aed2-6c8fe7ae38f6
+md"""
+# Lawinenphotodioden
+
+In einer Lawinenphotodioden (engl avalanche photo diode, APD) erzeugt ein Photon  durch sehr hohe interne Beschleunigungsspannung via Stoßionisation eine Kaskade von Ladungsträgerpaaren. Dies entspricht einer internen Verstärkung $G$. Man kann diese Dioden 'analog' betreiben, also nur den Strom messen, oder im Geiger-Modus. Dabei wird mit einer passenden Schaltung die hohe Leitfähigkeit während der Lawine 'gelöscht', so dass einzelne Impulse entstehen. Diese können dann gezählt werden, womit man im Endeffekt einzelne Photonen zählen kann.
+"""
+
+# ╔═╡ 572ef31f-fa6f-4edd-a308-de5120d425ad
+md"""
+# Rauschen in Photodetektoren
+
+Verschiedene Quellen tragen zum Rauschen von Photodetektoren bei
+
+- Photonen-Rauschen: Photonen unterliegen der Poisson-Statistik, so dass bei $n$ Photonen pro Zeitintervall die Standardabweichung $\sqrt{n}$ beträgt
+
+- Photoelektronen-Rauschen: Die Quanteneffizienz $\eta$ ist immer kleiner 1. Damit entsteht zusätzliches Rauschen durch die 'Entscheidung', ob dieses Photon jetzt ein Elektron erzeugt oder nicht. Das ist äquivalent mit (und viel einfacher zu verstehen über) einer Reduktion des Photonenstroms von $n$ auf $\eta n$. Man ersetzt einen realen Detektor durch einen idealen plus vorgeschalteten abschwächenden optischen Filter.
+
+- Verstärkungs-Rauschen: in APDs ist die Größe der Lawine stochastisch und bewirkt einen zusätzlichen Rauschbeitrag
+
+- Elektronisches Rauschen: alle elektronische Bauteile wie Widerstände und Transistoren tragen zum Rauschen bei.
+
+- Hintergrund-Rauschen: Manchmal ist der Hintergrund nicht dunkel. Ein abwesendes Signal führt also *nicht* zur Detektion einer Null. Dies ist ärgerlich und unangenehm und sollte durch Verändern des Aufbaus beseitigt werden.
+"""
+
+# ╔═╡ ac7a11b1-ef92-4990-abd5-4abbc09664ec
+md"""
+> See figure 18.6-1 in Saleh/Teich
+"""
+
+# ╔═╡ ad0d49ac-47b4-47fd-b64a-cab4a6052bca
+md"""
+## Signal-zu-Rauschen
+
+Das Verhältnis von Signal-Amplitude zu Rauschen (engl. signal to noise ration, SNR) ist die zentrale Größe. Sie ist definiert als
+```math
+\text{SNR} = \frac{i}{\sigma_i} = \frac{n}{\sigma_n}
+```
+je nach dem, ob man einen Strom $i$ misst oder $n$ Photonen zählt. Manchmal, insbesondere in den Ingenieurwissenschaften, bezieht man sich auf detektierte Leistungen und nicht Amplituden, so auch in Saleh/Teich. Dann sind die rechten Seiten von obigen Gleichung quadriert.
+"""
+
+# ╔═╡ b6d4bf33-5e7b-42ae-8652-4c1992a38d5a
 md"""
 ## Noise-Equivalent Power (NEP)
 
-Dies ist die optische Strahlungsleistung, welche genau den elektrischen Strom entsprechend dem (elektrischen) Rauschen  $\sigma_{el}$ erzeugt, also ein Signal-Rausch-Verhältnis (SNR) von 1 bewirkt. Das hängt natürlich von der Bandbreite ab, daher die Einheit W/sqrt(Hz). Es gilt also mit der Emfindlichkeit $R$
+Die NEP ist die optische Leistung $P$, die zu einem SNR von 1 führt. Manchmal wird sie auch 'minimum detectable signal' genannt. Im Folgenden diskutieren wir das SNR.
+"""
 
-```math
-\text{NEP} \times R=  \sigma_{el} 
-```
-Das elektrische Rauschen kann durch das Schrot-Rauschen des Dunkelstroms oder durch das thermosche Rauschen in Widerständen verusacht werden. Schrot-Rauschen im Photonenstrom können wir vernachlässigen. Dies wäre Rauschen auf dem Signal, nicht auf dem Untergrund.
+# ╔═╡ 8aa0f3f3-c57c-43c0-870c-1421a65dc252
+md"""
+## Photonen-Rauschen
 
-Der Dunkelstrom führt zu 
+Falls nur Photonen-Rauschen vorliegt, bzw. dies der dominante Anteil ist, dann ist es einfach, SNR und NEP auszurechnen. Bei $n$ detektierten Photonen beträgt die Standardabweichung $\sigma = \sqrt{n}$. Somit ist
 ```math
-\sigma_{dunkel}  = \sqrt{2 I_{dunkel} \, e B}
+\text{SNR} = \frac{n}{\sqrt{n}} = \sqrt{n}
 ```
-Thermisches Johnson-Rauschen am Shunt-Widerstand füht zu 
+Ein SNR von 1 erhält man bei einem Detektierten Photon ($n=1$) pro Zeitintervall.
+"""
+
+# ╔═╡ ed23907d-8627-40c4-8ebf-cb8879ffe3fd
+let
+	T = 1.0u"µs"
+	λ = 620u"nm"
+	P = h * c_0 / (λ * T) |> u"fW"
+end
+
+# ╔═╡ e31bd36e-6857-4bfb-a592-172515731ba4
+md"""
+Bei einer Integrationszeit von 1 µs und einer Wellenlänge von 620 nm beträgt die NEP also ca. 331 fW.
+"""
+
+# ╔═╡ 6f0580a1-71a9-4553-bce2-3bd116599644
+md"""
+## Rauschen in Photostrom
+
+Wir können das genauso aus der Sicht eines Photostroms betrachten. Eine optische Leistung $P$ führt bei der Empfindlichkeit $R$ zu einem Strom $i  = R \, P$. Das Schrot-Rauschen auf einem Strom hat die Standardabweichung
+```math
+\sigma = \sqrt{2 i \, e B} =  \sqrt{2 R\,P \, e B}
+```
+mit der Bandbreite $B$. Also ist das SNR
+```math
+\text{SNR} = \sqrt{\frac{R \, P}{2  e B}}
+```
+(Jetzt wird auch deutlich, warum eine quadratische Definition des SNR sinnvoll sein kann). Die NEP ist dann unabhängig von quadratisch oder nicht 
+```math
+\text{NEP} = \frac{2  e B}{R}
+```
+"""
+
+# ╔═╡ b0227416-4706-4444-a716-dd4a440f845e
+let
+	B = 500u"kHz"
+	R = 0.5u"A/W"
+	P = 2 * e * B / R |> u"fW"
+end
+
+# ╔═╡ cd024817-566b-450f-a7f5-f4c26616cdd6
+md"""
+Man beachte, dass die Bandbreite einer Messung mit Integrationszeit $T$ nur $1/2T$ ist.
+"""
+
+# ╔═╡ e05eb9eb-cfb3-4ccb-bd0b-43d9da0d792a
+md"""
+### Noise-equivalent bandwidth (NEBW)
+
+Eine Nebenbemerkung zur Bandbreite $B$. Was wir hier benötigen, ist die 'Noise-equivalent bandwidth' NEBW. Der Frequenzverlauf der Transferfunktion des Detektionssystems geht vollständig ein, nicht nur die -3dB Grenzfrequenz des Filters. Es gilt
+```math
+\text{NEBW} = \int_0^\infty \left| \frac{H(f)}{H(0)} \right|^2 df
+```
+
+Für ein einfachen RC-Tiefpassfilter ist die Transferfunktion
+```math
+H(\omega) = \frac{1}{\sqrt{1  + (\tau \omega)^2}}
+```
+mit $\tau = R C$. Damit wird 
+```math
+\text{NEBW} = \frac{\pi}{2 \tau} 
+```
+
+Bei steileren Filtern (höheren Filter-Ordnungen) wird der Faktor $\pi/2$ zunehmend kleiner.
+"""
+
+# ╔═╡ 8314e09e-65da-4515-a62d-3041ad102cb6
+let 
+	df = 0.001
+	f = (0:df:1000);
+	H = @. 1 / sqrt(1 + f^2)
+	(sum(H.^2) .* df , pi/2)
+end
+
+# ╔═╡ 7d7ce080-6e9c-46d4-9cdd-3f6e65ccc06e
+md"""
+## Verstärkungs-Rauschen
+
+Wenn die Verstärkung durch den Lawinen-Prozess einer APD immer gleich groß wäre, dann würde deren Faktor $G$ in Zähler und Nenner des SNR gleichermaßen eingehen und sich kürzen. Das Problem sind Fluktuationen in $G$, also die Varianz $\sigma_G$. Man beschreibt das über einen 'excess noise factor' F
+```math
+ F = 1+ \frac{\sigma_g^2}{\left< G \right> ^2}
+```
+
+Das SNR wird damit
+```math
+\text{SNR} = \sqrt{\frac{R \, P}{2  e B \,F}}
+```
+
+Typische Werte von $F$ liegen zwischen kurz über 1 und 2.
+
+
+"""
+
+# ╔═╡ 1593544d-0984-4927-bd5c-c3034beab2b1
+md"""
+## Elektronisches Rauschen
+
+Elektronische Bauteile rauschen. Thermisches Johnson-Rauschen am Shunt-Widerstand parallel zur Photodiode führt zu 
 ```math
 \sigma_{Johnson}  =  \sqrt{\frac{4 kT}{R_{shunt}} \, B}
 ```
-
+Der Dunkelstrom  der Diode führt zu 
+```math
+\sigma_{dunkel}  = \sqrt{2 I_{dunkel} \, e B}
+```
 """
 
 # ╔═╡ e79722c5-f674-4292-9161-b49a4a935610
 md"""
-### Beispiel
-
 Für obige Diode ist ein Dunkelstrom von $I_{dunkel} = 1$ nA angegeben.
 """
 
@@ -270,81 +408,41 @@ end
 
 # ╔═╡ ed5ba03b-15ad-4100-b338-6c5ea1261d3d
 md"""
-Angegeben sind im Datenblatt $12 \,fW/\sqrt{Hz}$. Das scheint nciht gfanz mit dem Dunkelstrom zusammenzupassen. Zusätzlichers Johnson-Rauschen würde dies nur schlechter machen.
-"""
-
-# ╔═╡ d8bb6f1c-e9c8-4001-aed2-6c8fe7ae38f6
-md"""
-# Lawinenphotodioden
-
-Ein Photon erzeugt durch sehr hohe interne Beschleunigungsspannung via Stoßionisation eine Kaskade von Ladungsträgerpaaren.
-
-„Optischer Gewinn“
-Im Sichtbaren: Si-Dioden; im Telekom-NIR-Bereich (1300-1600nm): InGaAs
-
-Insbesondere: Einzelphotonendetektoren:
-Im Geigermodus als „Photonenzähler“: Binäres Auslesen der Lawinenpulse 
-Dann muss mit passender Schaltung die hohe Leitfähigkeit „gelöscht“ werden, -> Totzeit
-
-Hohe Quanteneffizienzen über 70% für Si, niedrige Dunkelzählraten <50 /s. 
-
-
-Excess-Noise / Gewinnrauschen:
-In Detektoren mit Verstärkung G (Gain) – Photomultiplier und Lawinenphotodioden (Avalanche Photodiodes APD) weist diese Fluktuationen in der Licht-zu-Ladungs-Verstärkung auf.
-
-"""
-
-# ╔═╡ bbf05a7d-e31e-4ba8-8821-4fc01fa814ef
-md"""
-Fortsetzung:
-
-
-Antwortzeit (Response-Time)
-
-In Halbleiterdetektoren:
-Durchgangsverbreiterung der Ladungsträger durch Kollisionen, Driftgeschwindigkeit von Elektronen und Löcher.
-In PMTs: Durchgang über mehrere Verstärkerplatten
-
-RC-Zeitkonstante
-Widerstand R und Kapazität C z.B. in Photodiode ergeben Antwortzeit der Schaltung.
-Häufig: Für gegebenes Detektormaterial: Konstantes Produkt aus Detektionseffizienz/Gewinn und Bandbreite, Kompromiss für konkrete Anwendung.
-
-
-
-
+Angegeben sind im Datenblatt NEP = $12 \,fW/\sqrt{Hz}$. Das scheint nicht ganz mit dem Dunkelstrom zusammenzupassen. Zusätzliches Johnson-Rauschen würde dies nur schlechter machen.
 """
 
 # ╔═╡ 434da4bd-17d2-4c3e-9acf-b6714250dfe5
 md"""
-# Beispiel
+# Photodetektor OE-200 von Femto
 
-Photodetekor OE-200 von Femto
+Wir betrachten als Beispiel diesen Photodetektor bestehend aus Diode und Verstärker.
+
 - [website](https://www.femto.de/en/products/photoreceivers/variable-gain-up-to-500-khz-oe-200.html)
 - [Datenblatt](https://www.femto.de/images/pdf-dokumente/de-oe-200-si.pdf)
 """
 
 # ╔═╡ 4cfc69b4-2b69-48ba-a161-78b76396a746
 md"""
-Licht (Wellenlänge 532 nm, Leistung 100 µW) fällt auf den Detektor, der im niedrigsten Verstärkungsbereich eingestellt ist.
 
+## Q1
+Licht (Wellenlänge 532 nm, Leistung 100 µW) fällt auf den Detektor, der im niedrigsten Verstärkungsbereich eingestellt ist.
 Wie groß ist die Spannung des Ausgangssignals ?
 
 """
 
 # ╔═╡ 21f83198-bbd1-494d-a22a-7ca5fc2aa4b4
 md"""
-Licht der Wellenlänge 850 nm wird mit f_m = 300 kHz moduliert.
+## Q2
 
+Licht der Wellenlänge 850 nm wird mit f_m = 300 kHz moduliert.
 Welche Eingangsleistung wird mindestens benötigt, um ein Signal bei f_m am Ausgang mit der Amplitude von 10 V zu erhalten?
 
 """
 
 # ╔═╡ ea85ed7a-5c9c-4259-abde-ef6c9c0a89b3
 md"""
-Es wird Licht der Leistung P = 1 µW bei einer Wellenlänge von 850 nm detektiert.
-
-Wie groß ist die zu erwartende spektrale Rausch-Leistungsdichte durch Schrotrauschen?
-
+## Q3
+Es wird Licht der Leistung P = 1 µW bei einer Wellenlänge von 850 nm detektiert. Wie groß ist die zu erwartende spektrale Rausch-Leistungsdichte durch Schrotrauschen?
 In welcher Einstellung ist das Rauschen des Detektors kleiner als dieser Wert? 
 
 """
@@ -1413,7 +1511,7 @@ version = "0.9.1+5"
 # ╟─0e6b72ce-38e4-4212-921e-1221d0740b7a
 # ╟─4580e946-96f3-11ec-38d9-bbfb594fb979
 # ╟─0254558d-a260-4763-a761-629a78e0d8dd
-# ╠═29db8930-3faa-4099-babc-67f942d5b276
+# ╟─29db8930-3faa-4099-babc-67f942d5b276
 # ╟─02923951-dce2-4941-be90-3b3cc0f764bb
 # ╟─870cc18a-e47e-490a-9d23-b13211bb3f5f
 # ╟─d740d9cf-e23f-498e-a80e-316adbab448c
@@ -1425,24 +1523,36 @@ version = "0.9.1+5"
 # ╠═f5313df1-f07c-4407-ac37-8e9a8b667414
 # ╠═bf5e9bb0-1f21-4576-905d-b134b8c2762c
 # ╠═a880e78b-6a35-479b-ae53-6269347f1f70
-# ╠═11d95dd8-dc96-4317-981b-b4c8bbeb6362
+# ╟─11d95dd8-dc96-4317-981b-b4c8bbeb6362
 # ╠═8006880f-9f33-4a9b-9433-d4a31ab8502b
 # ╠═46cf25e2-f549-4997-95bf-fec87f6f3ced
-# ╠═41bd75ea-907c-4db3-aac4-cffea61b6730
-# ╠═fdb400fb-d193-4fc4-8951-1d1d92741f08
+# ╟─41bd75ea-907c-4db3-aac4-cffea61b6730
+# ╟─fdb400fb-d193-4fc4-8951-1d1d92741f08
 # ╠═1b091521-955d-4972-adb6-1d6e43a67e53
 # ╟─185633a7-584b-4da0-83b1-5621446596f3
-# ╟─b4abca58-03ad-4a15-a490-74834495d286
+# ╟─d8bb6f1c-e9c8-4001-aed2-6c8fe7ae38f6
+# ╟─572ef31f-fa6f-4edd-a308-de5120d425ad
+# ╟─ac7a11b1-ef92-4990-abd5-4abbc09664ec
+# ╟─ad0d49ac-47b4-47fd-b64a-cab4a6052bca
+# ╟─b6d4bf33-5e7b-42ae-8652-4c1992a38d5a
+# ╟─8aa0f3f3-c57c-43c0-870c-1421a65dc252
+# ╠═ed23907d-8627-40c4-8ebf-cb8879ffe3fd
+# ╟─e31bd36e-6857-4bfb-a592-172515731ba4
+# ╟─6f0580a1-71a9-4553-bce2-3bd116599644
+# ╠═b0227416-4706-4444-a716-dd4a440f845e
+# ╟─cd024817-566b-450f-a7f5-f4c26616cdd6
+# ╟─e05eb9eb-cfb3-4ccb-bd0b-43d9da0d792a
+# ╠═8314e09e-65da-4515-a62d-3041ad102cb6
+# ╟─7d7ce080-6e9c-46d4-9cdd-3f6e65ccc06e
+# ╟─1593544d-0984-4927-bd5c-c3034beab2b1
 # ╟─e79722c5-f674-4292-9161-b49a4a935610
 # ╠═ca9fcc00-558b-4008-b9f9-7321e6115731
 # ╠═9dc7d2e9-8515-4d3f-aa85-27f23d323edd
 # ╟─ed5ba03b-15ad-4100-b338-6c5ea1261d3d
-# ╟─d8bb6f1c-e9c8-4001-aed2-6c8fe7ae38f6
-# ╠═bbf05a7d-e31e-4ba8-8821-4fc01fa814ef
 # ╟─434da4bd-17d2-4c3e-9acf-b6714250dfe5
-# ╠═4cfc69b4-2b69-48ba-a161-78b76396a746
-# ╠═21f83198-bbd1-494d-a22a-7ca5fc2aa4b4
-# ╠═ea85ed7a-5c9c-4259-abde-ef6c9c0a89b3
+# ╟─4cfc69b4-2b69-48ba-a161-78b76396a746
+# ╟─21f83198-bbd1-494d-a22a-7ca5fc2aa4b4
+# ╟─ea85ed7a-5c9c-4259-abde-ef6c9c0a89b3
 # ╠═b5bcc95c-05c5-4e9c-84ab-a04dc0cef191
 # ╠═87c27d3d-a773-4fa6-b193-5e274c1cd733
 # ╠═522ce802-3c99-483a-8515-7fd071509069

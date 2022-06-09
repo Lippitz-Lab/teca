@@ -380,7 +380,7 @@ md"""
 
 Berechnen Sie die effektive thermische Rauschspannung in einem 50 $\Omega$ Widerstand bei ca 17 °C (290 K) bei einer Messbandbreite von 20 MHz.
 
-Mit welchem Signal-zu-Rausch-Verhältnis wird dann eine Sinus-Oszillation von 1 $\mu$V Amplititude gemessen?
+Mit welchem Signal-zu-Rausch-Verhältnis wird dann eine Sinus-Oszillation von 1 $\mu$V Amplitude gemessen?
 """
 
 # ╔═╡ d8faa994-c2b3-4475-a259-d478fcac0398
