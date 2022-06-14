@@ -434,8 +434,8 @@ Wie groß ist die Spannung des Ausgangssignals ?
 md"""
 ## Q2
 
-Licht der Wellenlänge 850 nm wird mit f_m = 300 kHz moduliert.
-Welche Eingangsleistung wird mindestens benötigt, um ein Signal bei f_m am Ausgang mit der Amplitude von 10 V zu erhalten?
+Licht der Wellenlänge 850 nm wird mit $f_m$ = 300 kHz moduliert.
+Welche Eingangsleistung wird mindestens benötigt, um ein Signal bei $f_m$ am Ausgang mit der Amplitude von 10 V zu erhalten?
 
 """
 
