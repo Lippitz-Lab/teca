@@ -123,7 +123,7 @@ md"""
 
 Die Empfindlichkeit (engl. responsivity) verknüpft den einfallenden Fluss an Photonen mit dem entstehenden Fluss an Elektronen, beschreibt also die  elektrische Stromantwort auf einfallende Lichtleistung $P$. Der Strom ist 
 ```math
- i_P = \eta e \Phi_{opt} = \frac{\eta \, e}{h \nu} = R \, P
+ i_P = \eta e \Phi_{opt} = \frac{\eta \, e}{h \nu} \, P = R \, P
 ```
 Die Empfindlichkeit $R$ hat die Einheit A/W
 ```math
