@@ -45,26 +45,6 @@ Ein Lock-In-Verstärker (engl. lock-in amplifier, LIA) sollte besser phasen-empf
 
 """
 
-# ╔═╡ 957916f2-c8a6-4a9e-a84d-851c5a7f8784
-md"""
-# Motivation
-
-## Kontinuierliches Signal
-
-Wir betrachten eine kontinuierlich leuchtende Lichtquelle, deren Leistung wir durch eine Photodiode detektieren und den Photostrom verstärken und messen. Solange das Signal groß ist, geht das problemlos. Wenn das Signal jedoch klein ist, dann spielt das Rauschen des Photodetektors und mögliche Störquellen eine Rolle.
-
-> Skizzieren Sie das zu erwartende Rauschspektrum der Lichtquelle sowie des Photodetektors mit und ohne eingeschaltete Lichtquelle.
-"""
-
-# ╔═╡ 010d3676-e41c-4f27-8640-36908c66117e
-md"""
-## Moduliertes Signal
-
-Die Dinge werden etwas besser, wenn wir die Lichtquelle modulieren. Wir können beispielsweise die Stromversorgung periodisch mit der Frequenz $f_m$ ein- und ausschalten, oder einen mechanischen Zerhacker (engl. [chopper](https://en.wikipedia.org/wiki/Optical_chopper)) verwenden, der periodisch den Strahl unterbricht. Dadurch verschieben wir die interessanten Frequenzen des Signals nach $f_m$.
-
-> Gegeben sei das Frequenz-Spektrum $S(\omega)$ der unmodulierten Lichtquelle (z.B. aus ihrer Skizze oben). Der Chopper multipliziert den zeitlichen Verlauf $s(t)$ mit einer Rechteck-Funktion, die gleich lang den Wert '1' und den Wert '0' zeigt und die Frequenz $f_m$ besitzt. Berechnen Sie das Frequenz-Spektrum $M(\omega)$ nach dem Chopper, was also von der Photodiode detektiert wird.
-"""
-
 # ╔═╡ efc79d57-5813-4064-8bb7-d8de71e3e8c7
 md"""
 Die Photodiode detektiert in diesem Fall ein moduliertes Signal. Die interessierende Größe ist die Amplitude des Frequenzkomponente bei $f_m$. Eine naheliegende Möglichkeit ist, das elektrische Signal der Photodiode durch einen Bandpassfilter bei der Frequenz $f_m$ zu filtern und danach gleichzurichten.
@@ -78,25 +58,6 @@ Das ist machbar, hat aber einige Nachteile
 
 """
 
-# ╔═╡ 4f348530-7b3c-47b8-b7f2-804abe1a5e9b
-md"""
-## Phasen-empfindliche Detektion
-
-Ein phasen-empfindlicher Detektor löst diese Probleme. Wir betrachten zwei Varianten:
-
-### Schalter = Demodulation mit Rechteck
-
-Wir detektieren und verstärken unser Signal weiterhin mit einem Photodetektor. Dann jedoch folgt kein Bandpass-Filter, sondern ein Schalter, mit dem wir periodisch mit der Frequenzen $f_r$ das Vorzeichen des Signal ändern, also mit einer Rechteck-Funktion multiplizieren, die zwischen '1' und '-1' oszilliert. Danach folgt ein Tiefpass-Filter und wir messen die Amplitude des Signals.
-
-Der Trick ist, dass wir die Referenz-Frequenz $f_r$ der Demodulation gleich der der Modulation $f_m$ wählen und zwar phasenstarr. Es geht also ein Kabel vom Chopper und eines von der Diode zum Lock-In-Verstärker.
-
-> Warum ist es nicht möglich, einfach nur beide Frequenz auf den gleichen Wert zu stellen?
-
-Wenn die uns interessierende Frequenzkomponente im Diodensignal in Phase ist mit dem Referenzsignal, dann werden die negativen Halbwellen mit '-1' multipliziert und umgeklappt, so dass nach der Tiefpass-Filterung ein Wert übrig bleibt. Wenn aber beispielsweise kein Signal anliegt, sondern nur Rauschen um die Null herum, dann wird ein Teil des Rauschens invertiert. Dessen Mittelwert ist aber weiterhin zentriert um die Null.
-
-Die Bandbreite dieses 'synchronen Filters' ist durch die Zeitkonstante $T$ des Tiefpass-Filters gegeben. Die kann aber beliebig lang sein, unabhängig von $f_m$, so dass beliebig schmale Filter erzeugt werden können.
-"""
-
 # ╔═╡ ba02ba73-8e4e-4b9b-8ddf-8c39bdd8ff8f
 md"""
 ### Mixer = Demodulation mit Kosinus
@@ -107,11 +68,6 @@ u(t) = m(t) \times r(t)
 ```
 
 > Ausgehend von obigem Diodensignal $M(\omega)$, wie sieht $U(\omega)$ aus? 
-"""
-
-# ╔═╡ c68ab966-1535-465c-bde0-fe7e49e7d4fa
-md"""
-Analog kann man auch obige Schalter-Variante in Frequenzraum beschreiben.
 """
 
 # ╔═╡ 9cba2b6b-c64a-4303-9872-a1e2e2724085
@@ -269,6 +225,52 @@ TableOfContents(title="Inhalt")
 
 # ╔═╡ 23b2f50e-5d41-411f-847e-95a71dcde261
 aside(x) = PlutoUI.ExperimentalLayout.aside(x);
+
+# ╔═╡ 957916f2-c8a6-4a9e-a84d-851c5a7f8784
+md"""
+# Motivation
+
+## Kontinuierliches Signal
+
+Wir betrachten eine kontinuierlich leuchtende Lichtquelle, deren Leistung wir durch eine Photodiode detektieren und den Photostrom verstärken und messen. Solange das Signal groß ist, geht das problemlos. Wenn das Signal jedoch klein ist, dann spielt das Rauschen des Photodetektors und mögliche Störquellen eine Rolle.
+$(aside([Resource("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/11-Lock-In/setup_1.png", (:height => 100))  md"*Detektion eines kontinuierlichen Signals*"]) ) 
+
+> Skizzieren Sie das zu erwartende Rauschspektrum der Lichtquelle sowie des Photodetektors mit und ohne eingeschaltete Lichtquelle.
+"""
+
+# ╔═╡ 010d3676-e41c-4f27-8640-36908c66117e
+md"""
+## Moduliertes Signal
+
+Die Dinge werden etwas besser, wenn wir die Lichtquelle modulieren. Wir können beispielsweise die Stromversorgung periodisch mit der Frequenz $f_m$ ein- und ausschalten, oder einen mechanischen Zerhacker (engl. [chopper](https://en.wikipedia.org/wiki/Optical_chopper)) verwenden, der periodisch den Strahl unterbricht. Dadurch verschieben wir die interessanten Frequenzen des Signals nach $f_m$.$(aside([Resource("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/11-Lock-In/setup_2.png", (:height => 100))  md"*Detektion eines modulierten Signals durch Tiefpass-Filterung*"]) ) 
+
+
+> Gegeben sei das Frequenz-Spektrum $S(\omega)$ der unmodulierten Lichtquelle (z.B. aus ihrer Skizze oben). Der Chopper multipliziert den zeitlichen Verlauf $s(t)$ mit einer Rechteck-Funktion, die gleich lang den Wert '1' und den Wert '0' zeigt und die Frequenz $f_m$ besitzt. Berechnen Sie das Frequenz-Spektrum $M(\omega)$ nach dem Chopper, was also von der Photodiode detektiert wird.
+"""
+
+# ╔═╡ 4f348530-7b3c-47b8-b7f2-804abe1a5e9b
+md"""
+## Phasen-empfindliche Detektion
+
+Ein phasen-empfindlicher Detektor löst diese Probleme. Wir betrachten zwei Varianten:
+
+### Schalter = Demodulation mit Rechteck
+
+Wir detektieren und verstärken unser Signal weiterhin mit einem Photodetektor. Dann jedoch folgt kein Bandpass-Filter, sondern ein Schalter, mit dem wir periodisch mit der Frequenzen $f_r$ das Vorzeichen des Signal ändern, also mit einer Rechteck-Funktion multiplizieren, die zwischen '1' und '-1' oszilliert. Danach folgt ein Tiefpass-Filter und wir messen die Amplitude des Signals.$(aside([Resource("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/11-Lock-In/setup_3.png", (:height => 120))  md"*Phasenempfindliche Detektion durch Umschalten*"]) ) 
+
+Der Trick ist, dass wir die Referenz-Frequenz $f_r$ der Demodulation gleich der der Modulation $f_m$ wählen und zwar phasenstarr. Es geht also ein Kabel vom Chopper und eines von der Diode zum Lock-In-Verstärker.
+
+> Warum ist es nicht möglich, einfach nur beide Frequenz auf den gleichen Wert zu stellen?
+
+Wenn die uns interessierende Frequenzkomponente im Diodensignal in Phase ist mit dem Referenzsignal, dann werden die negativen Halbwellen mit '-1' multipliziert und umgeklappt, so dass nach der Tiefpass-Filterung ein Wert übrig bleibt. Wenn aber beispielsweise kein Signal anliegt, sondern nur Rauschen um die Null herum, dann wird ein Teil des Rauschens invertiert. Dessen Mittelwert ist aber weiterhin zentriert um die Null.
+
+Die Bandbreite dieses 'synchronen Filters' ist durch die Zeitkonstante $T$ des Tiefpass-Filters gegeben. Die kann aber beliebig lang sein, unabhängig von $f_m$, so dass beliebig schmale Filter erzeugt werden können.
+"""
+
+# ╔═╡ c68ab966-1535-465c-bde0-fe7e49e7d4fa
+md"""
+Analog kann man auch obige Schalter-Variante in Frequenzraum beschreiben.$(aside([Resource("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/11-Lock-In/setup_4.png", (:height => 120))  md"*Phasenempfindliche Detektion durch Mischen*"]) ) 
+"""
 
 # ╔═╡ d778736a-2992-4cde-bb4a-2e85cbe75028
 begin
