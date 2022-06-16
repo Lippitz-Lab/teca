@@ -99,7 +99,7 @@ Die Bandbreite dieses 'synchronen Filters' ist durch die Zeitkonstante $T$ des T
 
 # ╔═╡ ba02ba73-8e4e-4b9b-8ddf-8c39bdd8ff8f
 md"""
-## Mixer = Demodulation mit Kosinus
+### Mixer = Demodulation mit Kosinus
 
 Alternativ kann man an Stelle des Schalters auch einen Mixer verwenden, also ein elektronisches  Bauteil, dessen Ausgangssignal dem Produkt seiner beiden Eingangsignale entspricht. Wir erzeugen also aus dem Diodensignal $m(t)$ und einer cosinus-förmigen Referenz-Wellenform $r(t)$ ein Signal 
 ```math
@@ -133,7 +133,7 @@ Typischerweise demoduliert man sowohl mit einem Kosinus als auch einen Sinus (da
 
 # ╔═╡ 89d0ad35-b026-4fdc-9e26-42cfcb7b4cd4
 md"""
-## Frage
+### Frage
 
 > Wenn man mit einem Chopper den Lichtstrahl moduliert, ist es dann geschickter mit einem Rechteck oder einem Cosinus zu demodulieren? In welchen Fällen ist dies andersrum?
 """
