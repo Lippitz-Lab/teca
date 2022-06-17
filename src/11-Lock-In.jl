@@ -124,7 +124,7 @@ begin
 	f0 = 10
 	dϕ = 0.5
 	A = zeros(length(t))
-	A[t .> 1] .= 2   # switch on at t=2 sec
+	A[t .> 1] .= 2   # switch on at t=1 sec
 	
 	signal = A .* (1 .+ cos.(2π * t * f0 .+ dϕ))
 	rauschen = randn(length(signal))
@@ -162,7 +162,7 @@ Insgesamt sieht das gemessene Signal dann so aus
 
 # ╔═╡ 82782168-4965-4b9c-a3ee-3fec56bb0218
 md"""
-Die Werte von $x$ und $y$ erreichen $A$ nicht, weil wir eine Phasenverschiebung $d\phi$ vorgegeben hatten. Wir berechnen jetzt also $R$ und $phi$
+Die Werte von $x$ und $y$ erreichen $A$ nicht, weil wir eine Phasenverschiebung $d\phi$ vorgegeben hatten. Wir berechnen jetzt also $R$ und $\phi$
 """
 
 # ╔═╡ 9862fa3a-3c20-4740-ab04-b6834481471f
@@ -206,9 +206,9 @@ md"""
 
 Alternativ zu einem Lock-In-Verstärker kann man auch boxcar averaging machen. Ein gepulster Laser produziert kurze Lichtpulse (ca. ps bis ns) in periodischen Abständen (ca. kHz). Dann kann man den Photostrom der Photodiode über kurze Intervalle entsprechend der Pulslänge integrieren, und in den langen Intervallen zwischen den Laserpulsen ignorieren. Dies tut ein [boxcar averager](https://en.wikipedia.org/wiki/Boxcar_averager). 
 
-Man kann dies als Variante des Lock-in-Verstärker sehen, auch wenn es technologisch anders gelöst ist. Im Prinzip aber demoduliert man das SIgnal mit einer Rechteck-Referenzwelle, nur dass diese jetzt nicht wie oben gleich lang 1 und -1 zeigt, sondern die '1'-Phasen viel kürzer sind.
+Man kann dies als Variante des Lock-in-Verstärker sehen, auch wenn es technologisch anders gelöst ist. Im Prinzip aber demoduliert man das Signal mit einer Rechteck-Referenzwelle, nur dass diese jetzt nicht wie oben gleich lang 1 und -1 zeigt, sondern die '1'-Phasen viel kürzer sind.
 
-Technisch integriert man dss Signal währender '1'-Phasen und mittelt dann über viele dieser Phasen. Die '-1'-Phasen ignoriert man oder beschafft sich eine andere Hintergrund-Messung.
+Technisch integriert man das Signal während der '1'-Phasen und mittelt dann über viele dieser Phasen. Die '-1'-Phasen ignoriert man oder beschafft sich eine andere Hintergrund-Messung.
 """
 
 # ╔═╡ 80aff572-e704-4211-910c-657deedc9736
@@ -242,7 +242,7 @@ $(aside([Resource("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res
 md"""
 ## Moduliertes Signal
 
-Die Dinge werden etwas besser, wenn wir die Lichtquelle modulieren. Wir können beispielsweise die Stromversorgung periodisch mit der Frequenz $f_m$ ein- und ausschalten, oder einen mechanischen Zerhacker (engl. [chopper](https://en.wikipedia.org/wiki/Optical_chopper)) verwenden, der periodisch den Strahl unterbricht. Dadurch verschieben wir die interessanten Frequenzen des Signals nach $f_m$.$(aside([Resource("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/11-Lock-In/setup_2.png", (:height => 100))  md"*Detektion eines modulierten Signals durch Tiefpass-Filterung*"]) ) 
+Die Dinge werden etwas besser, wenn wir die Lichtquelle modulieren. Wir können beispielsweise die Stromversorgung periodisch mit der Frequenz $f_m$ ein- und ausschalten, oder einen mechanischen Zerhacker (engl. [chopper](https://en.wikipedia.org/wiki/Optical_chopper)) verwenden, der periodisch den Strahl unterbricht. Dadurch verschieben wir die interessanten Frequenzen des Signals nach $f_m$.$(aside([Resource("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/11-Lock-In/setup_2.png", (:height => 100))  md"*Detektion eines modulierten Signals durch Bandpass-Filterung und Gleichrichtung*"]) ) 
 
 
 > Gegeben sei das Frequenz-Spektrum $S(\omega)$ der unmodulierten Lichtquelle (z.B. aus ihrer Skizze oben). Der Chopper multipliziert den zeitlichen Verlauf $s(t)$ mit einer Rechteck-Funktion, die gleich lang den Wert '1' und den Wert '0' zeigt und die Frequenz $f_m$ besitzt. Berechnen Sie das Frequenz-Spektrum $M(\omega)$ nach dem Chopper, was also von der Photodiode detektiert wird.
