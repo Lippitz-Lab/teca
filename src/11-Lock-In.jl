@@ -242,7 +242,7 @@ $(aside([Resource("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res
 md"""
 ## Moduliertes Signal
 
-Die Dinge werden etwas besser, wenn wir die Lichtquelle modulieren. Wir können beispielsweise die Stromversorgung periodisch mit der Frequenz $f_m$ ein- und ausschalten, oder einen mechanischen Zerhacker (engl. [chopper](https://en.wikipedia.org/wiki/Optical_chopper)) verwenden, der periodisch den Strahl unterbricht. Dadurch verschieben wir die interessanten Frequenzen des Signals nach $f_m$.$(aside([Resource("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/11-Lock-In/setup_2.png", (:height => 100))  md"*Detektion eines modulierten Signals durch Bandpass-Filterung und Gleichrichtung*"]) ) 
+Die Dinge werden etwas besser, wenn wir die Lichtquelle modulieren. Wir können beispielsweise die Stromversorgung periodisch mit der Frequenz $f_m$ ein- und ausschalten, oder einen mechanischen Zerhacker (engl. [chopper](https://en.wikipedia.org/wiki/Optical_chopper)) verwenden, der periodisch den Strahl unterbricht. Dadurch verschieben wir die interessanten Frequenzen des Signals nach $f_m$.$(aside([Resource("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/11-Lock-In/setup_2.png", (:height => 120))  md"*Detektion eines modulierten Signals durch Bandpass-Filterung und Gleichrichtung*"]) ) 
 
 
 > Gegeben sei das Frequenz-Spektrum $S(\omega)$ der unmodulierten Lichtquelle (z.B. aus ihrer Skizze oben). Der Chopper multipliziert den zeitlichen Verlauf $s(t)$ mit einer Rechteck-Funktion, die gleich lang den Wert '1' und den Wert '0' zeigt und die Frequenz $f_m$ besitzt. Berechnen Sie das Frequenz-Spektrum $M(\omega)$ nach dem Chopper, was also von der Photodiode detektiert wird.
