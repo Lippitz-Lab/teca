@@ -25,7 +25,6 @@ md"""
 zu messen
 - homodyne und heterodyne Detektion in der Nachrichtentechnik
 -  homodyne und heterodyne Detektion in der Optik 
-- Schrotrauschen-limitierte Detektion
 - Schrotrauschen in Interferometern
 
 **Literatur:** Horowitz/Hill Kap. 13.14–20
@@ -182,7 +181,78 @@ Interessant ist der Fall von einem sehr starken lokalen Oszillator, also $E_{LO}
 I(t) \approx |E_{LO}|^2 \, [1  + 2 \Re \{a(t) \, e^{-i \Delta \phi} \}]
 ```
 
-Der Effekt des lokalen Oszillators ist also zum Einen, die Signal-Amplitude zu erhöhen ohne mehr Lichtleistung durch das Experiment schicken zu müssen, falls die Probe beispielsweise nur eine gewisse Intensität toleriert. Zum Anderen kommt $\Delta ^phi$ also Freiheitsgrad hinzu. Man kann somit also nicht nur den Realteil von $a(t)$ detektieren, sondern auch den Imaginärteil bze. eine durch die Probe hervorgerufene Phasenverschiebung.
+Der Effekt des lokalen Oszillators ist also zum Einen, die Signal-Amplitude zu erhöhen ohne mehr Lichtleistung durch das Experiment schicken zu müssen, falls die Probe beispielsweise nur eine gewisse Intensität toleriert. Zum Anderen kommt $\Delta \phi$ also Freiheitsgrad hinzu. Man kann somit also nicht nur den Realteil von $a(t)$ detektieren, sondern auch den Imaginärteil bze. eine durch die Probe hervorgerufene Phasenverschiebung.
+
+Im Prinzip kann man aber auch schon die '1' in obigen Gleichungen als lokalen Oszillator verstehen. Quasi alle optischen Messungen beinhlaten immer auch Licht, dass nicht durch das Experiment tabgiuert wurde, eben den '1'-Term. Dieses Licht interefreiert immer am Detektor mit dem '$a(t)$'-Term, so dass immer eine homodyne Detektion vorliegt, solange man nicht besondetre Vorkehrungen trifft.
+"""
+
+# ╔═╡ 9b7ae5b7-02f1-42c2-bfac-0dfa8b23c255
+md"""
+> Sie wolllen ein kleines SIgnal $a(t)$ detektieren, dass sie zwsichen $a=0$ und $a=a_0$ schalten können. Untersuchen Sie den Einfluss vershciedener Rausch-Quelllen auf das SNR, und ob daran interferomtersiche Detektion etwas ändert / ändert kann.
+"""
+
+# ╔═╡ 2f9db9e2-8120-45b4-8839-5a74b0cd0b95
+md"""
+### Frequenzmodulation
+
+Der Effekt des Experiments sei, dass eine zusätzlcihe optische Fqreunz im Signal-Arm erscheint, die etweas gegenüber der eigneltichen Trägerferquenz verschieben ist (dazu unten mehr). Das elelktrische feld nach dem Epxeirment ist also
+```math
+E_S = E_0 \left[ e^{i \omega_0 t} + a(t) e^{i (\omega + \Delta \omega) t} \right]
+```
+Der lokale Sozillator vergößert wieder die Feldamplituzde bei der Frequwnz $\omega_0$ und liefetr den Freiheistgrad der Phase. Unabhängig davo findet man mit und ohen Refrenzarm einen Term, der orporotioanl zu 
+```math
+\Re \left( e^{i \Delta \omega t} \right)
+```
+ist, also cosuinus-förrmig mit $\Delta \omega$ oszulliert.
+"""
+
+# ╔═╡ e7c85170-32d4-4831-9bf4-f1fa1beafda6
+md"""
+## Optische Heterodyn-Detektion
+
+Manchmal möchte man die Amplitude und Phase einer Fequenzkomponente im Lichtfeld bestimmen, die um eine RF-Ferquenz gegenüber der Trägerwelle verschoben ist. Als Beispiel diskutiere ich hier ein Experiemnt zum optischen Vier-Wellen-Mischen
+
+Wolfgang Langbein and Brian Patton: *Heterodyne spectral interferometry for multidimensional nonlinear spectroscopy of individual quantum systems.*  [Opt. Lett. 31, 1151-1153 (2006)](https://doi.org/10.1364/OL.31.001151)
+"""
+
+# ╔═╡ 279d0c8b-8798-49b5-aacf-28cf24b88067
+md"""
+### Vier-Wellen-Mischen
+
+Vier-Wellen-Mischen ist ein ncihtlinearer optischer Effekt, bei dem  drei optsiche Wellen eine neue, vierte Welle erzeugen, also zu diesen gemischt werden. Ausgangspounkt ist dabei eine nichtlineare optische Polarisation dritter Ordnung
+```math
+\mathbf{P}^{(3)} = \chi^{(3)} \, \vdots \; \mathbf{E}_1(t) \, \mathbf{E}_2(t) \, \mathbf{E}_3(t)
+```
+dabei ist $\chi^{(3)}$ ein Tensor, aber die Richtung der Vektoren intersssiert hier nicht, also 
+```math
+P^{(3)} = \chi^{(3)} \, E_1(t) \, E_2(t) \, E_3(t)
+```
+Jedes der 3 Felder $E_i$ kann eine eigener Ferquenz $\omega_i$ haben. Da
+```math
+2 \cos x = e^{i x} + e^{-i x}
+```
+tauchen sowohl positive als auch negative Frequenzen auf. Im Prinzip gibt es also $2^3 = 8$ Mischprodukte, die unterschiedlcohen physiaklsicuhen urpsrung haben. In diesen Artikel ist man an dem mit den Vorzeichen $(+-+)$ interessiert. Die zu abalyisereden Frequenz ist also
+```math
+\omega_4 = \omega_1 - \omega_2 + \omega_3
+```
+"""
+
+# ╔═╡ 5dd3ad80-05d7-473c-bd24-0681401c6de6
+md"""
+### AOM als Freueunz-Schieber
+
+Im Experirment bestehen die Felder $E_i$ aus Lasderpulsen, und deren zeitlcieh Reihgenfolg eist relevant. Dazu wird ein Laserstrahl in 2 Teile aufegteilt und jeder Teil durrch einen *Akusto-Optischen Modulator* (AOM) geschickt. Hier wird der Strahl ein einbem Ultrashcall-Gitter gebeugt. Dabei wird jede Beugungsordnung $\pm k$ um die Ultarscgallfrequenz $\Omega$ freqeuenzvershcioerben (sonst würde die Energieerhaltung nicht zusammen mit der Imnoulderhgaltung gelten). Dmair ist also
+```math
+\omega_k = \omega_{laser} + k \Omega
+```
+Die einzelnen $\omega_i$ von ioben basieren also alle auf dem gleoichen $\omega_{laser}$. Zwei davon sind jedoch in zwei vershcienden AOM umzwei verschiedene $\Omega_{AOM}$ vershcoben.
+"""
+
+# ╔═╡ 859e2f65-c352-42e4-b93c-a8555b72beb0
+md"""
+### Heterdyn-Dekttrion
+
+Das Mischrpodukt $\omega_4$ liegt wieder in der Nähe von $\omega_{laser}$ (so ist der Prizess ausgewählt). Wo genau hängt aber von den $\Omega_{AOM}$ ab. Jetzt kommt die Heterodyn-detektion zum Einsatz. Ein dritter AOM erzeugt eine weitere Frequenz bei $\Omega_D$ verschoebne gegenpüber den Laser. Diese wird nach dem Experiemnt mit dem Signal-Strahl gemischt. Das zur dekettion verwendete Spekrometer ist wie jedes Spektrometer langsam gegenüber der Lichfrequenz uund auch langsam gegenüber den RF-Ffeauemzen des AOMs. Es wirkt damit als Tiefpass-Filter. Durch Wahl von $\Omega_D$ kann zwischen den prozessne  $(-++)$,  $(+-+)$ und  $(++-)$ unterschieden werden. $(+++)$ liegt bei der driefachen Laserfreuenz, also im Ultraviotellen, und wird hier nicht betrachtet.
 """
 
 # ╔═╡ e21750ab-95e5-4ae2-a596-53dcd04de064
@@ -444,7 +514,13 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─140c248e-51f1-4eac-91d3-2b0d599ba11f
 # ╟─cda6bbea-4650-4c9a-87de-9763f25e1cd7
 # ╟─591de8fc-94a9-4430-8098-a72e59e77629
-# ╟─4d7ecda5-a8aa-4839-97ee-a87d73114c03
+# ╠═4d7ecda5-a8aa-4839-97ee-a87d73114c03
+# ╟─9b7ae5b7-02f1-42c2-bfac-0dfa8b23c255
+# ╟─2f9db9e2-8120-45b4-8839-5a74b0cd0b95
+# ╠═e7c85170-32d4-4831-9bf4-f1fa1beafda6
+# ╠═279d0c8b-8798-49b5-aacf-28cf24b88067
+# ╟─5dd3ad80-05d7-473c-bd24-0681401c6de6
+# ╠═859e2f65-c352-42e4-b93c-a8555b72beb0
 # ╠═238209b9-b380-459f-86c7-5b73ff69e7e7
 # ╠═e21750ab-95e5-4ae2-a596-53dcd04de064
 # ╠═8096a364-ef4a-4dea-b362-f61735a23956
