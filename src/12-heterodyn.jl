@@ -233,6 +233,11 @@ tauchen sowohl positive als auch negative Frequenzen auf. Im Prinzip gibt es als
 ```
 """
 
+# ╔═╡ f89b3eeb-84bd-499f-a106-0878942430f6
+md"""
+$(Resource("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/12-heterodyn/setup.png", (:height => 400))) *Schema des Aufbaus von Langbein und Patton.*
+"""
+
 # ╔═╡ 5dd3ad80-05d7-473c-bd24-0681401c6de6
 md"""
 ### AOM als Frequenz-Schieber
@@ -248,15 +253,15 @@ Die einzelnen $\omega_i$ von oben basieren also alle auf dem gleichen $\omega_{l
 md"""
 ### Heterodyn-Detektion 
 
-Das Mischprodukt $\omega_4$ liegt wieder in der Nähe von $\omega_{laser}$ (so ist der Prozess ausgewählt). Wo genau hängt aber von den $\Omega_{AOM}$ ab. Jetzt kommt die Heterodyn-Detektion zum Einsatz. An einem ditten AOM bei der Frequenz  $\Omega_D$  treffen sich der Strahl $E_4$ von der Probe und ein Refrenz-Strahl $E_R$ dirket vom Laser. Der Winkel zwsicehn deb beiden Strahl enspricht gerade dem Beugubgswinkel. Die Ordnung +1  von $E_4$ geht also in die gleoiche Rcihung wie die Nullte Ordnung von $E_R$ bzw. die Ordnung -1 von $E_R$ überlagert sich mit $E_4$. Ingesamt begkommt mal also
+Das Mischprodukt $\omega_4$ liegt wieder in der Nähe von $\omega_{laser}$ (so ist der Prozess ausgewählt). Wo genau hängt aber von den $\Omega_{AOM}$ ab. Jetzt kommt die Heterodyn-Detektion zum Einsatz. An einem dritten AOM bei der Frequenz  $\Omega_D$  treffen sich der Strahl $E_4$ von der Probe und ein Referenz-Strahl $E_R$ direkt vom Laser. Der Winkel zwischen den beiden Strahl entspricht gerade dem Beugungswinkel. Die Ordnung +1  von $E_4$ geht also in die gleiche Richtung wie die Nullte Ordnung von $E_R$ bzw. die Ordnung -1 von $E_R$ überlagert sich mit $E_4$. Insgesamt bekommt mal also
 ```math
 E_a = E_R + E_4 e^{i \Omega_D t} \quad \text{und} \quad E_b = E_R e^{-i \Omega_D t} + E_4 
 ```
-Das Spektromteer misst Intesnitäten, also zB
+Das Spektrometer misst Intensitäten, also z.B.
 ```math
 I_a \propto |E_a|^2 = |E_R|^2 + |E_4|^2 + 2 \Re \left\{ E_R^\star \, E_4   \, e^{i \Omega_D t}  \right\}
 ```
-und mittelt diese über die Integarionszeit. Der dritte Term oszilliert in $t$ und mittelt sich so weg, wenn nicht gerade alle Frequenzen sich gegenseitig aufheben, also gerade $\omega_4 = \omega_{laser} - \Omega_D$. Wenn man dann och $I_a - I_b$ betarchtet, dann heben sich die konstanten ertsbn beiden terme gerade weg.
+und mittelt diese über die Integrationszeit. Der dritte Term oszilliert in $t$ und mittelt sich so weg, wenn nicht gerade alle Frequenzen sich gegenseitig aufheben, also gerade $\omega_4 = \omega_{laser} - \Omega_D$. Wenn man dann noch $I_a - I_b$ betrachtet, dann heben sich die konstanten ersten beiden Terme gerade weg.
 """
 
 # ╔═╡ e21750ab-95e5-4ae2-a596-53dcd04de064
@@ -523,6 +528,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─2f9db9e2-8120-45b4-8839-5a74b0cd0b95
 # ╟─e7c85170-32d4-4831-9bf4-f1fa1beafda6
 # ╟─279d0c8b-8798-49b5-aacf-28cf24b88067
+# ╟─f89b3eeb-84bd-499f-a106-0878942430f6
 # ╟─5dd3ad80-05d7-473c-bd24-0681401c6de6
 # ╟─859e2f65-c352-42e4-b93c-a8555b72beb0
 # ╠═238209b9-b380-459f-86c7-5b73ff69e7e7
