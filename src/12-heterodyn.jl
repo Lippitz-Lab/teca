@@ -16,7 +16,7 @@ html"""<div>
 <font size="7"><b>12 Homodyn- und Heterodyn-Detektion</b></font> </div>
 
 <div><font size="5"> Markus Lippitz</font> </div>
-<div><font size="5"> 27. Juni 2022 </font> </div>
+<div><font size="5"> 29. Juni 2022 </font> </div>
 """
 
 # ╔═╡ 705a5b52-96f3-11ec-11e9-45e1cd363a35
@@ -191,21 +191,6 @@ md"""
 > Sie wollen ein kleines SIgnal $a(t)$ detektieren, dass sie zwischen $a=0$ und $a=a_0$ schalten können. Untersuchen Sie den Einfluss verschiedener Rausch-Quellen auf das SNR, und ob daran interferometrische Detektion etwas ändert / ändert kann.
 """
 
-# ╔═╡ 2f9db9e2-8120-45b4-8839-5a74b0cd0b95
-md"""
-### Frequenzmodulation
-
-Der Effekt des Experiments sei, dass eine zusätzliche optische Frequenz im Signal-Arm erscheint, die etwas gegenüber der eigentlichen Trägerfrequenz verschieben ist (dazu unten mehr). Das elektrische Feld nach dem Experiment ist also
-```math
-E_S = E_0 \left[ e^{i \omega_0 t} + a(t) e^{i (\omega + \Delta \omega) t} \right]
-```
-Der lokale Oszillator vergrößert wieder die Feldamplitude bei der Frequenz $\omega_0$ und liefert den Freiheitsgrad der Phase. Unabhängig davon findet man mit und ohne Referenzarm einen Term, der proportional zu 
-```math
-\Re \left( e^{i \Delta \omega t} \right)
-```
-ist, also Kosinus-förmig mit $\Delta \omega$ oszilliert.
-"""
-
 # ╔═╡ e7c85170-32d4-4831-9bf4-f1fa1beafda6
 md"""
 ## Bsp. zu Optische Heterodyn-Detektion
@@ -223,7 +208,8 @@ Vier-Wellen-Mischen ist ein nichtlinearer optischer Effekt, bei dem  drei optisc
 ```math
 P^{(3)} = \chi^{(3)} \, E_1(t) \, E_2(t) \, E_3(t)
 ```
-Jedes der 3 Felder $E_i$ kann eine eigener Frequenz $\omega_i$ haben. Da
+Jedes der 3 Felder $E_i$ kann eine eigener Frequenz $\omega_i$ haben. Die nichtlinear e Polarisation $P^{(3)}$ strahlt ein viertes Feld ab, dessen Frequenz die Summe der einzelnen Frequenzen ist.
+Da
 ```math
 2 \cos x = e^{i x} + e^{-i x}
 ```
@@ -242,7 +228,7 @@ $(Resource("https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/12-het
 md"""
 ### AOM als Frequenz-Schieber
 
-Im Experiment bestehen die Felder $E_i$ aus Laserpulsen, und deren zeitliche Reihenfolge ist relevant. Dazu wird ein Laserstrahl in 2 Teile aufgeteilt und jeder Teil durch einen *Akusto-Optischen Modulator* (AOM) geschickt. Hier wird der Strahl an einem Ultraschall-Gitter gebeugt. Dabei wird jede Bergungsordnung $\pm k$ um $k$ mal die Ultraschallfrequenz $\Omega$ frequenzverschoben (sonst würde die Energieerhaltung nicht zusammen mit der Impulserhaltung gelten). Damit ist also
+Im Experiment bestehen die Felder $E_i$ aus Laserpulsen, und deren zeitliche Reihenfolge ist relevant. Dazu wird ein Laserstrahl in 2 Teile aufgeteilt und jeder Teil durch einen *Akusto-Optischen Modulator* (AOM) geschickt. Hier wird der Strahl an einem Ultraschall-Gitter gebeugt. Dabei wird jede Beugungsordnung $k = 0, \pm 1, \pm2, \dots $ um $k$ mal die Ultraschallfrequenz $\Omega$ frequenzverschoben (sonst würde die Energieerhaltung nicht zusammen mit der Impulserhaltung gelten). Damit ist also
 ```math
 \omega_k = \omega_{laser} + k \Omega
 ```
@@ -261,7 +247,9 @@ Das Spektrometer misst Intensitäten, also z.B.
 ```math
 I_a \propto |E_a|^2 = |E_R|^2 + |E_4|^2 + 2 \Re \left\{ E_R^\star \, E_4   \, e^{i \Omega_D t}  \right\}
 ```
-und mittelt diese über die Integrationszeit. Der dritte Term oszilliert in $t$ und mittelt sich so weg, wenn nicht gerade alle Frequenzen sich gegenseitig aufheben, also gerade $\omega_4 = \omega_{laser} - \Omega_D$. Wenn man dann noch $I_a - I_b$ betrachtet, dann heben sich die konstanten ersten beiden Terme gerade weg.
+und mittelt diese über die Integrationszeit. Der dritte Term oszilliert in $t$ und mittelt sich so weg, wenn nicht gerade alle Frequenzen sich gegenseitig aufheben, also gerade $\omega_4 = \omega_{laser} - \Omega_D$. Wenn man dann noch $I_a - I_b$ betrachtet, dann heben sich die konstanten ersten beiden Terme gerade weg. 
+
+So ist man in der Lage, Amplitude und Phase von $E_4$ (und damit von dem gewählten $P^{(3)})$) zu detektieren. Das Spektrometer sorgt dafür, dass man nicht nur die Gesamtintensität, sondern auch noch deren spektralen Verlauf kennt. Im dem Artikel wird so die Kopplung zwischen verschiedenen Zuständen eines Quantenpunkts untersucht.
 """
 
 # ╔═╡ e21750ab-95e5-4ae2-a596-53dcd04de064
@@ -525,7 +513,6 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─591de8fc-94a9-4430-8098-a72e59e77629
 # ╟─4d7ecda5-a8aa-4839-97ee-a87d73114c03
 # ╟─9b7ae5b7-02f1-42c2-bfac-0dfa8b23c255
-# ╟─2f9db9e2-8120-45b4-8839-5a74b0cd0b95
 # ╟─e7c85170-32d4-4831-9bf4-f1fa1beafda6
 # ╟─279d0c8b-8798-49b5-aacf-28cf24b88067
 # ╟─f89b3eeb-84bd-499f-a106-0878942430f6
