@@ -1,0 +1,136 @@
+<!-- PlutoStaticHTML.Begin -->
+<!--
+    # This information is used for caching.
+    [PlutoStaticHTML.State]
+    input_sha = "e8cbd46f19480e42730f4e58a65ca818de45cc7bc01175b75afd0a4120a7e56d"
+    julia_version = "1.9.3"
+-->
+
+<div><font size="7"><b>6 Fourier-Transformation</b></font></div>
+<div><font size="5"> Markus Lippitz </font></div>
+<div><font size="5"> 13. Mai 2022 </font></div>
+
+
+<div class="markdown"><p><strong>Ziele</strong> Sie können für typische ein-dimensionale Funktionen die Fourier-Transformierte intuitiv <em>vorhersagen</em>.</p><ul><li><p>von der Fourier-Reihe zur Fourier-Transformation</p></li><li><p>FT typischer Funktionen</p></li><li><p>Produkt und Faltung von Funktionen</p></li></ul><p><strong>weitere Aufgaben</strong></p><ul><li><p>Synthetisieren sie eine Dreieck- / Rechteck-Funktion ‚von Hand'</p></li></ul><p><strong>Literatur</strong> Butz Kap. 1 &amp; 2, Saleh/Teich Anhang A, Hecht Kap.11, Horowitz / Hill, Kap. 15.18</p></div>
+
+
+<div class="markdown"><h1>Überblick</h1><p>An vielen Stellen in der Physik ist es sinnvoll und hilfreich, einen intuitiven Zugang zur Fourier-Transformation zu haben. Im Endeffekt muss man in der Experimentalphysik nur selten eine Fourier-Transformation wirklich ausrechnen. Sehr oft reicht es, ein paar oft vorkommende Fourier-Paare zu kennen und diese mit einfachen Regeln zu kombinieren. Dies möchte ich hier kurz vorstellen. Eine sehr schöne und viel detailliertere Darstellung findet sich in <strong>Butz: Fourier-Transformation für Fußgänger</strong>. Ich folge hier seiner Notation.</p><p>Bevor wir zu den Fourier-Paaren kommen, müssen allerdings doch erst ein paar Grundlagen gelegt werden.</p></div>
+
+
+<div class="markdown"><h1>Fourier-Reihen: eine periodische Funktion und deren Fourier-Koeffizienten</h1><p>Wir betrachten hier alles erst einmal eindimensional im Zeit- bzw. Frequenzraum mit den Variablen <span class="tex">$t$</span> und <span class="tex">$\omega = 2 \pi \nu$</span>. Die Funktion <span class="tex">$f(t)$</span> sei periodisch in der Zeit mit der Periodendauer <span class="tex">$T$</span>, also <span class="tex">$f(t) = f (t + T)$</span> Dann kann man diese als Fourier-Reihe schreiben</p><p class="tex">$$f(t) = \sum_{k=-\infty}^{\infty} \, C_k \, e^{i \, \omega_k \, t}$$</p><p>mit <span class="tex">$\omega_k = \frac{2 \pi \, k}{T}$</span> und den Fourier-Koeffizienten</p><p class="tex">$$C_k = \frac{1}{T} \, \int_{-T/2}^{T/2} \, f(t) \, \, e^{-i \, \omega_k \, t} \, dt$$</p><p>Man beachte das negative Vorzeichen in der Exponentialfunktion im Gegensatz zur Gleichung davor. Für reellwertige Funktionen <span class="tex">$f(t)$</span> sind 'gegenüberliegende' <span class="tex">$C_k$</span> konjugiert-komplex, also <span class="tex">$C_k = C_{-k}^\star$</span>. Für <span class="tex">$k&lt;0$</span> sind die Frequenzen <span class="tex">$\omega_k$</span> negativ, was aber kein Problem darstellt. Der nullte Koeffizient <span class="tex">$C_0$</span> ist also gerade der zeitliche Mittelwert der Funktion <span class="tex">$f(t)$</span>.</p></div>
+
+
+<div class="markdown"><h1>Eine beliebige Funktion und deren Fourier-Transformierte</h1><p>Nun heben wir die Einschränkung auf periodische Funktionen <span class="tex">$f(t)$</span> auf, indem wir die Periodendauer <span class="tex">$T$</span> gegen unendlich gehen lassen. Dadurch wird aus der Summe ein Integral und die diskreten <span class="tex">$\omega_k$</span> werden kontinuierlich. Damit wird </p><p class="tex">$$\begin{aligned}
+ F(\omega) = &amp; \int_{-\infty}^{+\infty} \, f(t) \, e^{- i \omega\, t} \, dt \\
+ f(t) = &amp; \frac{1}{2 \pi } \int_{-\infty}^{+\infty} \, F(\omega) \, e^{+ i \omega\, t} \, d\omega \end{aligned}$$</p><p>Die erste Gleichung ist dabei die Hintransformation (minus-Zeichen im Exponenten), die zweite die Rücktransformation (plus-Zeichen im Exponenten). Die Symmetrie wird durch das <span class="tex">$2 \pi$</span> gebrochen. Dies ist aber notwendig, wenn man weiterhin <span class="tex">$F(\omega = 0)$</span> als Mittelwert behalten will. Alternativ könnte man das alles mit <span class="tex">$\nu$</span> statt <span class="tex">$\omega$</span> formulieren, hätte dann aber an viel mehr Stellen ein <span class="tex">$2 \pi$</span>, wenn auch nicht vor dem Integral.</p></div>
+
+
+<div class="markdown"><h2>Nebenbemerkung: Delta-Funktion</h2><p>Die Delta-Funktion kann geschrieben werden als</p><p class="tex">$$\delta(x) = \lim_{a \rightarrow 0} f_a(x) \quad
+   \text{mit} \quad
+    f_a(x) = \left\{ \begin{matrix}
+    a  &amp; \text{falls } |x| &lt; \frac{1}{2a} \\
+    0 &amp; \text{sonst}
+    \end{matrix}
+    \right.$$</p><p>oder als</p><p class="tex">$$\delta(x)  = \frac{1}{2 \pi}  \int_{-\infty}^{+\infty} \, e^{+ i\, x \, y} \, dy$$</p><p>Eine wichtige Eigenschaft ist, dass die delta-Funktion einen Wert selektiert, also</p><p class="tex">$$\int_{-\infty}^{+\infty} \, \delta(x) \, f(x) \, dx = f(0)$$</p></div>
+
+
+<div class="markdown"><h1>Wichtige Fourier-Paare</h1><p>Es ist sehr oft ausreichend, die folgenden Paare von Funktionen und deren Fourier-Transformierten zu kennen. Ich schreibe sie hier, Butz folgend, als Paare in <span class="tex">$t$</span> und <span class="tex">$\omega$</span> (nicht <span class="tex">$\nu = \omega / (2 \pi)$</span>). Genauso hätte man auch Paare in <span class="tex">$x$</span> und <span class="tex">$k$</span> schreiben können. Wichtig ist dabei die Frage, ob ein <span class="tex">$2 \pi$</span> in der Exponentialfunktion der ebenen Welle auftaucht oder nicht. Also</p><p class="tex">$$e^{i \omega t} \quad \text{und} \quad e^{i k x} \quad \text{, aber} \quad 
+e^{i 2 \pi \nu t}$$</p><p>Weiterhin folge ich hier der oben gemachten Konvention zu asymmetrischen Verteilung der <span class="tex">$2 \pi$</span> zwischen Hin- und Rück-Transformation. Wenn man die anders verteilt, dann ändern sich natürlich auch die Vorfaktoren. Eine gute Übersicht über noch viel mehr Fourier-Paare in diversen '<span class="tex">$2 \pi$</span>'-Konventionen findet sich in der englischen Wikipedia unter 'Fourier transform'. In deren Nomenklatur ist die hier benutzte Konvention von Butz 'non-unitary, angular frequency'.</p></div>
+
+
+<div class="markdown"><h3>Konstante und Delta-Funktion</h3><p>Aus <span class="tex">$f(t) = a$</span> wird <span class="tex">$F(\omega) = a \, 2 \pi \, \delta(\omega)$</span> und aus <span class="tex">$f(t) = a \, \delta(t)$</span> wird <span class="tex">$F(\omega) = a$</span>. Das ist wieder das asymmetrische <span class="tex">$2 \pi$</span>.</p></div>
+
+
+<div class="markdown"><h3>Rechteck und sinc</h3><p>Aus der Rechteckfunktion der Breite <span class="tex">$b$</span> wird ein sinc, der sinus cardinalis. Also aus</p><p class="tex">$$f(t) = \text{rect} _b (t) = \left\{ \begin{array}{ll}
+ 1 &amp; \text{für} \quad |t| &lt; b/2 \\
+ 0 &amp; \text{sonst} \\
+ \end{array}
+ \right.$$</p><p>wird</p><p class="tex">$$F(\omega) = b \,  \frac{\sin \omega b / 2}{\omega b /2} = b \, \text{sinc}( \omega b /2)$$</p></div>
+
+
+<div class="markdown"><h3>Gauss</h3><p>Die Gauss-Funktion bleibt unter Fourier-Transformation erhalten. Ihre Breite geht in den reziproken Wert über. Also aus einer Gauss-Funktion der Fläche Eins</p><p class="tex">$$f(t) = \frac{1}{\sigma \sqrt{2 \pi}} \, e^{- \frac{1}{2} \left( \frac{t}{\sigma} \right)^2}$$</p><p>wird</p><p class="tex">$$F(\omega) =  e^{- \frac{1}{2} \left( \sigma \, \omega \right) ^2  }$$</p></div>
+
+
+<div class="markdown"><h3>(beidseitiger) Exponentialzerfall und Lorentz-Kurve</h3><p>Aus einer sowohl zu positiven als auch zu negativen Zeiten exponentiell abfallenden Kurve </p><p class="tex">$$f(t) = e^{- |t| / \tau}$$</p><p>wird die Lorentz-Kurve</p><p class="tex">$$F(\omega) = \frac{2 \tau}{1 + \omega^2 \, \tau^2}$$</p></div>
+
+
+<div class="markdown"><h3>Einseitiger Exponentialzerfall</h3><p>Als Nebenbemerkung hier der einseitige Exponentialzerfall, also</p><p class="tex">$$f(t) = \left\{ \begin{array}{ll}
+e^{- \lambda t } &amp; \text{für} \quad t &gt; 0 \\
+ 0 &amp; \text{sonst} \\
+ \end{array}
+ \right.$$</p><p>Der wird zu </p><p class="tex">$$F(\omega) = \frac{1}{\lambda + i \, \omega}$$</p><p>ist also komplexwertig. Sein Betrags-Quadrat ist wieder eine Lorentz-Funktion </p><p class="tex">$$| F(\omega)|^2 = \frac{1}{\lambda^2 +  \omega^2}$$</p><p>und die Phase ist <span class="tex">$\phi = - \omega / \lambda$</span>.</p></div>
+
+
+<div class="markdown"><h3>Eindimensionales Punktgitter</h3><p>Eine äquidistante Kette von Punkten bzw. Delta-Funktionen geht bei Fourier-Transformation wieder in eine solche über. Die Abstände nehmen dabei den reziproken Wert an. Also aus</p><p class="tex">$$f(t) = \sum_{n=-\infty}^{\infty} \, \delta (t - \Delta t \, n)$$</p><p>wird</p><p class="tex">$$F(\omega) = \frac{2 \pi}{\Delta t} \, \sum_{n=-\infty}^{\infty} \, \delta \left(\omega - n\frac{2 \pi}{\Delta t} \right)$$</p></div>
+
+
+<div class="markdown"><h1>Sätze und Eigenschaften der Fourier-Transformation</h1><p>Neben den Fourier-Paaren braucht man noch ein paar Eigenschaften der Fourier-Transformation. Im Folgende seien <span class="tex">$f(t)$</span> und <span class="tex">$F(\omega)$</span> Fourier-konjugierte und ebenso <span class="tex">$g$</span> und <span class="tex">$G$</span>.</p></div>
+
+
+<div class="markdown"><h3>Linearität</h3><p>Die Fourier-Transformation ist linear</p><p class="tex">$$a \, f(t) + b \, g(t) \quad \leftrightarrow \quad 
+a \, F(\omega) + b \, G(\omega)$$</p></div>
+
+
+<div class="markdown"><h3>Verschiebung</h3><p>Eine Verschiebung in der Zeit bedeutet eine Modulation in der Frequenz und andersherum </p><p class="tex">$$\begin{aligned}
+ f(t - a) &amp; \quad \leftrightarrow \quad 
+F(\omega) \, e^{-i \omega a} \\
+ f(t) \, \, e^{-i \omega_0 t} &amp;  \quad \leftrightarrow \quad 
+F(\omega + \omega_0)  \end{aligned}$$</p></div>
+
+
+<div class="markdown"><h3>Skalierung</h3><p class="tex">$$f( a \, t)  \quad \leftrightarrow \quad 
+\frac{1}{|a|} \, F \left( \frac{\omega}{a} \right)$$</p></div>
+
+
+<div class="markdown"><h3>Faltung und Multiplikation</h3><p>Die Faltung geht in ein Produkt über, und andersherum.</p><p class="tex">$$f(t) \otimes g(t) = \int f(\zeta) g(t- \zeta) d\zeta 
+ \quad \leftrightarrow \quad 
+ F(\omega) \, G(\omega)$$</p><p>und </p><p class="tex">$$f(t) \,  g(t) 
+ \quad \leftrightarrow \quad 
+\frac{1}{2 \pi} \,  F(\omega) \otimes G(\omega)$$</p></div>
+
+
+<div class="markdown"><h3>Parsevals Theorem</h3><p>Die Gesamt-Leistung ist im Zeit- wie im Frequenzraum die gleiche</p><p class="tex">$$\int |f(t) |^2 \, dt = \frac{1}{2 \pi} \, \int | F (\omega ) | ^2 \, d\omega$$</p></div>
+
+
+<div class="markdown"><h3>Zeitliche Ableitungen</h3><p class="tex">$$\frac{d \, f(t)}{dt} 
+ \quad \leftrightarrow \quad 
+i \omega \,  F(\omega)$$</p></div>
+
+
+<div class="markdown"><h1>Beispiel: Beugung am Doppelspalt</h1><p>Als Beispiel betrachten wir die Fourier-Transformierte eines Doppelspalts, die gerade sein Beugungsbild beschreibt. Die Spalten haben eine Breite <span class="tex">$b$</span> und einem Mitten-Abstand <span class="tex">$d$</span>. Damit wird der Spalt beschrieben durch eine Faltung der Rechteck-Funktion mit zwei Delta-Funktionen im Abstand <span class="tex">$d$</span></p><p class="tex">$$f(x) = \text{rect} _b (x) \, \otimes \, \left( \delta (x - d/2) + \delta (x + d/2) \right)$$</p><p>Die Fourier-Transformierte der Rechteck-Funktion ist der <span class="tex">$\text{sinc}$</span>, die der delta-Funktionen eine Konstante. Die Verschiebung im Ort bewirkt allerdings eine Modulation im <span class="tex">$k$</span>-Raum. Aus der Summe der beiden Delta-Funktionen wird also</p><p class="tex">$$\mathcal{FT}\left\{ \delta (x - d/2) + \delta (x + d/2)  \right\} =
+e^{-i k d/2} + e^{+i k d/2}  = 2 \cos ( k d/2)$$</p><p>Die Faltung mit der Rechteck-Funktion geht über in eine Multiplikation mit dem <span class="tex">$\text{sinc}$</span>. Zusammen erhalten wir somit</p><p class="tex">$$\mathcal{FT}\left\{ f(x)  \right\} = b \frac{\sin (k b/2) }{kb/2} \, 2 \cos ( k d/2) = \frac{4}{k} \, \sin (k b/2) \,  \cos ( k d/2)$$</p><p>Die Intensität in Richtung <span class="tex">$k$</span> ist dann das Betragsquadrat davon.</p></div>
+
+
+<div class="markdown"><h1>Selbstkontrolle</h1><h2>Zeitliche Verschiebung</h2><ul><li><p>Skizzieren Sie Amplitude und Phase der FT eines zeitlichen Rechteckpulses, der um die zeitliche Null zentriert ist!</p></li><li><p>Was ändert sich, wenn man den Puls zu positiven Zeiten verschiebt?</p></li></ul></div>
+
+
+<div class="markdown"><h2>Pulsfolge</h2><p>Sie fragen sich, wie die Fourier-Transformierte (Betragsquadrat) einer unendlichen Folge von Rechteck-Pulsen aussieht und fangen an, danach im Internet zu suchen. Ihre Kommilitonin entgegnet, das „sehe“ man doch sofort.</p><ul><li><p>Skizzieren Sie sich die Fourier-Transformierte.</p></li><li><p>Erklären Sie wieso man das direkt herleiten könnte oder „sehen“ solle.</p></li></ul></div>
+
+
+<div class="markdown"><h2>Lichtpuls</h2><p>Stellen Sie sich einen „Lichtpuls“ vor als mathematische Konstruktion aus einer unendlich langen Cosinus-Schwingung, die der Lichtfrequenz entspricht. Den „Puls“ erhält man daraus, indem man die Welle mit einer zeitlich begrenzten Gausspuls-Einhüllenden (z.B. Halbwertsbreite von 10 Lichtschwingungen) multipliziert. </p><ul><li><p>Skizzieren Sie die Konstruktion der Fouriertransformation im Spektralbereich</p></li></ul></div>
+
+
+<div class="markdown"><h1>Zweidimensionale Fourier-Transformation</h1><p>Wir können die Definition der Fourier-Transformation auf zwei und mehr Dimensionen erweitern. Die konjugierten Variablen sind <span class="tex">$(x,y)$</span> und <span class="tex">$(k_x, k_y)$</span>, anstelle von <span class="tex">$t$</span> und <span class="tex">$\omega$</span>. Der Wellenvektor <span class="tex">$k_i = 2\pi / \lambda_i$</span> enthält den Faktor von <span class="tex">$2\pi$</span> wie in der Kreisfrequenz <span class="tex">$\omega$</span>. Wir definieren </p><p class="tex">$$\begin{aligned}
+  F(k_x, k_y) = &amp; \iint_{-\infty}^{+\infty} \, f(x,y) \, e^{- i (k_x \, x + k_y \, y )} \, dx \, dy \\
+  f(x,y) = &amp; \frac{1}{(2 \pi )^2} \iint_{-\infty}^{+\infty} \, F(k_x, k_y) \,\, e^{+ i (k_x \, x + k_y \, y )}  \, dk_x \,dk_y \quad .
+ \end{aligned}$$</p><p>Wenn wir die Funktion <span class="tex">$f(x,y)$</span> in ein Produkt von eindimensionalen Funktionen zerlegen können, dann ist die Fourier-Transformation einfach das Produkt der einzelnen Fourier-Transformationen</p><p class="tex">$$f(x,y) = g(x) \cdot h(y) \quad \leftrightarrow \quad 
+  F(k_x, k_y) = G(k_x) \cdot H(k_y) \quad .$$</p><p>Ein Rechteck der Größe <span class="tex">$a \times b$</span> wird in ein Produkt von Sinc-Funktionen umgewandelt </p><p class="tex">$$\begin{aligned}
+  (x,y) = &amp; \text{rect} _a (x) \cdot \text{rect} _b (y) \\
+  \leftrightarrow \quad  F(k_x, k_y) = &amp; a b \, \text{sinc}( k_x a /2) \, \text{sinc}( k_y b /2) \quad .\end{aligned}$$</p><p>Ein Spezialfall davon ist die rotationssymmetrische zweidimensionale Gaußsche Funktion </p><p class="tex">$$f(x,y) = 
+  \frac{1}{2 \pi \sigma^2} \, e^{-  \frac{x^2 + y^2}{2 \sigma^2} }
+  \quad \leftrightarrow \quad 
+  F(k_x, k_y) = e^{- \frac{\sigma^2 }{2} \left(k_x^2 + k_y^2 \right)  } \quad .$$</p><p>Eine wichtige Funktion kann nicht in ein Produkt eindimensionaler Funktionen zerlegt werden: eine Scheibe mit dem Radius <span class="tex">$a$</span></p><p class="tex">$$f(x,y)  = \left\{ 
+    \begin{array}{ll}
+    1 &amp; \text{für} \quad x^2+y^2 &lt; a \\
+    0 &amp; \text{sonst} \\
+    \end{array}
+    \right.$$</p><p>wird transformiert in</p><p class="tex">$$F(k_x, k_y) = a \, \frac{J_1(\pi \, a \, \rho )}{\rho}
+  \quad \text{width} \quad \rho = \sqrt{k_x^2 + k_y^2}$$</p><p>und der (zylindrischen) Besselfunktion erster Art <span class="tex">$J_1(x)$</span></p><p class="tex">$$J_1(x) = \frac{1}{\pi} \int_0^\pi \cos (\tau - x \sin \tau) \,d\tau \quad ,$$</p><p>die das zylindrische Analogon einer Sinc-Funktion ist.</p></div>
+
+<pre class='language-julia'><code class='language-julia'>using PlutoUI</code></pre>
+
+
+<pre class='language-julia'><code class='language-julia'>TableOfContents(title="Inhalt")</code></pre>
+
+
+<!-- PlutoStaticHTML.End -->

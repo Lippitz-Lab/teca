@@ -1,0 +1,236 @@
+<!-- PlutoStaticHTML.Begin -->
+<!--
+    # This information is used for caching.
+    [PlutoStaticHTML.State]
+    input_sha = "2d30a22f453c72c181546d174ca232963fb765e361455c733280ff0572179e05"
+    julia_version = "1.9.3"
+-->
+
+<div class="markdown"><h1>1 Erste Schritte mit Julia - live</h1><p>Bevor Sie dieses Notebook erfolgreich lokal ausführen können, müssen Sie <a href="/teca/software">Julia und Pluto einrichten</a>.</p></div>
+
+
+<div class="markdown"><h2>Variablen</h2><p>Wir können eine Variable mit <code>=</code> (Zuweisung) definieren. Dann können wir ihren Wert in anderen Ausdrücken verwenden:</p></div>
+
+<pre class='language-julia'><code class='language-julia'>x = 3</code></pre>
+<pre class="code-output documenter-example-output" id="var-x">3</pre>
+
+<pre class='language-julia'><code class='language-julia'>y = 2x</code></pre>
+<pre class="code-output documenter-example-output" id="var-y">6</pre>
+
+
+<div class="markdown"><p>Standardmäßig zeigt Julia die Ausgabe der letzten Operation an. (Sie können die Ausgabe unterdrücken, indem Sie <code>;</code> (ein Semikolon) am Ende hinzufügen.)</p></div>
+
+
+<div class="markdown"><p>Wir können herausfinden, welchen Typ eine Variable hat, indem wir <code>typeof</code> benutzen:</p></div>
+
+<pre class='language-julia'><code class='language-julia'>typeof(y)</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash291424">Int64</pre>
+
+
+<div class="markdown"><h2>Funktionen</h2></div>
+
+
+<div class="markdown"><p>Für einfache Funktionen kann eine kurze, einzeilige Funktionsdefinition verwendet werden:</p></div>
+
+<pre class='language-julia'><code class='language-julia'>f(x) = 2 + x</code></pre>
+<pre class="code-output documenter-example-output" id="var-f">f (generic function with 1 method)</pre>
+
+
+<div class="markdown"><p>Wenn Sie den Namen der Funktion eingeben, erhalten Sie Informationen über diese Funktion. Um sie aufzurufen, müssen wir Klammern verwenden:</p></div>
+
+<pre class='language-julia'><code class='language-julia'>f</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash151887">f (generic function with 1 method)</pre>
+
+<pre class='language-julia'><code class='language-julia'>f(10)</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash377668">12</pre>
+
+
+<div class="markdown"><p>Für längere Funktionen verwenden wir die folgende Syntax mit dem Schlüsselwort <code>function</code> und <code>end</code>:</p></div>
+
+<pre class='language-julia'><code class='language-julia'>function g(x, y)
+    z = x + y
+    return z^2
+end</code></pre>
+<pre class="code-output documenter-example-output" id="var-g">g (generic function with 1 method)</pre>
+
+<pre class='language-julia'><code class='language-julia'>g(1, 2)</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash520259">9</pre>
+
+
+<div class="markdown"><h2>For-Schleifen</h2></div>
+
+
+<div class="markdown"><p>Verwenden Sie <code>for</code>, um eine Schleife über eine vorher festgelegte Menge von Werten laufen zu lassen:</p></div>
+
+<pre class='language-julia'><code class='language-julia'>let s = 0
+    
+    for i in 1:10
+        s += i    # Equivalent to s = s + i
+    end
+    
+    s
+end</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash163775">55</pre>
+
+
+<div class="markdown"><p>Hier ist <code>1:10</code> ein <strong>Bereich</strong> (range), der die Zahlen von 1 bis 10 darstellt:</p></div>
+
+<pre class='language-julia'><code class='language-julia'>typeof(1:10)</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash562543">UnitRange{Int64}</pre>
+
+
+<div class="markdown"><p>Oben haben wir einen <code>let</code>-Block verwendet, um eine neue lokale Variable <code>s</code> zu definieren.  Aber solche Codeblöcke sind normalerweise besser innerhalb von Funktionen aufgehoben, so dass sie wiederverwendet werden können. Beispielsweise könnten wir den obigen Code wie folgt umschreiben:</p></div>
+
+<pre class='language-julia'><code class='language-julia'>function mysum(n)
+    s = 0
+    
+    for i in 1:n
+        s += i    
+    end
+    
+    return s
+end</code></pre>
+<pre class="code-output documenter-example-output" id="var-mysum">mysum (generic function with 1 method)</pre>
+
+<pre class='language-julia'><code class='language-julia'>mysum(100)</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash179017">5050</pre>
+
+
+<div class="markdown"><h2>Bedingungen: <code>if</code></h2></div>
+
+
+<div class="markdown"><p>Wir können auswerten, ob eine Bedingung wahr ist oder nicht, indem wir einfach die Bedingung schreiben:</p></div>
+
+<pre class='language-julia'><code class='language-julia'>a = 3</code></pre>
+<pre class="code-output documenter-example-output" id="var-a">3</pre>
+
+<pre class='language-julia'><code class='language-julia'>a &lt; 5</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash964015">true</pre>
+
+
+<div class="markdown"><p>Wir sehen, dass Bedingungen einen booleschen Wert (<code>true</code> oder <code>false</code>) haben. </p><p>Wir können dann <code>if</code> verwenden, um zu steuern, was wir auf der Grundlage dieses Wertes tun:</p></div>
+
+<pre class='language-julia'><code class='language-julia'>if a &lt; 5
+    "small"
+    
+else
+    "big"
+    
+end</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash481735">"small"</pre>
+
+
+<div class="markdown"><p>Beachten Sie, dass das <code>if</code> auch den zuletzt ausgewerteten Wert zurückgibt, in diesem Fall die Zeichenkette <code>"small"</code> oder <code>"big"</code>, Da Pluto reaktiv ist, führt eine Änderung der Definition von <code>a</code> oben automatisch dazu, dass dieser Wert neu ausgewertet wird!</p></div>
+
+
+<div class="markdown"><h2>Felder (Arrays)</h2></div>
+
+
+<div class="markdown"><h3>1D Felder (<code>Vector</code>)</h3></div>
+
+
+<div class="markdown"><p>Wir können einen <code>Vector</code> (1-dimensional, oder 1D array) durch eckige Klammern erzeugen:</p></div>
+
+<pre class='language-julia'><code class='language-julia'>v = [1, 2, 3]</code></pre>
+<pre class="code-output documenter-example-output" id="var-v">3-element Vector{Int64}:
+ 1
+ 2
+ 3</pre>
+
+<pre class='language-julia'><code class='language-julia'>typeof(v)</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash120145">Vector{Int64} (alias for Array{Int64, 1})</pre>
+
+
+<div class="markdown"><p>Die <code>1</code> im Typ zeigt, dass es sich um ein 1D-Array handelt.</p><p>Wir greifen auf die Elemente auch mit eckigen Klammern zu:</p></div>
+
+<pre class='language-julia'><code class='language-julia'>v[2]</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash119835">2</pre>
+
+<pre class='language-julia'><code class='language-julia'>v[2] = 10</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash108360">10</pre>
+
+
+<div class="markdown"><p>Beachten Sie, dass Pluto die Zellen nicht automatisch aktualisiert, wenn Sie Elemente eines Arrays ändern, aber der Wert ändert sich schon.</p></div>
+
+
+<div class="markdown"><p>Eine gute Möglichkeit, einen Vektor nach einem bestimmten Muster zu erzeugen, ist <strong>array comprehension</strong>:</p></div>
+
+<pre class='language-julia'><code class='language-julia'>v2 = [i^2 for i in 1:10]</code></pre>
+<pre class="code-output documenter-example-output" id="var-v2">10-element Vector{Int64}:
+   1
+   4
+   9
+  16
+  25
+  36
+  49
+  64
+  81
+ 100</pre>
+
+
+<div class="markdown"><h3>2D Felder (matrices)</h3></div>
+
+
+<div class="markdown"><p>Wir können auch kleine Matrizen (2D-Arrays) mit eckigen Klammern erstellen:</p></div>
+
+<pre class='language-julia'><code class='language-julia'>M = [1 2
+     3 4]</code></pre>
+<pre class="code-output documenter-example-output" id="var-M">2×2 Matrix{Int64}:
+ 1  2
+ 3  4</pre>
+
+<pre class='language-julia'><code class='language-julia'>typeof(M)</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash174200">Matrix{Int64} (alias for Array{Int64, 2})</pre>
+
+
+<div class="markdown"><p>Das <code>2</code> im Typ bestätigt, dass es sich um ein 2D-Array handelt.</p></div>
+
+
+<div class="markdown"><p>Das funktioniert allerdings nicht bei größeren Matrizen. Dafür können wir z.B. verwenden</p></div>
+
+<pre class='language-julia'><code class='language-julia'>zeros(5, 5)</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash873134">5×5 Matrix{Float64}:
+ 0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0</pre>
+
+
+<div class="markdown"><p>Beachten Sie, dass <code>zeros</code> standardmäßig <code>Float64</code> ergibt. Wir können auch einen Typ für die Elemente angeben:</p></div>
+
+<pre class='language-julia'><code class='language-julia'>zeros(Int, 4, 5)</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash989171">4×5 Matrix{Int64}:
+ 0  0  0  0  0
+ 0  0  0  0  0
+ 0  0  0  0  0
+ 0  0  0  0  0</pre>
+
+
+<div class="markdown"><p>Wir können dann die gewünschten Werte eintragen, indem wir die Elemente manipulieren, z. B. mit einer <code>for</code>-Schleife.</p></div>
+
+
+<div class="markdown"><p>Eine schöne alternative Syntax zur Erstellung von Matrizen nach einem bestimmten Muster ist ein <em>array comprehension</em> mit einer <em>doppelten</em><code>for</code>-Schleife:</p></div>
+
+<pre class='language-julia'><code class='language-julia'>[i + j for i in 1:5, j in 1:6]</code></pre>
+<pre class="code-output documenter-example-output" id="var-hash228051">5×6 Matrix{Int64}:
+ 2  3  4  5   6   7
+ 3  4  5  6   7   8
+ 4  5  6  7   8   9
+ 5  6  7  8   9  10
+ 6  7  8  9  10  11</pre>
+
+
+<div class="markdown"><h2>Acknowledgement</h2></div>
+
+
+<div class="markdown"><div class="admonition is-warning"><header class="admonition-header">This notebook is translated from</header><div class="admonition-body"><p><em><strong>Computational Thinking</strong>, a live online Julia/Pluto textbook.</em> (<a href="https://computationalthinking.mit.edu">computationalthinking.mit.edu</a>, <a href="https://github.com/mitmath/18S191/blob/Fall20/lecture_notebooks/Basic%20Julia%20syntax.jl">original notebook</a>)</p></div></div></div>
+
+<pre class='language-julia'><code class='language-julia'>using PlutoUI</code></pre>
+
+
+<pre class='language-julia'><code class='language-julia'>TableOfContents(title="Inhalt")</code></pre>
+
+
+<!-- PlutoStaticHTML.End -->

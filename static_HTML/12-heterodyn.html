@@ -1,0 +1,123 @@
+<!-- PlutoStaticHTML.Begin -->
+<!--
+    # This information is used for caching.
+    [PlutoStaticHTML.State]
+    input_sha = "d08a6a33a663c3d91fb31d8437db2965ba70156463374b3e982d71e426839e5e"
+    julia_version = "1.9.3"
+-->
+
+<div><font size="7"><b>12 Homodyn- und Heterodyn-Detektion</b></font></div>
+<div><font size="5"> Markus Lippitz</font></div>
+<div><font size="5"> 29. Juni 2022 </font></div>
+
+
+<div class="markdown"><p><strong>Ziele:</strong> Sie können <em>erklären</em>, wann und wie ein Interferometer hilft, rauscharm zu messen</p><ul><li><p>homodyne und heterodyne Detektion in der Nachrichtentechnik</p></li><li><p>homodyne und heterodyne Detektion in der Optik </p></li><li><p>Schrotrauschen in Interferometern</p></li></ul><p><strong>Literatur:</strong> Horowitz/Hill Kap. 13.14–20</p></div>
+
+
+<div class="markdown"><h1>Nachrichtentechnik</h1><p>Wir beginnen mit einem Exkurs in die Nachrichtentechnik, die die benutzen Vokabeln geprägt hat. Wie können wir Information, beispielsweise ein Radio-Programm, über eine längere Distanz übertragen?</p><p>Im Folgenden meint 'Signal' dieses Radio-Programm, also eine zeitlich variable Amplitude <span class="tex">$a(t)$</span>, deren Bandbreite begrenzt ist, weil Sprache oder Musik nur in einem gewissen Frequenzintervall stattfindet (ca. 100 Hz bis 5 KHz). Dieses Signal wird über einen 'Kanal' übertragen. Das kann optisch in einer Glasfaser oder als Radiosignal geschehen. Dazu wird das Signal auf einen 'Träger' aufmoduliert. Die Lichtwelle (bei 300 THz) oder die Radiowelle (bei 100 kHz bis 100 MHz) transportiert ja an sich keine Information. Erst durch Ändern ihrer Amplitude oder Frequenz wird Information übertragen.</p><p>Durch die Modulation wird das Frequenzspektrum des Trägers breiter, in erster Näherung um <span class="tex">$\pm$</span> die Bandbreite des Signals. Verschiedene Träger-Frequenzen müssen also passenden Abstand einhalten, damit die Signale sich nicht gegenseitig beeinflussen.</p></div>
+
+
+<div class="markdown"><h2>Amplitudenmodulation</h2><p>Die einfachste Methode ist die Amplitudenmodulation. Man ändert die Amplitude einer Radiowelle oder die Helligkeit eines Laserstrahls proportional zu zum Signal <span class="tex">$a(t)$</span>. Dabei muss man berücksichtigen, dass <span class="tex">$a(t)$</span> negativ werden könnte, zählt also einen passende offset <span class="tex">$o$</span> hinzu. Damit erhalten wir für für die ausgesandt Wellenform <span class="tex">$w(t)$</span></p><p class="tex">$$ w(t) = \left[o + a(t) \right] \, \cos (\omega_c \, t)$$</p><p>mit der Träger-Kreisfrequenz <span class="tex">$\omega_c$</span>. Das Spektrum <span class="tex">$W(\omega)$</span> besteht als aus dem des Signals <span class="tex">$A(\omega)$</span> symmetrisch über- und unterhalb der Trägerfrequenz <span class="tex">$\omega_c$</span>.</p><p>Die Erzeugung eines solchen amplitudenmodulierten Wellenform ist technisch einfach. Man kann beispielsweise den Verstärkungsfaktor bzw. die Versorgungsspannung eines Verstärkers modulieren.</p></div>
+
+
+<div class="markdown"><h2>Demodulation</h2><p>Um das Signal aus einer amplituden-modulierten Wellenform wiederzugewinnen, muss man zunächst die empfangene Wellenform verstärken. Dies geschieht also bei der Trägerfrequenz <span class="tex">$\omega_c$</span> und in einem gewissen Frequenzintervall darum herum. Wenn diese Verstärker-Bandbreite gerade der Signal-Bandbreite entspricht, dann wären alle anderen Kanäle unterdrückt und man hätte <span class="tex">$w(t)$</span> wiedergewonnen. Gleichrichten und Tiefpass-filtern liefert dann <span class="tex">$o + a(t)$</span>. Hochpass-Filtern entfernt <span class="tex">$o$</span> und man behält <span class="tex">$a(t)$</span>.</p><p>Leider erfordert dies im Radio-Empfänger einen genau abstimmbaren Verstärker bzw. eigentlich eine Kette von Verstärkern, die für jeden Kanal, jeden Sender neu abgestimmt werden müssten. Das ist technisch schwierig.</p></div>
+
+
+<div class="markdown"><h2>Heterodyne Detektion (historisch)</h2><p>Die Idee der Heterodyn-Detektion geht zurück auf dem <a href="https://en.wikipedia.org/wiki/Superheterodyne_receiver#Heterodyne">Empfang von Morse-Code</a> und entstand um 1905. Wenn nicht ein Träger amplitudenmoduliert wurde, sondern zwei nahe benachbarte Träger-Frequenzen, dann kann man diese beiden Frequenz im Empfänger miteinander mischen. Bei passender Wahl ist die Differenzfrequenz im hörbaren Frequenzbereich (z.B. bei 3 kHz).</p></div>
+
+
+<div class="markdown"><h2>Super-Heterodyne Detektion</h2><p>Der heutzutage quasi immer verwendete Superheterodyn-Empfänger verwendet einen lokalen Oszillator bei <span class="tex">$\omega_{LO}$</span> statt der zweiten Trägerfrequenz. Und der Frequenzunterschied <span class="tex">$\omega_{IF} = \omega_c - \omega_{LO}$</span> ist <em>supersonic</em>, also deutlich höher als hörbar. Dei Vorsilbe <em>super</em> lässt man aber gerne weg.</p></div>
+
+
+<div class="markdown"><img controls="" height="200" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Superheterodyne_receiver_block_diagram_2.svg/512px-Superheterodyne_receiver_block_diagram_2.svg.png" type="image/png"/><p><em>Blockdiagramm eines typischen Superheterodyn-Empfängers. Rot sind die Teile, die das eingehende Hochfrequenzsignal (HF) verarbeiten; grün sind die Teile, die auf der Zwischenfrequenz (ZF) arbeiten, während die blauen Teile auf der Modulationsfrequenz (Audio) arbeiten. Aus <a href="https://en.wikipedia.org/wiki/Heterodyne#/media/File:Superheterodyne_receiver_block_diagram_2.svg">wikipedia</a></em></p></div>
+
+
+<div class="markdown"><style>
+
+
+@media (min-width: calc(700px + 30px + 300px)) {
+	aside.plutoui-aside-wrapper {
+		position: absolute;
+		right: -11px;
+		width: 0px;
+	}
+	aside.plutoui-aside-wrapper > div {
+		width: 300px;
+	}
+}
+</style><aside class="plutoui-aside-wrapper"><div><img controls="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/How_superheterodyne_receiver_works.svg/1200px-How_superheterodyne_receiver_works.svg.png" type="image/png"/><div class="markdown"><p><em>Funktionsweise eines Superheterodyn-Empfängers</em>. Aus <a href="https://en.wikipedia.org/wiki/Superheterodyne_receiver#/media/File:How_superheterodyne_receiver_works.svg">wikipedia</a></p></div></div></aside></div>
+
+
+<div class="markdown"><p>Die Antenne empfängt das gesamte Frequenzspektrum, das durch eine RF-Filter zunächst nur grob vorgefiltert wird. Der lokale Oszillator ist um die Frequenz <span class="tex">$\omega_{if}$</span> gegenüber der gewünschten Trägerfrequenz <span class="tex">$\omega_{S1}$</span> verstimmt. Nach dem Mischen (und grober Tiefpass-Filterung) bleiben nur wenige Kanäle übrig. Der schmalbandige IF-Filter behält dann nur noch den einen Kanal. Dieser kann dann wie gewöhnlich demoduliert werden.</p><p>Der Vorteil ist, dass der schmalbandige Filter bei IF bei einer technisch angenehmen Frequenz betrieben werden kann. Bei hohen Radiofrequenzen sind Filter etc. technisch viel aufwändiger. Und nur der grobe RF-Filter muss an den Kanal angepasst werden. Der selektive IF-Filter bleibt konstant.</p></div>
+
+
+<div class="markdown"><h2>Homodyne Detektion</h2><p>Ein Nachteil der Superheterodyn-Technik ist der Zwischenschritt über die IF-Frequenz. Man hat versucht, das konzeptionell einfacher zu bauen, indem man gleich auf die Frequenz Null herunter mischt. Das ist die homodyne Detektion bzw. der <a href="https://de.wikipedia.org/wiki/Direktmischempf%C3%A4nger">Direktmischempfänger</a> und sehr ähnlich dem Lock-In-Verstärker. Schaltungstechnisch hat sich das nicht durchgesetzt, aber in moderner Digitaltechnik wird dies oft implementiert, beispielsweise in <em>software defined radio</em> (<a href="https://en.wikipedia.org/wiki/Software-defined_radio">SDR</a>).</p></div>
+
+
+<div class="markdown"><h2>Frequenzmodulation</h2><p>Neben der Amplitudenmodulation (AM) ist die Frequenzmodulation (FM) eigentlich bedeutsamer. Das Signal <span class="tex">$a(t)$</span> wird auf die Frequenz der Trägerwelle moduliert. Die gesendete Wellenform ist also</p><p class="tex">$$w_{FM}(t) = \cos \left( \omega_c t + \omega_\Delta \, \int_0^t a(\tau) d\tau \right)$$</p><p>bzw. analog die Phasenmodulation  (PM)</p><p class="tex">$$w_{PM}(t) = \cos \left( \omega_c t + \omega_\Delta \, a(t)  \right)$$</p></div>
+
+
+<div class="markdown"><p>Lassen Sie uns  annehmen, dass das Signal nur aus einem Ton bei <span class="tex">$\omega_m$</span> besteht, also <span class="tex">$a(t) =  \cos \omega_m t$</span>. Dann wird das Integral <span class="tex">$\sin (\omega_m t) / \omega_m$</span> und somit</p><p class="tex">$$w_{FM}(t) = \cos \left( \omega_c t + \frac{\omega_\Delta}{\omega_m} \, \sin (\omega_m t)\right)$$</p><p>Den Term </p><p class="tex">$$h = \frac{\omega_\Delta}{\omega_m}$$</p><p>nennt man <strong>Modulations-Index</strong>. Die Amplitude der einzelnen Frequenz-Komponenten folgt damit Bessel-Funktionen <span class="tex">$J_k(h)$</span></p><p class="tex">$$w_{FM}(t) = \cos \left( \omega_c t + h \, \sin (\omega_m t)\right)
+= \sum_{k=-\infty}^\infty J_k(h) \, \cos ( \, [\omega_c + k \omega_m] \, t)$$</p><p>Die Anzahl der <strong>Seitenbänder</strong>  bei <span class="tex">$k\neq 0$</span> entspricht ungefähr dem Wert des Modulations-Indexes <span class="tex">$h$</span>.</p></div>
+
+
+<div class="markdown"><p>Zur Detektion eignet sich auch ein Superheterodyn-Detektor. Der Verstärker im IF-Bereich wird so ausgelegt, dass er sättigt, also immer die gleiche Amplitude liefert, egal wie stark das Eingangssignal war. Danach braucht es noch einen Detektor, der die instantane Frequenz bestimmt, beispielsweise eine <em>phase locked loop</em> (<a href="https://de.wikipedia.org/wiki/Phasenregelschleife">PLL</a>).</p></div>
+
+
+<div class="markdown"><h1>Optische Signale</h1><p>Radiowellen und Licht sind beides elektromagnetische Wellen, nur in verschiedenem Frequenzbereich. Die Konzepte der Nachrichtentechnik lassen sich deswegen zumindest teilweise übertragen.</p></div>
+
+
+<div class="markdown"><h2>Optische Homodyn-Detektion</h2><p>Man kan ein Interferometer als Variante der Homodyn-Detektion betrachten.<style>
+
+
+@media (min-width: calc(700px + 30px + 300px)) {
+	aside.plutoui-aside-wrapper {
+		position: absolute;
+		right: -11px;
+		width: 0px;
+	}
+	aside.plutoui-aside-wrapper > div {
+		width: 300px;
+	}
+}
+</style></p><aside class="plutoui-aside-wrapper"><div><img controls="" src="https://upload.wikimedia.org/wikipedia/commons/0/08/HomodyneDetection2.png" type="image/png" width="200"/><div class="markdown"><p><em>Interferometer</em>. Aus <a href="https://en.wikipedia.org/wiki/Homodyne_detection">wikipedia</a></p></div></div></aside>
+
+ Im Unterschied zu Nachrichtentechnik müssen lokaler Oszillator und Trägerwelle von gleichen Laser abgeleitet werden, damit sie phasenstabil genug sind. Die Trennung geschieht im ersten Strahlteiler. Im Signal-Arm (hier senkrecht) bewirkt das Experiment dann eine Amplituden- oder Frequenzmodulation des Trägers. Am zweiten Strahlteiler werden beide Arme wieder überlagert. Die Photodiode liefert einen Strom proportional zum Quadrat der Gesamt-Feldstärke und dient somit gleichzeitig als Mischer und auch Tiefpass-Filter, weil die doppelte optische Frequenz jenseits der elektrischen Bandbreite liegt.<p></p></div>
+
+
+<div class="markdown"><h3>Amplitudenmodulation</h3><p>Wenn das Experiment eine Amplitudenmodulation <span class="tex">$a(t)$</span> bewirkt, dann ist das Lichtfeld nach dem Experiment</p><p class="tex">$$E_S(t) = E_0 \, [1 + a(t) ] \, e^{i \omega_0 t}$$</p><p>und der lokale Oszillator </p><p class="tex">$$E_{LO}(t) = E_{LO} \,  \,  e^{i \omega_0 t + \Delta \phi}$$</p><p>Der Photostrom ist damit </p><p class="tex">$$I(t) \propto \left| E_S(t) + E_{LO}(t) \right|^2$$</p></div>
+
+
+<div class="markdown"><p>Betrachten wir zunächst den Fall ohne lokalen Oszillator, also <span class="tex">$E_{LO} = 0$</span>. Dann ist</p><p class="tex">$$I(t) \propto |E_0|^2 [1 + a][1+ a^\star] = |E_0|^2 \, [1  + 2 \Re \{a(t)\} + |a(t)|^2] \approx  |E_0|^2 \, [1  + 2 \Re \{a(t)\}]$$</p><p>Wir sind ja nur an kleinen Signalen, also <span class="tex">$a(t) \ll 1$</span> interessiert.</p></div>
+
+
+<div class="markdown"><p>Mit lokalen Oszillator wird dies zu</p><p class="tex">$$I(t) \propto \left| E_0 [1 + a(t)] + E_{LO} e^{i\Delta \phi} \right|^2$$</p><p>Interessant ist der Fall von einem sehr starken lokalen Oszillator, also <span class="tex">$E_{LO} \gg E_0$</span>. Damit wird</p><p class="tex">$$I(t) \approx |E_{LO}|^2 \, [1  + 2 \Re \{a(t) \, e^{-i \Delta \phi} \}]$$</p><p>Der Effekt des lokalen Oszillators ist also zum Einen, die Signal-Amplitude zu erhöhen ohne mehr Lichtleistung durch das Experiment schicken zu müssen, falls die Probe beispielsweise nur eine gewisse Intensität toleriert. Zum Anderen kommt <span class="tex">$\Delta \phi$</span> also Freiheitsgrad hinzu. Man kann somit also nicht nur den Realteil von <span class="tex">$a(t)$</span> detektieren, sondern auch den Imaginärteil bze. eine durch die Probe hervorgerufene Phasenverschiebung.</p><p>Im Prinzip kann man aber auch schon die '1' in obigen Gleichungen als lokalen Oszillator verstehen. Quasi alle optischen Messungen beinhalten immer auch Licht, dass nicht durch das Experiment tangiert wurde, eben den '1'-Term. Dieses Licht interferiert immer am Detektor mit dem '<span class="tex">$a(t)$</span>'-Term, so dass immer eine homodyne Detektion vorliegt, solange man nicht besondere Vorkehrungen trifft.</p></div>
+
+
+<div class="markdown"><blockquote><p>Sie wollen ein kleines SIgnal <span class="tex">$a(t)$</span> detektieren, dass sie zwischen <span class="tex">$a=0$</span> und <span class="tex">$a=a_0$</span> schalten können. Untersuchen Sie den Einfluss verschiedener Rausch-Quellen auf das SNR, und ob daran interferometrische Detektion etwas ändert / ändert kann.</p></blockquote></div>
+
+
+<div class="markdown"><h2>Bsp. zu Optische Heterodyn-Detektion</h2><p>Manchmal möchte man die Amplitude und Phase einer Frequenzkomponente im Lichtfeld bestimmen, die um eine RF-Frequenz gegenüber der Trägerwelle verschoben ist. Als Beispiel diskutiere ich hier ein Experiment zum optischen Vier-Wellen-Mischen</p><p>Wolfgang Langbein and Brian Patton: <em>Heterodyne spectral interferometry for multidimensional nonlinear spectroscopy of individual quantum systems.</em><a href="https://doi.org/10.1364/OL.31.001151">Opt. Lett. 31, 1151-1153 (2006)</a></p></div>
+
+
+<div class="markdown"><h3>Vier-Wellen-Mischen</h3><p>Vier-Wellen-Mischen ist ein nichtlinearer optischer Effekt, bei dem  drei optische Wellen eine neue, vierte Welle erzeugen,  zu dieser gemischt werden. Ausgangspunkt ist dabei eine nichtlineare optische Polarisation dritter Ordnung</p><p class="tex">$$P^{(3)} = \chi^{(3)} \, E_1(t) \, E_2(t) \, E_3(t)$$</p><p>Jedes der 3 Felder <span class="tex">$E_i$</span> kann eine eigener Frequenz <span class="tex">$\omega_i$</span> haben. Die nichtlinear e Polarisation <span class="tex">$P^{(3)}$</span> strahlt ein viertes Feld ab, dessen Frequenz die Summe der einzelnen Frequenzen ist. Da</p><p class="tex">$$2 \cos x = e^{i x} + e^{-i x}$$</p><p>tauchen sowohl positive als auch negative Frequenzen auf. Im Prinzip gibt es also <span class="tex">$2^3 = 8$</span> Mischprodukte, die unterschiedlichen physikalischen Ursprung haben. In diesen Artikel ist man an dem mit den Vorzeichen <span class="tex">$(-++)$</span> interessiert. Weiterhin wählt das Experiment <span class="tex">$E_2 = E_3$</span>. Die zu analysierenden Frequenz ist also</p><p class="tex">$$\omega_4 = -\omega_1 + 2 \omega_2 $$</p></div>
+
+
+<div class="markdown"><img controls="" height="400" src="https://raw.githubusercontent.com/MarkusLippitz/teca/main/res/12-heterodyn/setup.png" type="image/png"/><p><em>Schema des Aufbaus von Langbein und Patton.</em></p></div>
+
+
+<div class="markdown"><h3>AOM als Frequenz-Schieber</h3><p>Im Experiment bestehen die Felder <span class="tex">$E_i$</span> aus Laserpulsen, und deren zeitliche Reihenfolge ist relevant. Dazu wird ein Laserstrahl in 2 Teile aufgeteilt und jeder Teil durch einen <em>Akusto-Optischen Modulator</em> (AOM) geschickt. Hier wird der Strahl an einem Ultraschall-Gitter gebeugt. Dabei wird jede Beugungsordnung <span class="tex">$k = 0, \pm 1, \pm2, \dots $ um $k$</span> mal die Ultraschallfrequenz <span class="tex">$\Omega$</span> frequenzverschoben (sonst würde die Energieerhaltung nicht zusammen mit der Impulserhaltung gelten). Damit ist also</p><p class="tex">$$\omega_k = \omega_{laser} + k \Omega$$</p><p>Die einzelnen <span class="tex">$\omega_i$</span> von oben basieren also alle auf dem gleichen <span class="tex">$\omega_{laser}$</span>, sind jedoch in zwei verschiedenen AOM um zwei verschiedene <span class="tex">$\Omega_{AOM}$</span> verschoben.</p></div>
+
+
+<div class="markdown"><h3>Heterodyn-Detektion</h3><p>Das Mischprodukt <span class="tex">$\omega_4$</span> liegt wieder in der Nähe von <span class="tex">$\omega_{laser}$</span> (so ist der Prozess ausgewählt). Wo genau hängt aber von den <span class="tex">$\Omega_{AOM}$</span> ab. Jetzt kommt die Heterodyn-Detektion zum Einsatz. An einem dritten AOM bei der Frequenz  <span class="tex">$\Omega_D$</span>  treffen sich der Strahl <span class="tex">$E_4$</span> von der Probe und ein Referenz-Strahl <span class="tex">$E_R$</span> direkt vom Laser. Der Winkel zwischen den beiden Strahl entspricht gerade dem Beugungswinkel. Die Ordnung +1  von <span class="tex">$E_4$</span> geht also in die gleiche Richtung wie die Nullte Ordnung von <span class="tex">$E_R$</span> bzw. die Ordnung -1 von <span class="tex">$E_R$</span> überlagert sich mit <span class="tex">$E_4$</span>. Insgesamt bekommt mal also</p><p class="tex">$$E_a = E_R + E_4 e^{i \Omega_D t} \quad \text{und} \quad E_b = E_R e^{-i \Omega_D t} + E_4 $$</p><p>Das Spektrometer misst Intensitäten, also z.B.</p><p class="tex">$$I_a \propto |E_a|^2 = |E_R|^2 + |E_4|^2 + 2 \Re \left\{ E_R^\star \, E_4   \, e^{i \Omega_D t}  \right\}$$</p><p>und mittelt diese über die Integrationszeit. Der dritte Term oszilliert in <span class="tex">$t$</span> und mittelt sich so weg, wenn nicht gerade alle Frequenzen sich gegenseitig aufheben, also gerade <span class="tex">$\omega_4 = \omega_{laser} - \Omega_D$</span>. Wenn man dann noch <span class="tex">$I_a - I_b$</span> betrachtet, dann heben sich die konstanten ersten beiden Terme gerade weg. </p><p>So ist man in der Lage, Amplitude und Phase von <span class="tex">$E_4$</span> (und damit von dem gewählten <span class="tex">$P^{(3)})$</span>) zu detektieren. Das Spektrometer sorgt dafür, dass man nicht nur die Gesamtintensität, sondern auch noch deren spektralen Verlauf kennt. Im dem Artikel wird so die Kopplung zwischen verschiedenen Zuständen eines Quantenpunkts untersucht.</p></div>
+
+<pre class='language-julia'><code class='language-julia'>using PlutoUI</code></pre>
+
+
+<pre class='language-julia'><code class='language-julia'>TableOfContents(title="Inhalt")</code></pre>
+
+
+<pre class='language-julia'><code class='language-julia'>aside(x) = PlutoUI.ExperimentalLayout.aside(x);</code></pre>
+
+
+<!-- PlutoStaticHTML.End -->

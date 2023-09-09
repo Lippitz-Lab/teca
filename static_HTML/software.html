@@ -1,0 +1,114 @@
+<!-- PlutoStaticHTML.Begin -->
+<!--
+    # This information is used for caching.
+    [PlutoStaticHTML.State]
+    input_sha = "2ede921628deb73c004e4adbd28ea8a96f90ed2e7ff6b09dd77a3cf6766af64a"
+    julia_version = "1.9.3"
+-->
+
+<div class="markdown"><h1>Erstmalige Einrichtung: Installieren Sie Julia &amp; Pluto</h1></div>
+
+
+<div class="markdown"><blockquote><p><strong>Acknowledgement</strong>  This material is translated from <em><strong>Computational Thinking</strong>, a live online Julia/Pluto textbook.</em><a href="https://computationalthinking.mit.edu">(computationalthinking.mit.edu)</a></p></blockquote></div>
+
+
+<div class="markdown"><h2>Schritt 1: Julia 1.7.2 installieren</h2><p>Von <a href="https://julialang.org/downloads">https://julialang.org/downloads</a> die aktuelle stabile Version, Julia 1.7.2 herunterladen, in der passenden Version für Ihr Betriebssystem (Linux x86, Mac, Windows, etc.).</p><p><em>Mac-Benutzer aufgepasst!</em> Laden Sie <strong>nicht</strong> die ARM/M-Serienversion von Julia herunter! Sie ist noch experimentell und einige Pakete werden nicht funktionieren.</p></div>
+
+
+<div class="markdown"><h2>Schritt 2: Julia ausführen</h2><p>Nach der Installation müssen Sie <strong>sicherstellen, dass Sie Julia ausführen können</strong>. Auf einigen Systemen bedeutet dies, dass Sie nach dem Programm "Julia 1.7.2" suchen müssen, das auf Ihrem Computer installiert ist; auf anderen bedeutet es, dass Sie den Befehl "Julia" in einem Terminal ausführen müssen. Stellen Sie sicher, dass Sie Folgendes ausführen können: <code>1 + 1</code></p></div>
+
+
+<div class="markdown"><p><img alt="image" src="https://user-images.githubusercontent.com/6933510/91439734-c573c780-e86d-11ea-8169-0c97a7013e8d.png"/></p></div>
+
+
+<div class="markdown"><p><em>Vergewissern Sie sich, dass Sie in der Lage sind, Julia zu starten und <code>1+1</code> zu berechnen, bevor Sie fortfahren!</em></p></div>
+
+
+<div class="markdown"><h2>Schritt 3: Installieren Sie <a href="https://github.com/fonsp/Pluto.jl"><code>Pluto</code></a></h2><p>Als nächstes installieren wir das <a href="https://github.com/fonsp/Pluto.jl/blob/master/README.md"><strong>Pluto Notebook</strong></a> das wir während des Kurses benutzen werden. Pluto ist eine Julia <em>Programmierumgebung</em>, die für Interaktivität und schnelle Experimente konzipiert ist.</p><p>Öffnen Sie die <strong>Julia REPL</strong>. Dies ist die Kommandozeilen-Schnittstelle zu Julia, ähnlich wie auf dem vorherigen Screenshot.</p><p>Hier geben Sie <em>Julia-Befehle</em> ein, und wenn Sie ENTER drücken, wird das Programm ausgeführt, und Sie sehen das Ergebnis.</p></div>
+
+
+<div class="markdown"><p>Um Pluto zu installieren, müssen wir einen <em>Paketmanager-Befehl</em> ausführen. Um vom <em>Julia</em> Modus in den <em>Pkg</em> Modus zu wechseln, geben Sie <code>]</code> (schließende eckige Klammer) an der <code>julia&gt;</code> Eingabeaufforderung ein:</p><pre><code class="language-julia">julia&gt; ]
+
+(@v1.7) pkg&gt;</code></pre></div>
+
+
+<div class="markdown"><p>Die Zeile wird blau und die Eingabeaufforderung ändert sich zu <code>pkg&gt;</code>, was Ihnen mitteilt, dass Sie sich jetzt im <em>Paketverwaltungsmodus</em> befinden. Dieser Modus erlaubt es Ihnen, Operationen mit <strong>Paketen</strong> (auch Bibliotheken genannt) durchzuführen.</p></div>
+
+
+<div class="markdown"><p>Um Pluto zu installieren, führen Sie den folgenden Befehl (Groß-/Kleinschreibung beachten) aus, um das Paket zu Ihrem System <em>hinzufügen</em> (installieren), indem Sie es aus dem Internet herunterladen. Sie sollten dies nur <em>einmal</em> für jede Installation von Julia tun müssen:</p><pre><code class="language-julia">(@v1.7) pkg&gt; add Pluto</code></pre><p>Das kann ein paar Minuten dauern, daher können Sie sich eine Tasse Tee holen!</p></div>
+
+
+<div class="markdown"><p><img alt="image" src="https://user-images.githubusercontent.com/6933510/91440380-ceb16400-e86e-11ea-9352-d164911774cf.png"/></p><p>Sie können nun das Terminal schließen.</p></div>
+
+
+<div class="markdown"><h2>Schritt 4: Verwenden Sie einen modernen Browser: Mozilla Firefox oder Google Chrome</h2><p>Wir brauchen einen modernen Browser, um die Pluto-Notebooks anzusehen. Firefox und Chrome funktionieren am besten.</p></div>
+
+
+<div class="markdown"><h1>Das zweite Mal: <em>Pluto starten &amp; ein Notebook öffnen</em></h1><p>Wiederholen Sie die folgenden Schritte, wenn Sie an einem Projekt oder einer Hausaufgabe arbeiten möchten.</p></div>
+
+
+<div class="markdown"><h2>Schritt 1: Pluto starten</h2></div>
+
+
+<div class="markdown"><p>Starten Sie die Julia-REPL, wie Sie es bei der Einrichtung getan haben. Geben Sie in der REPL ein:</p><pre><code class="language-julia">julia&gt; using Pluto
+
+julia&gt; Pluto.run()</code></pre></div>
+
+
+<div class="markdown"><p><img alt="image" src="https://user-images.githubusercontent.com/6933510/91441094-eb01d080-e86f-11ea-856f-e667fdd9b85c.png"/></p><p>Das Terminal sagt uns, dass wir zu <code>http://localhost:1234/</code> (oder einer ähnlichen URL) gehen sollen. Wir öffnen Firefox oder Chrome und geben diese Adresse in die Adressleiste ein.</p></div>
+
+
+<div class="markdown"><p><img alt="image" src="https://user-images.githubusercontent.com/6933510/91441391-6a8f9f80-e870-11ea-94d0-4ef91b4e2242.png"/></p></div>
+
+
+<div class="markdown"><blockquote><p>Wenn Sie wissen wollen, wie ein <em>Pluto-Notebook</em> aussieht, schauen Sie sich die <strong>Beispiel-Notebooks</strong> an. Die Beispiele 1, 2 und 6 können nützlich sein, um einige Grundlagen der Julia-Programmierung zu lernen. </p><p>Wenn Sie die Geschichte von Pluto hören wollen, schauen Sie sich die<a href="https://www.youtube.com/watch?v=IAF8DjrQSSk">JuliaCon Präsentation</a> an.</p></blockquote></div>
+
+
+<div class="markdown"><p>Wenn beim ersten Mal im Browser nichts passiert, schließen Sie Julia und versuchen Sie es erneut. Und bitte geben Sie mir Bescheid!</p></div>
+
+
+<div class="markdown"><h2>Schritt 2a: Öffnen eines Notebooks aus dem Internet</h2><p>Dies ist das Hauptmenü - hier können Sie neue Notizbücher erstellen oder bestehende öffnen. Jede Seite des Skripts ist ein Pluto-Notebook. Oben rechts finde Sie die Schaltfläche "Dieses Notizbuch bearbeiten oder ausführen". Kopieren Sie den Link zum Notizbuch aus diesen Anweisungen und fügen Sie ihn bei 'open file from' ein. Drücken Sie die Eingabetaste, und wählen Sie im Bestätigungsfeld OK.</p></div>
+
+
+<div class="markdown"><p><img alt="image" src="https://user-images.githubusercontent.com/6933510/91441968-6b750100-e871-11ea-974e-3a6dfd80234a.png"/></p></div>
+
+
+<div class="markdown"><p><strong>Als Erstes müssen wir das Notizbuch irgendwo auf unserem eigenen Computer speichern; siehe unten</strong></p></div>
+
+
+<div class="markdown"><h2>Schritt 2b: Öffnen eines bestehenden Notebooks</h2><p>Wenn Sie Pluto zum zweiten Mal starten, werden Ihre letzten Notizbücher im Hauptmenü angezeigt. Sie können sie anklicken, um dort fortzufahren, wo Sie aufgehört haben.</p></div>
+
+
+<div class="markdown"><p>Wenn Sie eine lokale Notizbuchdatei ausführen möchten, die Sie noch nicht geöffnet haben, müssen Sie den <em>vollständigen Pfad</em> in das blaue Feld im Hauptmenü eingeben. Mehr zur Suche nach vollständigen Pfaden in Schritt 3.</p></div>
+
+
+<div class="markdown"><h2>Schritt 3: Ein Notebook abspeichern</h2><p>Zunächst brauchen wir einen Ordner, in dem wir unsere Dateien speichern. Öffnen Sie Ihren Datei-Explorer und erstellen Sie einen. </p></div>
+
+
+<div class="markdown"><p>Als nächstes müssen wir den <em>absoluten Pfad</em> dieses Ordners kennen. Hier steht, wie Sie das herausfinden unter <a href="https://www.top-password.com/blog/copy-full-path-of-a-folder-file-in-windows/">Windows</a>, <a href="https://www.josharcher.uk/code/find-path-to-folder-on-mac/">MacOS</a> und <a href="">Ubuntu</a>.</p></div>
+
+
+<div class="markdown"><p>Sie könnten zum Beispiel haben:</p><ul><li><p><code>C:\\Users\\fonsi\\Documents\\18S191_assignments\\</code> unter Windows</p></li><li><p><code>/Users/fonsi/Documents/18S191_assignments/</code> unter MacOS</p></li><li><p><code>/home/fonsi/Documents/18S191_assignments/</code> unter Ubuntu</p></li></ul><p>Da wir nun den absoluten Pfad kennen, gehen Sie zurück zu Ihrem Pluto-Notebook und klicken Sie oben auf der Seite auf <em>"Save Notebook ..."</em>. </p></div>
+
+
+<div class="markdown"><p><img alt="image" src="https://user-images.githubusercontent.com/6933510/91444741-77fb5880-e875-11ea-8f6b-02c1c319e7f3.png"/></p></div>
+
+
+<div class="markdown"><p>Hier geben Sie den <strong>neuen Pfad+Dateinamen für Ihr Notebook</strong> ein:</p><p><img alt="image" src="https://user-images.githubusercontent.com/6933510/91444565-366aad80-e875-11ea-8ed6-1265ded78f11.png"/></p></div>
+
+
+<div class="markdown"><p>Klicken Sie auf <em>Choose</em>.</p></div>
+
+
+<div class="markdown"><h2>Schritt 4: Ein Notebook teilen</h2></div>
+
+
+<div class="markdown"><p>Nachdem Sie an Ihrem Notebook gearbeitet haben (Ihr Code wird automatisch gespeichert, wenn Sie ihn ausführen), finden Sie Ihre Notebook in dem Ordner, den wir in Schritt 3 erstellt haben. Diese Datei können Sie mit anderen teilen oder als Aufgabe im elearning-system einreichen.</p></div>
+
+
+
+
+
+
+
+<!-- PlutoStaticHTML.End -->
