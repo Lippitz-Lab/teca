@@ -149,7 +149,7 @@ Thorlabs no-robots rules does not allow any more the automatic download of the F
 # FDS100 = DataFrame(XLSX.readtable(Downloads.download("https://www.thorlabs.com/images/popupImages/FDS100_Res_data.xlsx"),"Responsivity", "C:D"; first_row=2)...)
 
 # ╔═╡ 128fbcdf-f5c1-4d54-a8f1-5631502193fb
-
+FDS100 = DataFrame(XLSX.readtable(Downloads.download("https://github.com/MarkusLippitz/teca/raw/main/res/10-Detektoren/FDS100_Res_data.xlsx"),"Responsivity", "C:D"; first_row=2))
 
 # ╔═╡ bf5e9bb0-1f21-4576-905d-b134b8c2762c
 import PhysicalConstants.CODATA2018: c_0, h, e

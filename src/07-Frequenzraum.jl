@@ -32,10 +32,6 @@ using PlutoUI
 # ╔═╡ 54daea9f-2c1e-4934-a666-b14b960bd45f
 using Plots
 
-# ╔═╡ f5450eab-0f9f-4b7f-9b80-992d3c553ba9
-# DO NOT MODIFY, will be updated by update_navbar.jl
-HTML("    <nav >\n    Vorbereitungen:\n\n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/index.html\"><em>Intro</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/software.html\"><em>Software</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/01-basic_syntax.html\"><em>Julia Basics</em></a> / \n\n<br>\nStatistik:\n\n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/02-beschreibende-statistik.html\"><em>Beschreibende Statistik</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/03-wahrscheinlichkeit.html\"><em>Wahrscheinlichkeit</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/04-schaetzung.html\"><em>Schätzung</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/05-messunsicherheit.html\"><em>Messunsicherheit</em></a> / \n\n<br>\nFourier-Transformation:\n\n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/06-Fourier-Transformation.html\"><em>Fourier-Transformation</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/07-Frequenzraum.html\"><em>Frequenzraum</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/08-Filter.html\"><em>Filter</em></a> / \n\n<br>\nMesstechnik:\n\n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/09-Rauschen.html\"><em>Rauschen</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/10-Detektoren.html\"><em>Detektoren</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/11-Lock-In.html\"><em>Lock-In-Verstärker</em></a> / \n<a class=\"sidebar-nav-item\" href=\"https://pluto.ep3.uni-bayreuth.de/teca/12-heterodyn.html\"><em>Heterodyn-Detektion</em></a> / \n\n<br>\n\n\n    </nav>\n\t")
-
 # ╔═╡ aaa4db38-4e95-4d52-a316-67386c7393e6
 html"""<div>
 <font size="7"><b>7 Frequenzraum</b></font> </div>
@@ -477,6 +473,36 @@ md"""
 Erlauben Sie ihrem Webbrowser, auf die Kamera zuzugreifen und nehmen Sie dann einen Schnappschuss auf! Zeigen Sie Ihrer Kamera einfache Muster und vergleichen Sie die Fourier-Transformierte mit Ihren Erwartungen.
 """
 
+# ╔═╡ 3f9a3bc0-1063-44c9-9710-b81e5b528bd9
+# ╠═╡ disabled = true
+#=╠═╡
+@bind webcam_data camera_input()
+  ╠═╡ =#
+
+# ╔═╡ 49e196e2-c62e-40e2-b6d7-675640258885
+# ╠═╡ disabled = true
+#=╠═╡
+snapshot = process_raw_camera_data(webcam_data)
+  ╠═╡ =#
+
+# ╔═╡ 812372c8-82d7-4fee-8b0c-a9e22ae398c2
+# ╠═╡ disabled = true
+#=╠═╡
+spatial_data = Real.(Gray.(snapshot));
+  ╠═╡ =#
+
+# ╔═╡ 5133276a-8995-4ce9-a1f5-2c4caf116e20
+# ╠═╡ disabled = true
+#=╠═╡
+freq_data = abs.(fftshift(fft(spatial_data .- mean(spatial_data) )));
+  ╠═╡ =#
+
+# ╔═╡ dc548c88-d969-4eaf-8ddd-938f953fda1a
+# ╠═╡ disabled = true
+#=╠═╡
+ft_snapshot = Gray.(freq_data ./ maximum(freq_data))
+  ╠═╡ =#
+
 # ╔═╡ 9b933f4b-92bf-48b8-91f6-980ea65ea18c
 md"""
 
@@ -748,36 +774,6 @@ function camera_input(;max_size=150, default_url="https://i.imgur.com/SUmi94P.pn
 """ |> HTML
 end
 
-
-# ╔═╡ 3f9a3bc0-1063-44c9-9710-b81e5b528bd9
-# ╠═╡ disabled = true
-#=╠═╡
-@bind webcam_data camera_input()
-  ╠═╡ =#
-
-# ╔═╡ 49e196e2-c62e-40e2-b6d7-675640258885
-# ╠═╡ disabled = true
-#=╠═╡
-snapshot = process_raw_camera_data(webcam_data)
-  ╠═╡ =#
-
-# ╔═╡ 812372c8-82d7-4fee-8b0c-a9e22ae398c2
-# ╠═╡ disabled = true
-#=╠═╡
-spatial_data = Real.(Gray.(snapshot));
-  ╠═╡ =#
-
-# ╔═╡ 5133276a-8995-4ce9-a1f5-2c4caf116e20
-# ╠═╡ disabled = true
-#=╠═╡
-freq_data = abs.(fftshift(fft(spatial_data .- mean(spatial_data) )));
-  ╠═╡ =#
-
-# ╔═╡ dc548c88-d969-4eaf-8ddd-938f953fda1a
-# ╠═╡ disabled = true
-#=╠═╡
-ft_snapshot = Gray.(freq_data ./ maximum(freq_data))
-  ╠═╡ =#
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -2119,7 +2115,6 @@ version = "1.4.1+0"
 """
 
 # ╔═╡ Cell order:
-# ╟─f5450eab-0f9f-4b7f-9b80-992d3c553ba9
 # ╟─aaa4db38-4e95-4d52-a316-67386c7393e6
 # ╟─d98ac7ca-96f2-11ec-0d44-b7943badb165
 # ╟─b462d67d-e8fe-4970-8346-1561ab2e3fc7
