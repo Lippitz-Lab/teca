@@ -1,0 +1,23 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: 'Lecture notes ''Messmethoden'' '
+message: >-
+  If you use this text, please cite it using the metadata
+  from this file.
+type: software
+authors:
+  - given-names: Markus
+    family-names: Lippitz
+    orcid: 'https://orcid.org/0000-0003-1218-6511'
+repository-code: 'https://github.com/Lippitz-Lab/teca'
+url: >-
+  https://www.ep3.uni-bayreuth.de/en/teaching/TECA/index.html
+abstract: >-
+  These are the lecture notes (German) of my lecture on
+  measurement techniques, statistics, and Fourier transform.
+  They are written as Pluto notebooks, using the computer
+  language Julia. The notes interweave explanatory text and
+  examples based on real data that is processes 'live'. 
+license: CC-BY-SA-4.0

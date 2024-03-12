@@ -6,9 +6,12 @@
 [cc-by-sa-shield]: https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg
 
 
-# Messmethoden (TECA) pluto notebooks
+# Messmethoden (TECA) lecture notes as pluto notebooks
 
-Repository structure
+These are the lecture notes (German) of my lecture on measurement techniques, statistics, and Fourier transform. They are written as [Pluto](https://plutojl.org/) notebooks, using the computer language [Julia](https://julialang.org/). The notes interweave explanatory text and examples based on real data that is processes 'live'. More details, including 'bookcast' type videos, are on the [website](https://www.ep3.uni-bayreuth.de/en/teaching/TECA/index.html).
+
+
+## Repository structure
 
 * src - Pluto notebooks, source of everything else
 * res - resources needed to run some notebooks

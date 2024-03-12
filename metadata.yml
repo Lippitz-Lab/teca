@@ -1,10 +1,14 @@
+'@context': https://schema.org/
 creativeWorkStatus: Published
-name: 'Messmethoden'
+type: LearningResource
+name: Messmethoden
 description: >-
-  These are the lecture notes (german) of my lecture on measurement techniques, statistics, and Fourier transform
-license:
-  id: https://creativecommons.org/licenses/by-sa/4.0/deed.de
-id: https://github.com/MarkusLippitz/teca
+  These are the lecture notes (German) of my lecture on measurement techniques,
+  statistics, and Fourier transform. They are written as Pluto notebooks, using
+  the computer language Julia. The notes interweave explanatory text and
+  examples based on real data that is processes 'live'. 
+license: https://creativecommons.org/licenses/by-sa/4.0/deed.de
+id: https://github.com/Lippitz-Lab/teca
 creator:
   - givenName: Markus
     familyName: Lippitz
@@ -16,12 +20,13 @@ creator:
       type: Organization
 keywords:
   - statistics
-  - data analysis 
+  - data analysis
   - lecture notes
 inLanguage:
-  - en
+  - de
 about:
   - https://w3id.org/kim/hochschulfaechersystematik/n0128
+image: https://www.ep3.uni-bayreuth.de/pool/bilder/teca-banner.png
 learningResourceType:
   - https://w3id.org/kim/hcrt/script
 educationalLevel:
